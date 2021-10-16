@@ -1,0 +1,4 @@
+public
+dist
+*.d.ts
+package.json

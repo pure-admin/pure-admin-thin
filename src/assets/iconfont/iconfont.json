@@ -1,0 +1,72 @@
+{
+  "id": "2208059",
+  "name": "pure-admin",
+  "font_family": "iconfont",
+  "css_prefix_text": "team-icon",
+  "description": "pure-admin",
+  "glyphs": [
+    {
+      "icon_id": "2508809",
+      "name": "最新连载",
+      "font_class": "zuixinlianzai",
+      "unicode": "e6da",
+      "unicode_decimal": 59098
+    },
+    {
+      "icon_id": "7795613",
+      "name": "新品",
+      "font_class": "xinpin",
+      "unicode": "e614",
+      "unicode_decimal": 58900
+    },
+    {
+      "icon_id": "7795615",
+      "name": "新品人气王",
+      "font_class": "xinpinrenqiwang",
+      "unicode": "e615",
+      "unicode_decimal": 58901
+    },
+    {
+      "icon_id": "18367956",
+      "name": "中英文2 中文",
+      "font_class": "internationality",
+      "unicode": "e67a",
+      "unicode_decimal": 59002
+    },
+    {
+      "icon_id": "6184565",
+      "name": "删除",
+      "font_class": "shanchu",
+      "unicode": "e617",
+      "unicode_decimal": 58903
+    },
+    {
+      "icon_id": "9626913",
+      "name": "全屏",
+      "font_class": "show-main-container",
+      "unicode": "e878",
+      "unicode_decimal": 59512
+    },
+    {
+      "icon_id": "9626952",
+      "name": "退出全屏",
+      "font_class": "hidden-main-container",
+      "unicode": "e881",
+      "unicode_decimal": 59521
+    },
+    {
+      "icon_id": "5698509",
+      "name": "全屏缩小",
+      "font_class": "exit-fullscreen",
+      "unicode": "e62a",
+      "unicode_decimal": 58922
+    },
+    {
+      "icon_id": "5698510",
+      "name": "全屏显示",
+      "font_class": "fullscreen",
+      "unicode": "e62b",
+      "unicode_decimal": 58923
+    }
+  ]
+}
