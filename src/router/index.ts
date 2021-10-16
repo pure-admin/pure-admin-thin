@@ -17,6 +17,7 @@ import { usePermissionStoreHook } from "/@/store/modules/permission";
 import homeRouter from "./modules/home";
 import Layout from "/@/layout/index.vue";
 import errorRouter from "./modules/error";
+import remainingRouter from "./modules/remaining";
 // 动态路由
 import { getAsyncRoutes } from "/@/api/routes";
 
@@ -33,8 +34,9 @@ export const ascending = arr => {
 };
 
 // 将所有静态路由导出
-export const constantRoutesArr: Array<RouteComponent> =
-  ascending(constantRoutes);
+export const constantRoutesArr: Array<RouteComponent> = ascending(
+  constantRoutes
+).concat(...remainingRouter);
 
 // 过滤meta中showLink为false的路由
 export const filterTree = data => {

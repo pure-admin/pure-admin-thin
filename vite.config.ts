@@ -6,6 +6,7 @@ import { warpperEnv } from "./build/utils";
 import { createProxy } from "./build/proxy";
 import { viteMockServe } from "vite-plugin-mock";
 import svgLoader from "vite-svg-loader";
+import styleImport from "vite-plugin-style-import";
 import ElementPlus from "unplugin-element-plus/vite";
 
 const pathResolve = (dir: string): any => {
@@ -55,6 +56,17 @@ export default ({ command, mode }: ConfigEnv): UserConfigExport => {
       vue(),
       vueJsx(),
       svgLoader(),
+      styleImport({
+        libs: [
+          // 按需加载vxe-table
+          {
+            libraryName: "vxe-table",
+            esModule: true,
+            resolveComponent: name => `vxe-table/es/${name}`,
+            resolveStyle: name => `vxe-table/es/${name}/style.css`
+          }
+        ]
+      }),
       ElementPlus({}),
       viteMockServe({
         mockPath: "mock",
@@ -70,7 +82,9 @@ export default ({ command, mode }: ConfigEnv): UserConfigExport => {
     optimizeDeps: {
       include: [
         "element-plus/lib/locale/lang/zh-cn",
-        "element-plus/lib/locale/lang/en"
+        "element-plus/lib/locale/lang/en",
+        "vxe-table/lib/locale/lang/zh-CN",
+        "vxe-table/lib/locale/lang/en-US"
       ]
     },
     build: {

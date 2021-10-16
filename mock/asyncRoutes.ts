@@ -1,37 +1,6 @@
 // 根据角色动态生成路由
 import { MockMethod } from "vite-plugin-mock";
 
-// http://mockjs.com/examples.html#Object
-const systemRouter = {
-  path: "/system",
-  name: "system",
-  redirect: "/system/user",
-  meta: {
-    icon: "el-icon-setting",
-    title: "message.hssysManagement",
-    showLink: true,
-    rank: 6
-  },
-  children: [
-    {
-      path: "/system/user",
-      name: "user",
-      meta: {
-        title: "message.hsBaseinfo",
-        showLink: true
-      }
-    },
-    {
-      path: "/system/dict",
-      name: "dict",
-      meta: {
-        title: "message.hsDict",
-        showLink: true
-      }
-    }
-  ]
-};
-
 const permissionRouter = {
   path: "/permission",
   name: "permission",
@@ -77,7 +46,7 @@ export default [
       if (query.name === "admin") {
         return {
           code: 0,
-          info: [systemRouter, setDifAuthority("v-admin", permissionRouter)]
+          info: [setDifAuthority("v-admin", permissionRouter)]
         };
       } else {
         return {
