@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { ref, unref } from "vue";
 import { storageSession } from "/@/utils/storage";
+
 let purview = ref<string>(storageSession.getItem("info").username);
+
 function changRole() {
   if (unref(purview) === "admin") {
     storageSession.setItem("info", {
@@ -20,7 +22,7 @@ function changRole() {
 </script>
 
 <template>
-  <div class="app-container">
+  <div>
     <h4>
       当前角色：
       <span style="font-size: 26px">{{ purview }}</span>
