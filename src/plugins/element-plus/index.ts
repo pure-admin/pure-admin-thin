@@ -30,11 +30,32 @@ import {
   ElDrawer,
   ElPagination,
   ElAlert,
+  ElRadio,
   ElRadioButton,
   ElRadioGroup,
   ElDescriptions,
-  ElDescriptionsItem
+  ElDescriptionsItem,
+  ElBacktop,
+  ElSwitch
 } from "element-plus";
+
+// https://element-plus.org/zh-CN/component/icon.html
+import {
+  Check,
+  Menu,
+  HomeFilled,
+  SetUp,
+  Edit,
+  Setting,
+  Lollipop,
+  Link,
+  Position,
+  Histogram,
+  RefreshRight,
+  ArrowDown,
+  Close,
+  CloseBold
+} from "@element-plus/icons";
 
 const components = [
   ElTag,
@@ -66,10 +87,29 @@ const components = [
   ElDrawer,
   ElPagination,
   ElAlert,
+  ElRadio,
   ElRadioButton,
   ElRadioGroup,
   ElDescriptions,
-  ElDescriptionsItem
+  ElDescriptionsItem,
+  ElBacktop,
+  ElSwitch,
+
+  // icon
+  Check,
+  Menu,
+  HomeFilled,
+  SetUp,
+  Edit,
+  Setting,
+  Lollipop,
+  Link,
+  Position,
+  Histogram,
+  RefreshRight,
+  ArrowDown,
+  Close,
+  CloseBold
 ];
 
 const plugins = [ElLoading];
