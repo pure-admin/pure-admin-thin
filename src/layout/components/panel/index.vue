@@ -1,32 +1,17 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import { useEventListener, onClickOutside } from "@vueuse/core";
+import { onClickOutside } from "@vueuse/core";
 import { emitter } from "/@/utils/mitt";
 
 let show = ref<Boolean>(false);
 const target = ref(null);
-onClickOutside(target, () => {
+onClickOutside(target, event => {
+  if (event.clientX > target.value.offsetLeft) return;
   show.value = false;
 });
 
-const addEventClick = (): void => {
-  useEventListener("click", closeSidebar);
-};
-
-const closeSidebar = (evt: any): void => {
-  const parent = evt.target.closest(".right-panel");
-  if (!parent) {
-    show.value = false;
-    window.removeEventListener("click", closeSidebar);
-  }
-};
-
 emitter.on("openPanel", () => {
   show.value = true;
-});
-
-defineExpose({
-  addEventClick
 });
 </script>
 
@@ -37,7 +22,9 @@ defineExpose({
       <div class="right-panel-items">
         <div class="project-configuration">
           <h3>项目配置</h3>
-          <i class="el-icon-close" @click="show = !show"></i>
+          <el-icon title="关闭配置" class="el-icon-close" @click="show = !show">
+            <Close />
+          </el-icon>
         </div>
         <div style="border-bottom: 1px solid #dcdfe6"></div>
         <slot />

@@ -5,12 +5,12 @@ import {
   createWebHashHistory,
   RouteRecordNormalized
 } from "vue-router";
+import { RouteConfigs } from "/@/layout/types";
 import { split, uniqBy } from "lodash-es";
 import { i18n } from "/@/plugins/i18n";
 import { openLink } from "/@/utils/link";
 import NProgress from "/@/utils/progress";
 import { useTimeoutFn } from "@vueuse/core";
-import { RouteConfigs } from "/@/layout/types";
 import { storageSession, storageLocal } from "/@/utils/storage";
 import { usePermissionStoreHook } from "/@/store/modules/permission";
 
@@ -18,6 +18,7 @@ import { usePermissionStoreHook } from "/@/store/modules/permission";
 import homeRouter from "./modules/home";
 import Layout from "/@/layout/index.vue";
 import errorRouter from "./modules/error";
+import externalLink from "./modules/externalLink";
 import remainingRouter from "./modules/remaining";
 // 动态路由
 import { getAsyncRoutes } from "/@/api/routes";
@@ -25,7 +26,11 @@ import { getAsyncRoutes } from "/@/api/routes";
 // https://cn.vitejs.dev/guide/features.html#glob-import
 const modulesRoutes = import.meta.glob("/src/views/*/*/*.vue");
 
-const constantRoutes: Array<RouteComponent> = [homeRouter, errorRouter];
+const constantRoutes: Array<RouteComponent> = [
+  homeRouter,
+  externalLink,
+  errorRouter
+];
 
 // 按照路由中meta下的rank等级升序来排序路由
 export const ascending = arr => {
@@ -181,7 +186,7 @@ export function resetRouter() {
 }
 
 // 路由白名单
-const whiteList = ["/login", "/register"];
+const whiteList = ["/login"];
 
 router.beforeEach((to, _from, next) => {
   if (to.meta?.keepAlive) {

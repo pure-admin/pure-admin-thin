@@ -1,13 +1,14 @@
 // 根据角色动态生成路由
 import { MockMethod } from "vite-plugin-mock";
 
+// http://mockjs.com/examples.html#Object
 const permissionRouter = {
   path: "/permission",
   name: "permission",
   redirect: "/permission/page",
   meta: {
     title: "message.permission",
-    icon: "el-icon-lollipop",
+    icon: "Lollipop",
     showLink: true,
     rank: 3
   },
