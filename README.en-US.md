@@ -4,6 +4,10 @@
 
 The lite version is based on the shelf extracted from https://github.com/xiaoxian521/vue-pure-admin, which contains the main functions and is more suitable for actual project development
 
+## Usage
+
+I think you should fork the project first, so that you can pull the update synchronously when I update! ! !
+
 ## Supporting video tutorial
 
 bilibili: https://www.bilibili.com/video/BV1534y1S7HV/

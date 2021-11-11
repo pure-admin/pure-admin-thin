@@ -4,6 +4,10 @@
 
 精简版是基于 https://github.com/xiaoxian521/vue-pure-admin 提炼出的架子，包含主体功能，更适合实际项目开发
 
+## 用法
+
+我认为你应该先 fork 项目去开发，以便我更新时你可以同步拉取更新！！！
+
 ## 配套视频教程
 
 bilibili：https://www.bilibili.com/video/BV1534y1S7HV/
