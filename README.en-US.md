@@ -6,7 +6,19 @@ The lite version is based on the shelf extracted from https://github.com/xiaoxia
 
 ## Usage
 
-I think you should fork the project first, so that you can pull the update synchronously when I update! ! !
+### Installation dependencies
+
+pnpm install
+
+### Install a package
+
+pnpm add packageName
+
+### Uninstall a package
+
+pnpm remove packageName
+
+I think you should fork the project first to develop, so that you can pull the update synchronously when I update! ! !
 
 ## Supporting video tutorial
 
