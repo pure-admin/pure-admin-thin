@@ -1,5 +1,9 @@
 <h1>vue-pure-admin精简版</h1>
 
+[![license](https://img.shields.io/github/license/xiaoxian521/vue-pure-admin.svg)](LICENSE)
+
+**中文** | [English](./README.en-US.md)
+
 ## 介绍
 
 精简版是基于 https://github.com/xiaoxian521/vue-pure-admin 提炼出的架子，包含主体功能，更适合实际项目开发
