@@ -9,6 +9,7 @@ const permissionRouter = {
   meta: {
     title: "message.permission",
     icon: "Lollipop",
+    i18n: true,
     showLink: true,
     rank: 3
   },
@@ -18,6 +19,7 @@ const permissionRouter = {
       name: "permissionPage",
       meta: {
         title: "message.permissionPage",
+        i18n: true,
         showLink: true
       }
     },
@@ -26,6 +28,7 @@ const permissionRouter = {
       name: "permissionButton",
       meta: {
         title: "message.permissionButton",
+        i18n: true,
         showLink: true,
         authority: []
       }
