@@ -1,16 +1,18 @@
 import {
   Router,
+  RouteMeta,
   createRouter,
   RouteComponent,
+  RouteRecordName,
   createWebHashHistory,
   RouteRecordNormalized
 } from "vue-router";
-import { RouteConfigs } from "/@/layout/types";
-import { split, uniqBy } from "lodash-es";
-import { transformI18n } from "../utils/i18n";
 import { openLink } from "/@/utils/link";
 import NProgress from "/@/utils/progress";
+import { split, uniqBy } from "lodash-es";
 import { useTimeoutFn } from "@vueuse/core";
+import { RouteConfigs } from "/@/layout/types";
+import { transformI18n } from "/@/plugins/i18n";
 import { storageSession, storageLocal } from "/@/utils/storage";
 import { usePermissionStoreHook } from "/@/store/modules/permission";
 import { useMultiTagsStoreHook } from "/@/store/modules/multiTags";
@@ -224,7 +226,29 @@ router.beforeEach((to, _from, next) => {
       if (usePermissionStoreHook().wholeRoutes.length === 0)
         initRouter(name.username).then((router: Router) => {
           if (!useMultiTagsStoreHook().getMultiTagsCache) {
-            return router.push("/");
+            const handTag = (
+              path: string,
+              parentPath: string,
+              name: RouteRecordName,
+              meta: RouteMeta
+            ): void => {
+              useMultiTagsStoreHook().handleTags("push", {
+                path,
+                parentPath,
+                name,
+                meta
+              });
+            };
+            const parentPath = to.matched[0]?.path;
+            if (to.meta?.realPath) {
+              const { path, name, meta } = to.matched[0]?.children[0];
+              handTag(path, parentPath, name, meta);
+              return router.push(path);
+            } else {
+              const { path, name, meta } = to;
+              handTag(path, parentPath, name, meta);
+              return router.push(to.path);
+            }
           }
           router.push(to.path);
           // 刷新页面更新标签栏与页面路由匹配

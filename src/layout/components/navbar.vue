@@ -1,17 +1,18 @@
 <script setup lang="ts">
 import { useI18n } from "vue-i18n";
 import { emitter } from "/@/utils/mitt";
+import Notice from "./notice/index.vue";
+import avatars from "/@/assets/avatars.jpg";
+import { transformI18n } from "/@/plugins/i18n";
 import Hamburger from "./sidebar/hamBurger.vue";
 import { useRouter, useRoute } from "vue-router";
 import { storageSession } from "/@/utils/storage";
 import Breadcrumb from "./sidebar/breadCrumb.vue";
-import Notice from "./notice/index.vue";
 import { useAppStoreHook } from "/@/store/modules/app";
 import { unref, watch, getCurrentInstance } from "vue";
 import { deviceDetection } from "/@/utils/deviceDetection";
 import screenfull from "../components/screenfull/index.vue";
 import globalization from "/@/assets/svg/globalization.svg";
-import { transformI18n } from "/@/utils/i18n";
 
 const instance =
   getCurrentInstance().appContext.config.globalProperties.$storage;
@@ -106,16 +107,15 @@ function translationEn() {
       <!-- 退出登陆 -->
       <el-dropdown trigger="click">
         <span class="el-dropdown-link">
-          <img
-            src="https://avatars.githubusercontent.com/u/44761321?s=400&u=30907819abd29bb3779bc247910873e7c7f7c12f&v=4"
-          />
+          <img :src="avatars" />
           <p>{{ usename }}</p>
         </span>
         <template #dropdown>
           <el-dropdown-menu class="logout">
-            <el-dropdown-item icon="el-icon-switch-button" @click="logout">{{
-              $t("message.hsLoginOut")
-            }}</el-dropdown-item>
+            <el-dropdown-item @click="logout">
+              <i class="ri-logout-circle-r-line"></i
+              >{{ $t("message.hsLoginOut") }}</el-dropdown-item
+            >
           </el-dropdown-menu>
         </template>
       </el-dropdown>
@@ -254,6 +254,7 @@ function translationEn() {
 
 .logout {
   .el-dropdown-menu__item {
+    display: inline-flex;
     padding: 0 18px !important;
   }
 

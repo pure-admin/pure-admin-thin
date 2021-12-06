@@ -8,6 +8,10 @@
 
 精简版是基于 https://github.com/xiaoxian521/vue-pure-admin 提炼出的架子，包含主体功能，更适合实际项目开发
 
+## 文档
+
+<https://pure-admin-doc.vercel.app/>
+
 ## 用法
 
 ### 安装依赖
