@@ -10,6 +10,7 @@ import {
   getCurrentInstance
 } from "vue";
 import panel from "../panel/index.vue";
+import { getConfig } from "/@/config";
 import { useRouter } from "vue-router";
 import { emitter } from "/@/utils/mitt";
 import { templateRef } from "@vueuse/core";
@@ -29,23 +30,23 @@ const instanceConfig =
   getCurrentInstance().appContext.app.config.globalProperties.$config;
 
 let themeColors = ref<Array<themeColorsType>>([
-  // 暗雅（默认）
+  // 道奇蓝（默认）
   { rgb: "27, 42, 71", themeColor: "default" },
-  // 明亮
+  // 亮白色
   { rgb: "255, 255, 255", themeColor: "light" },
-  // 薄暮
+  // 猩红色
   { rgb: "245, 34, 45", themeColor: "dusk" },
-  // 火山
+  // 橙红色
   { rgb: "250, 84, 28", themeColor: "volcano" },
-  // 黄色
+  // 金色
   { rgb: "250, 219, 20", themeColor: "yellow" },
-  // 明青
+  // 绿宝石
   { rgb: "19, 194, 194", themeColor: "mingQing" },
-  // 极光绿
+  // 酸橙绿
   { rgb: "82, 196, 26", themeColor: "auroraGreen" },
-  // 粉红
+  // 深粉色
   { rgb: "235, 47, 150", themeColor: "pink" },
-  // 酱紫
+  // 深紫罗兰色
   { rgb: "114, 46, 209", themeColor: "saucePurple" }
 ]);
 
@@ -77,7 +78,8 @@ const logoVal = ref(storageLocal.getItem("logoVal") || "1");
 const settings = reactive({
   greyVal: instance.sets.grey,
   weakVal: instance.sets.weak,
-  tabsVal: instance.sets.hideTabs
+  tabsVal: instance.sets.hideTabs,
+  multiTagsCache: instance.sets.multiTagsCache
 });
 
 function toggleClass(flag: boolean, clsName: string, target?: HTMLElement) {
@@ -93,7 +95,8 @@ const greyChange = (value): void => {
   instance.sets = {
     grey: value,
     weak: instance.sets.weak,
-    hideTabs: instance.sets.hideTabs
+    hideTabs: instance.sets.hideTabs,
+    multiTagsCache: instance.sets.multiTagsCache
   };
 };
 
@@ -107,7 +110,8 @@ const weekChange = (value): void => {
   instance.sets = {
     grey: instance.sets.grey,
     weak: value,
-    hideTabs: instance.sets.hideTabs
+    hideTabs: instance.sets.hideTabs,
+    multiTagsCache: instance.sets.multiTagsCache
   };
 };
 
@@ -116,9 +120,21 @@ const tagsChange = () => {
   instance.sets = {
     grey: instance.sets.grey,
     weak: instance.sets.weak,
-    hideTabs: showVal
+    hideTabs: showVal,
+    multiTagsCache: instance.sets.multiTagsCache
   };
   emitter.emit("tagViewsChange", showVal);
+};
+
+const multiTagsCacheChange = () => {
+  let multiTagsCache = settings.multiTagsCache;
+  instance.sets = {
+    grey: instance.sets.grey,
+    weak: instance.sets.weak,
+    hideTabs: instance.sets.hideTabs,
+    multiTagsCache: multiTagsCache
+  };
+  useMultiTagsStoreHook().multiTagsCacheChange(multiTagsCache);
 };
 
 //初始化项目配置
@@ -148,6 +164,7 @@ function onReset() {
       }
     }
   ]);
+  useMultiTagsStoreHook().multiTagsCacheChange(getConfig().MultiTagsCache);
   router.push("/login");
 }
 
@@ -314,6 +331,18 @@ function setLayoutThemeColor(theme: string) {
           active-text="开"
           inactive-text="关"
           @change="logoChange"
+        >
+        </el-switch>
+      </li>
+      <li>
+        <span>标签页持久化</span>
+        <el-switch
+          v-model="settings.multiTagsCache"
+          inline-prompt
+          inactive-color="#a6a6a6"
+          active-text="开"
+          inactive-text="关"
+          @change="multiTagsCacheChange"
         >
         </el-switch>
       </li>
