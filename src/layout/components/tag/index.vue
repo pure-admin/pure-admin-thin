@@ -17,16 +17,18 @@ import closeLeft from "/@/assets/svg/close_left.svg";
 import closeOther from "/@/assets/svg/close_other.svg";
 import closeRight from "/@/assets/svg/close_right.svg";
 
+import { isEqual } from "lodash-es";
 import { emitter } from "/@/utils/mitt";
 import { transformI18n } from "/@/plugins/i18n";
 import { storageLocal } from "/@/utils/storage";
 import { useRoute, useRouter } from "vue-router";
 import { RouteConfigs, tagsViewsType } from "../../types";
-import { handleAliveRoute, delAliveRoutes } from "/@/router";
 import { useSettingStoreHook } from "/@/store/modules/settings";
+import { handleAliveRoute, delAliveRoutes } from "/@/router/utils";
 import { useMultiTagsStoreHook } from "/@/store/modules/multiTags";
 import { usePermissionStoreHook } from "/@/store/modules/permission";
 import { toggleClass, removeClass, hasClass } from "/@/utils/operate";
+
 import { templateRef, useResizeObserver, useDebounceFn } from "@vueuse/core";
 
 const route = useRoute();
@@ -43,6 +45,61 @@ const scrollbarDom = templateRef<HTMLElement | null>("scrollbarDom", null);
 
 let multiTags: ComputedRef<Array<RouteConfigs>> = computed(() => {
   return useMultiTagsStoreHook()?.multiTags;
+});
+
+const linkIsActive = computed(() => {
+  return item => {
+    if (Object.keys(route.query).length === 0) {
+      if (route.path === item.path) {
+        return "is-active";
+      } else {
+        return "";
+      }
+    } else {
+      if (isEqual(route?.query, item?.query)) {
+        return "is-active";
+      } else {
+        return "";
+      }
+    }
+  };
+});
+
+const scheduleIsActive = computed(() => {
+  return item => {
+    if (Object.keys(route.query).length === 0) {
+      if (route.path === item.path) {
+        return "schedule-active";
+      } else {
+        return "";
+      }
+    } else {
+      if (isEqual(route?.query, item?.query)) {
+        return "schedule-active";
+      } else {
+        return "";
+      }
+    }
+  };
+});
+
+const iconIsActive = computed(() => {
+  return (item, index) => {
+    if (index === 0) return;
+    if (Object.keys(route.query).length === 0) {
+      if (route.path === item.path) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      if (isEqual(route?.query, item?.query)) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+  };
 });
 
 const dynamicTagView = () => {
@@ -228,7 +285,13 @@ function deleteDynamicTag(obj: any, current: any, tag?: string) {
   // 存放被删除的缓存路由
   let delAliveRouteList = [];
   let valueIndex: number = multiTags.value.findIndex((item: any) => {
-    return item.path === obj.path;
+    if (item.query) {
+      if (item.path === obj.path) {
+        return item.query === obj.query;
+      }
+    } else {
+      return item.path === obj.path;
+    }
   });
 
   const spliceRoute = (
@@ -279,7 +342,8 @@ function deleteDynamicTag(obj: any, current: any, tag?: string) {
     if (tag === "left") return;
     nextTick(() => {
       router.push({
-        path: newRoute[0].path
+        path: newRoute[0].path,
+        query: newRoute[0].query
       });
     });
   } else {
@@ -291,7 +355,8 @@ function deleteDynamicTag(obj: any, current: any, tag?: string) {
     });
     !isHasActiveTag &&
       router.push({
-        path: newRoute[0].path
+        path: newRoute[0].path,
+        query: newRoute[0].query
       });
   }
 }
@@ -477,7 +542,8 @@ function openMenu(tag, e) {
 // 触发tags标签切换
 function tagOnClick(item) {
   router.push({
-    path: item?.path
+    path: item?.path,
+    query: item?.query
   });
   showMenuModel(item?.path);
 }
@@ -563,7 +629,7 @@ onBeforeMount(() => {
           :key="index"
           :class="[
             'scroll-item is-closable',
-            $route.path === item.path ? 'is-active' : '',
+            linkIsActive(item),
             $route.path === item.path && showModel === 'card'
               ? 'card-active'
               : ''
@@ -573,12 +639,12 @@ onBeforeMount(() => {
           @mouseleave.prevent="onMouseleave(item, index)"
           @click="tagOnClick(item)"
         >
-          <router-link :to="item.path">{{
-            transformI18n(item.meta.title, item.meta.i18n)
-          }}</router-link>
+          <router-link :to="item.path"
+            >{{ transformI18n(item.meta.title, item.meta.i18n) }}
+          </router-link>
           <el-icon
             v-if="
-              ($route.path === item.path && index !== 0) ||
+              iconIsActive(item, index) ||
               (index === activeIndex && index !== 0)
             "
             class="el-icon-close"
@@ -589,7 +655,7 @@ onBeforeMount(() => {
           <div
             :ref="'schedule' + index"
             v-if="showModel !== 'card'"
-            :class="[$route.path === item.path ? 'schedule-active' : '']"
+            :class="[scheduleIsActive(item)]"
           ></div>
         </div>
       </div>

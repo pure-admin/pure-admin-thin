@@ -14,13 +14,16 @@ export const routerArrays: Array<RouteConfigs> = [
 export type RouteConfigs = {
   path?: string;
   parentPath?: string;
+  query?: object;
   meta?: {
     title?: string;
     i18n?: boolean;
     icon?: string;
     showLink?: boolean;
     savedPosition?: boolean;
+    authority?: Array<string>;
   };
+  children?: RouteConfigs[];
   name?: string;
 };
 
