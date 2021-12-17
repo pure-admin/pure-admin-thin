@@ -1,11 +1,16 @@
 <script setup lang="ts">
 import { ref, watch } from "vue";
-import { useRoute, useRouter, RouteLocationMatched } from "vue-router";
+import { isEqual } from "lodash-es";
 import { transformI18n } from "/@/plugins/i18n";
+import { getParentPaths, findRouteByPath } from "/@/router/utils";
+import { useMultiTagsStoreHook } from "/@/store/modules/multiTags";
+import { useRoute, useRouter, RouteLocationMatched } from "vue-router";
 
-const levelList = ref([]);
 const route = useRoute();
+const levelList = ref([]);
 const router = useRouter();
+const routes = router.options.routes;
+const multiTags = useMultiTagsStoreHook().multiTags;
 
 const isDashboard = (route: RouteLocationMatched): boolean | string => {
   const name = route && (route.name as string);
@@ -16,7 +21,44 @@ const isDashboard = (route: RouteLocationMatched): boolean | string => {
 };
 
 const getBreadcrumb = (): void => {
-  let matched = route.matched.filter(item => item.meta && item.meta.title);
+  // 当前路由信息
+  let currentRoute;
+  if (Object.keys(route.query).length > 0) {
+    multiTags.forEach(item => {
+      if (isEqual(route.query, item?.query)) {
+        currentRoute = item;
+      }
+    });
+  } else {
+    currentRoute = findRouteByPath(router.currentRoute.value.path, multiTags);
+  }
+  // 当前路由的父级路径组成的数组
+  const parentRoutes = getParentPaths(router.currentRoute.value.path, routes);
+  // 存放组成面包屑的数组
+  let matched = [];
+  // 获取每个父级路径对应的路由信息
+  parentRoutes.forEach(path => {
+    if (path !== "/") {
+      matched.push(findRouteByPath(path, routes));
+    }
+  });
+  if (router.currentRoute.value.meta?.refreshRedirect) {
+    matched.unshift(
+      findRouteByPath(
+        router.currentRoute.value.meta.refreshRedirect as string,
+        routes
+      )
+    );
+  } else {
+    // 过滤与子级相同标题的父级路由
+    matched = matched.filter(item => {
+      return !item.redirect || (item.redirect && item.children.length !== 1);
+    });
+  }
+  if (currentRoute?.path !== "/welcome") {
+    matched.push(currentRoute);
+  }
+
   const first = matched[0];
   if (!isDashboard(first)) {
     matched = [
@@ -27,8 +69,9 @@ const getBreadcrumb = (): void => {
       } as unknown as RouteLocationMatched
     ].concat(matched);
   }
+
   levelList.value = matched.filter(
-    item => item.meta && item.meta.title && item.meta.breadcrumb !== false
+    item => item?.meta && item?.meta.title !== false
   );
 };
 
@@ -36,6 +79,11 @@ getBreadcrumb();
 
 watch(
   () => route.path,
+  () => getBreadcrumb()
+);
+
+watch(
+  () => route.query,
   () => getBreadcrumb()
 );
 
