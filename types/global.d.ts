@@ -82,6 +82,7 @@ declare global {
     Locale?: string;
     Layout?: string;
     Theme?: string;
+    DarkMode?: boolean;
     Grey?: boolean;
     Weak?: boolean;
     HideTabs?: boolean;
