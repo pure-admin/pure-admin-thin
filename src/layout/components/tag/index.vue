@@ -2,12 +2,13 @@
 import {
   ref,
   watch,
-  onBeforeMount,
   unref,
   nextTick,
   computed,
-  getCurrentInstance,
-  ComputedRef
+  ComputedRef,
+  CSSProperties,
+  onBeforeMount,
+  getCurrentInstance
 } from "vue";
 
 import close from "/@/assets/svg/close.svg";
@@ -17,6 +18,7 @@ import closeLeft from "/@/assets/svg/close_left.svg";
 import closeOther from "/@/assets/svg/close_other.svg";
 import closeRight from "/@/assets/svg/close_right.svg";
 
+import { $t as t } from "/@/plugins/i18n";
 import { emitter } from "/@/utils/mitt";
 import { isEqual, isEmpty } from "lodash-es";
 import { transformI18n } from "/@/plugins/i18n";
@@ -187,42 +189,42 @@ const handleScroll = (offset: number): void => {
 const tagsViews = ref<Array<tagsViewsType>>([
   {
     icon: refresh,
-    text: "message.hsreload",
+    text: t("buttons.hsreload"),
     divided: false,
     disabled: false,
     show: true
   },
   {
     icon: close,
-    text: "message.hscloseCurrentTab",
+    text: t("buttons.hscloseCurrentTab"),
     divided: false,
     disabled: multiTags.value.length > 1 ? false : true,
     show: true
   },
   {
     icon: closeLeft,
-    text: "message.hscloseLeftTabs",
+    text: t("buttons.hscloseLeftTabs"),
     divided: true,
     disabled: multiTags.value.length > 1 ? false : true,
     show: true
   },
   {
     icon: closeRight,
-    text: "message.hscloseRightTabs",
+    text: t("buttons.hscloseRightTabs"),
     divided: false,
     disabled: multiTags.value.length > 1 ? false : true,
     show: true
   },
   {
     icon: closeOther,
-    text: "message.hscloseOtherTabs",
+    text: t("buttons.hscloseOtherTabs"),
     divided: true,
     disabled: multiTags.value.length > 2 ? false : true,
     show: true
   },
   {
     icon: closeAll,
-    text: "message.hscloseAllTabs",
+    text: t("buttons.hscloseAllTabs"),
     divided: false,
     disabled: multiTags.value.length > 1 ? false : true,
     show: true
@@ -230,9 +232,13 @@ const tagsViews = ref<Array<tagsViewsType>>([
 ]);
 
 // 显示模式，默认灵动模式显示
-const showModel = ref(storageLocal.getItem("showModel") || "smart");
+const showModel = ref(
+  storageLocal.getItem("responsive-configure")?.showModel || "smart"
+);
 if (!showModel.value) {
-  storageLocal.setItem("showModel", "card");
+  const configure = storageLocal.getItem("responsive-configure");
+  configure.showModel = "card";
+  storageLocal.setItem("responsive-configure", configure);
 }
 
 let visible = ref(false);
@@ -306,7 +312,7 @@ function deleteDynamicTag(obj: any, current: any, tag?: string) {
           path: "/welcome",
           parentPath: "/",
           meta: {
-            title: "message.hshome",
+            title: "menus.hshome",
             i18n: true,
             icon: "el-icon-s-home",
             showLink: true
@@ -609,17 +615,23 @@ onBeforeMount(() => {
     });
   });
 });
+
+const getTabStyle = computed((): CSSProperties => {
+  return {
+    transform: `translateX(${translateX.value}px)`
+  };
+});
+
+const getContextMenuStyle = computed((): CSSProperties => {
+  return { left: buttonLeft.value + "px", top: buttonTop.value + "px" };
+});
 </script>
 
 <template>
   <div ref="containerDom" class="tags-view" v-if="!showTags">
     <i class="ri-arrow-left-s-line" @click="handleScroll(200)"></i>
     <div ref="scrollbarDom" class="scroll-container">
-      <div
-        class="tab"
-        ref="tabDom"
-        :style="{ transform: `translateX(${translateX}px)` }"
-      >
+      <div class="tab" ref="tabDom" :style="getTabStyle">
         <div
           :ref="'dynamic' + index"
           v-for="(item, index) in multiTags"
@@ -663,7 +675,7 @@ onBeforeMount(() => {
       <ul
         v-show="visible"
         :key="Math.random()"
-        :style="{ left: buttonLeft + 'px', top: buttonTop + 'px' }"
+        :style="getContextMenuStyle"
         class="contextmenu"
       >
         <div
@@ -682,7 +694,7 @@ onBeforeMount(() => {
     <ul class="right-button">
       <li>
         <el-icon
-          :title="$t('message.hsrefreshRoute')"
+          :title="$t('buttons.hsrefreshRoute')"
           class="el-icon-refresh-right rotate"
           @click="onFresh"
         >

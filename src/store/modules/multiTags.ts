@@ -8,21 +8,21 @@ export const useMultiTagsStore = defineStore({
   id: "pure-multiTags",
   state: () => ({
     // 存储标签页信息（路由信息）
-    multiTags: storageLocal.getItem("responsive-sets").multiTagsCache
+    multiTags: storageLocal.getItem("responsive-configure").multiTagsCache
       ? storageLocal.getItem("responsive-tags")
       : [
           {
             path: "/welcome",
             parentPath: "/",
             meta: {
-              title: "message.hshome",
-              icon: "el-icon-s-home",
+              title: "menus.hshome",
+              icon: "HomeFilled",
               i18n: true,
               showLink: true
             }
           }
         ],
-    multiTagsCache: storageLocal.getItem("responsive-sets").multiTagsCache
+    multiTagsCache: storageLocal.getItem("responsive-configure").multiTagsCache
   }),
   getters: {
     getMultiTagsCache() {
