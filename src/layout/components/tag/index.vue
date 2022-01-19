@@ -30,7 +30,6 @@ import { handleAliveRoute, delAliveRoutes } from "/@/router/utils";
 import { useMultiTagsStoreHook } from "/@/store/modules/multiTags";
 import { usePermissionStoreHook } from "/@/store/modules/permission";
 import { toggleClass, removeClass, hasClass } from "/@/utils/operate";
-
 import { templateRef, useResizeObserver, useDebounceFn } from "@vueuse/core";
 
 const route = useRoute();
@@ -128,7 +127,7 @@ const moveToView = (index: number): void => {
   if (!instance.refs["dynamic" + index]) {
     return;
   }
-  const tabItemEl = instance.refs["dynamic" + index];
+  const tabItemEl = instance.refs["dynamic" + index][0];
   const tabItemElOffsetLeft = (tabItemEl as HTMLElement).offsetLeft;
   const tabItemOffsetWidth = (tabItemEl as HTMLElement).offsetWidth;
   // 标签页导航栏可视长度（不包含溢出部分）
@@ -552,30 +551,32 @@ function tagOnClick(item) {
 }
 
 // 鼠标移入
-function onMouseenter(item, index) {
+function onMouseenter(index) {
   if (index) activeIndex.value = index;
   if (unref(showModel) === "smart") {
-    if (hasClass(instance.refs["schedule" + index], "schedule-active")) return;
-    toggleClass(true, "schedule-in", instance.refs["schedule" + index]);
-    toggleClass(false, "schedule-out", instance.refs["schedule" + index]);
+    if (hasClass(instance.refs["schedule" + index][0], "schedule-active"))
+      return;
+    toggleClass(true, "schedule-in", instance.refs["schedule" + index][0]);
+    toggleClass(false, "schedule-out", instance.refs["schedule" + index][0]);
   } else {
-    if (hasClass(instance.refs["dynamic" + index], "card-active")) return;
-    toggleClass(true, "card-in", instance.refs["dynamic" + index]);
-    toggleClass(false, "card-out", instance.refs["dynamic" + index]);
+    if (hasClass(instance.refs["dynamic" + index][0], "card-active")) return;
+    toggleClass(true, "card-in", instance.refs["dynamic" + index][0]);
+    toggleClass(false, "card-out", instance.refs["dynamic" + index][0]);
   }
 }
 
 // 鼠标移出
-function onMouseleave(item, index) {
+function onMouseleave(index) {
   activeIndex.value = -1;
   if (unref(showModel) === "smart") {
-    if (hasClass(instance.refs["schedule" + index], "schedule-active")) return;
-    toggleClass(false, "schedule-in", instance.refs["schedule" + index]);
-    toggleClass(true, "schedule-out", instance.refs["schedule" + index]);
+    if (hasClass(instance.refs["schedule" + index][0], "schedule-active"))
+      return;
+    toggleClass(false, "schedule-in", instance.refs["schedule" + index][0]);
+    toggleClass(true, "schedule-out", instance.refs["schedule" + index][0]);
   } else {
-    if (hasClass(instance.refs["dynamic" + index], "card-active")) return;
-    toggleClass(false, "card-in", instance.refs["dynamic" + index]);
-    toggleClass(true, "card-out", instance.refs["dynamic" + index]);
+    if (hasClass(instance.refs["dynamic" + index][0], "card-active")) return;
+    toggleClass(false, "card-in", instance.refs["dynamic" + index][0]);
+    toggleClass(true, "card-out", instance.refs["dynamic" + index][0]);
   }
 }
 
@@ -644,8 +645,8 @@ const getContextMenuStyle = computed((): CSSProperties => {
               : ''
           ]"
           @contextmenu.prevent="openMenu(item, $event)"
-          @mouseenter.prevent="onMouseenter(item, index)"
-          @mouseleave.prevent="onMouseleave(item, index)"
+          @mouseenter.prevent="onMouseenter(index)"
+          @mouseleave.prevent="onMouseleave(index)"
           @click="tagOnClick(item)"
         >
           <router-link :to="item.path"

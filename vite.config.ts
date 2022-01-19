@@ -170,6 +170,10 @@ export default ({ command, mode }: ConfigEnv): UserConfigExport => {
     ],
     optimizeDeps: {
       include: [
+        "pinia",
+        "vue-i18n",
+        "lodash-es",
+        "@vueuse/core",
         "element-plus/lib/locale/lang/zh-cn",
         "element-plus/lib/locale/lang/en"
       ],
