@@ -7,7 +7,7 @@ const permissionRouter = {
   redirect: "/permission/page/index",
   meta: {
     title: "menus.permission",
-    icon: "Lollipop",
+    icon: "lollipop",
     i18n: true,
     showLink: true,
     rank: 3
