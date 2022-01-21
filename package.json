@@ -34,6 +34,7 @@
     "@fortawesome/vue-fontawesome": "^3.0.0-5",
     "@vueuse/core": "^7.5.3",
     "@vueuse/motion": "^2.0.0-beta.9",
+    "@vueuse/shared": "^7.5.3",
     "animate.css": "^4.1.1",
     "axios": "^0.25.0",
     "css-color-function": "^1.3.3",
