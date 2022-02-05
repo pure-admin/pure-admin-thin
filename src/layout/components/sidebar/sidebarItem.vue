@@ -31,6 +31,19 @@ const props = defineProps({
   }
 });
 
+const getExtraIconStyle = computed((): CSSProperties => {
+  if (useAppStoreHook().getSidebarStatus) {
+    return {
+      position: "absolute",
+      right: "10px"
+    };
+  } else {
+    return {
+      position: "static"
+    };
+  }
+});
+
 const getNoDropdownStyle = computed((): CSSProperties => {
   return {
     display: "flex",
@@ -177,6 +190,9 @@ function resolvePath(routePath) {
           </el-tooltip>
           <FontIcon
             v-if="onlyOneChild.meta.extraIcon"
+            width="30px"
+            height="30px"
+            :style="getExtraIconStyle"
             :icon="onlyOneChild.meta.extraIcon.name"
             :svg="onlyOneChild.meta.extraIcon.svg ? true : false"
           ></FontIcon>
@@ -221,6 +237,9 @@ function resolvePath(routePath) {
       </el-tooltip>
       <FontIcon
         v-if="props.item.meta.extraIcon"
+        width="30px"
+        height="30px"
+        style="position: absolute; right: 10px"
         :icon="props.item.meta.extraIcon.name"
         :svg="props.item.meta.extraIcon.svg ? true : false"
       ></FontIcon>
