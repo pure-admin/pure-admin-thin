@@ -6,11 +6,13 @@ import WindiCSS from "vite-plugin-windicss";
 import { viteMockServe } from "vite-plugin-mock";
 import liveReload from "vite-plugin-live-reload";
 import ElementPlus from "unplugin-element-plus/vite";
+import { visualizer } from "rollup-plugin-visualizer";
 import removeConsole from "vite-plugin-remove-console";
 import themePreprocessorPlugin from "@zougt/vite-plugin-theme-preprocessor";
 
 export function getPluginsList(command, VITE_LEGACY) {
   const prodMock = true;
+  const lifecycle = process.env.npm_lifecycle_event;
   return [
     vue(),
     // jsx、tsx语法支持
@@ -97,6 +99,10 @@ export function getPluginsList(command, VITE_LEGACY) {
           targets: ["ie >= 11"],
           additionalLegacyPolyfills: ["regenerator-runtime/runtime"]
         })
+      : null,
+    // 打包分析
+    lifecycle === "report"
+      ? visualizer({ open: true, brotliSize: true, filename: "report.html" })
       : null
   ];
 }
