@@ -6,11 +6,16 @@
 
 ## introduce
 
-The lite version is based on the shelf extracted from https://github.com/xiaoxian521/vue-pure-admin, which contains the main functions and is more suitable for actual project development
+The lite version is based on the shelf extracted from [vue-pure-admin](https://github.com/xiaoxian521/vue-pure-admin), which contains the main functions and is more suitable for actual project development, the packaged size is only more than `2MB`
+
+## Supporting Video
+
+- [Click Watch Tutorial](https://www.bilibili.com/video/BV1534y1S7HV)
+- [Click Watch UI Design](https://www.bilibili.com/video/BV17g411T7rq)
 
 ## Docs
 
-<https://pure-admin-doc.vercel.app/>
+- [Click Watch Docs](https://pure-admin-doc.vercel.app)
 
 ## Usage
 

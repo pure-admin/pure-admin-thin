@@ -9,7 +9,6 @@ const permissionRouter = {
     title: "menus.permission",
     icon: "lollipop",
     i18n: true,
-    showLink: true,
     rank: 3
   },
   children: [
@@ -18,8 +17,7 @@ const permissionRouter = {
       name: "permissionPage",
       meta: {
         title: "menus.permissionPage",
-        i18n: true,
-        showLink: true
+        i18n: true
       }
     },
     {
@@ -28,7 +26,6 @@ const permissionRouter = {
       meta: {
         title: "menus.permissionButton",
         i18n: true,
-        showLink: true,
         authority: []
       }
     }

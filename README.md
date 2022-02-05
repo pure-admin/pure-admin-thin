@@ -6,16 +6,16 @@
 
 ## 介绍
 
-精简版是基于 https://github.com/xiaoxian521/vue-pure-admin 提炼出的架子，包含主体功能，更适合实际项目开发
+精简版是基于[vue-pure-admin](https://github.com/xiaoxian521/vue-pure-admin)提炼出的架子，包含主体功能，更适合实际项目开发，打包后的大小仅 `2MB`多
 
 ## 配套视频
 
-教程：<https://www.bilibili.com/video/BV1534y1S7HV/>  
-UI 设计：<https://www.bilibili.com/video/BV17g411T7rq/>
+- [点我查看教程](https://www.bilibili.com/video/BV1534y1S7HV)
+- [点我查看 UI 设计](https://www.bilibili.com/video/BV17g411T7rq)
 
 ## 配套文档
 
-<https://pure-admin-doc.vercel.app/>
+- [点我查看文档](https://pure-admin-doc.vercel.app)
 
 ## 维护者
 

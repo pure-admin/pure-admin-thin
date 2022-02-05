@@ -1,42 +1,14 @@
 <script setup lang="ts">
-import { ref, computed } from "vue";
+import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { initRouter } from "/@/router/utils";
 import { storageSession } from "/@/utils/storage";
 import { addClass, removeClass } from "/@/utils/operate";
 import bg from "/@/assets/login/bg.png";
 import avatar from "/@/assets/login/avatar.svg?component";
-import illustration0 from "/@/assets/login/illustration0.svg?component";
-import illustration1 from "/@/assets/login/illustration1.svg?component";
-import illustration2 from "/@/assets/login/illustration2.svg?component";
-import illustration3 from "/@/assets/login/illustration3.svg?component";
-import illustration4 from "/@/assets/login/illustration4.svg?component";
-import illustration5 from "/@/assets/login/illustration5.svg?component";
-import illustration6 from "/@/assets/login/illustration6.svg?component";
+import illustration from "/@/assets/login/illustration.svg?component";
 
 const router = useRouter();
-
-// eslint-disable-next-line vue/return-in-computed-property
-const currentWeek = computed(() => {
-  switch (String(new Date().getDay())) {
-    case "0":
-      return illustration0;
-    case "1":
-      return illustration1;
-    case "2":
-      return illustration2;
-    case "3":
-      return illustration3;
-    case "4":
-      return illustration4;
-    case "5":
-      return illustration5;
-    case "6":
-      return illustration6;
-    default:
-      return illustration4;
-  }
-});
 
 let user = ref("admin");
 let pwd = ref("123456");
@@ -73,7 +45,7 @@ function onPwdBlur() {
   <img :src="bg" class="wave" />
   <div class="login-container">
     <div class="img">
-      <component :is="currentWeek"></component>
+      <illustration />
     </div>
     <div class="login-box">
       <div class="login-form">
@@ -110,7 +82,7 @@ function onPwdBlur() {
           }"
         >
           <div class="icon">
-            <i class="fa fa-user"></i>
+            <IconifyIconOffline icon="fa-user" width="14" height="14" />
           </div>
           <div>
             <h5>用户名</h5>
@@ -139,7 +111,7 @@ function onPwdBlur() {
           }"
         >
           <div class="icon">
-            <i class="fa fa-lock"></i>
+            <IconifyIconOffline icon="fa-lock" width="14" height="14" />
           </div>
           <div>
             <h5>密码</h5>
