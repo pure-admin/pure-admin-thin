@@ -4,6 +4,7 @@ dist
 dist-ssr
 *.local
 .eslintcache
+.stylelintcache
 
 yarn.lock
 npm-debug.log*
