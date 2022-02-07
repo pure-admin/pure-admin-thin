@@ -57,6 +57,7 @@ module.exports = {
     "@typescript-eslint/ban-ts-comment": "off",
     "@typescript-eslint/no-empty-function": "off",
     "@typescript-eslint/no-non-null-assertion": "off",
+    "space-before-function-paren": 0,
     "@typescript-eslint/no-unused-vars": [
       "error",
       {
