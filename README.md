@@ -27,12 +27,6 @@
 
 <img src="http://yiming_chang.gitee.io/manages/pay.jpg" width="150px" height="150px" />
 
-## 付费咨询、需求定制
-
-作者精力有限，需要提供技术服务的可扫下面的二维码加微信，添加请备注来意
-
-<img src="http://yiming_chang.gitee.io/manages/wechat.jpg" width="150px" height="150px" />
-
 ## 用法
 
 ### 安装依赖
