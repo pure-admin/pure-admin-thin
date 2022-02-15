@@ -52,3 +52,7 @@ pnpm remove 包名
 ## ⚠️ 注意
 
 精简版不接受任何 issues 和 pr，如果有问题请到完整版 https://github.com/xiaoxian521/vue-pure-admin/issues/new/choose 去提，谢谢！！！
+
+## 许可证
+
+原则上不收取任何费用及版权，可以放心使用，不过如需二次开源（比如用此平台二次开发并开源）请联系作者获取许可！

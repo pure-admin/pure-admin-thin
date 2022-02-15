@@ -40,3 +40,7 @@ bilibili: https://www.bilibili.com/video/BV1534y1S7HV/
 ## ⚠️ Note
 
 The lite version does not accept any issues and prs. If you have any questions, please go to the full version https://github.com/xiaoxian521/vue-pure-admin/issues/new/choose to mention it, thank you! ! !
+
+## License
+
+In principle, no fees and copyrights are charged, and you can use it with confidence, but if you need secondary open source, please contact the author for permission!
