@@ -2,7 +2,7 @@ import { toRouteType } from "./types";
 import { openLink } from "/@/utils/link";
 import NProgress from "/@/utils/progress";
 import { constantRoutes } from "./modules";
-import { split, findIndex } from "lodash-es";
+import { split, findIndex } from "lodash-unified";
 import { transformI18n } from "/@/plugins/i18n";
 import remainingRouter from "./modules/remaining";
 import { storageSession } from "/@/utils/storage";

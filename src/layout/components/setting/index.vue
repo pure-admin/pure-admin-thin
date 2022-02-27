@@ -10,7 +10,7 @@ import {
   getCurrentInstance
 } from "vue";
 import rgbHex from "rgb-hex";
-import { find } from "lodash-es";
+import { find } from "lodash-unified";
 import { getConfig } from "/@/config";
 import { useRouter } from "vue-router";
 import panel from "../panel/index.vue";
@@ -111,7 +111,7 @@ function storageConfigureChange<T>(key: string, val: T): void {
 function toggleClass(flag: boolean, clsName: string, target?: HTMLElement) {
   const targetEl = target || document.body;
   let { className } = targetEl;
-  className = className.replace(clsName, "");
+  className = className.replace(clsName, "").trim();
   targetEl.className = flag ? `${className} ${clsName} ` : className;
 }
 
