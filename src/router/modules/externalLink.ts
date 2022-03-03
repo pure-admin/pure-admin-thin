@@ -2,8 +2,7 @@ import { $t } from "/@/plugins/i18n";
 const Layout = () => import("/@/layout/index.vue");
 
 const externalLink = {
-  path: "/external",
-  name: "external",
+  path: "/externals",
   component: Layout,
   meta: {
     icon: "link",
@@ -13,11 +12,11 @@ const externalLink = {
   },
   children: [
     {
-      path: "https://github.com/xiaoxian521/vue-pure-admin",
+      path: "/external",
+      name: "https://pure-admin-doc.vercel.app",
       meta: {
         title: $t("menus.externalLink"),
-        i18n: true,
-        rank: 191
+        i18n: true
       }
     }
   ]
