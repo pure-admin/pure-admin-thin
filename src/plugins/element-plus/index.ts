@@ -32,6 +32,8 @@ import {
   ElEmpty,
   ElCollapse,
   ElCollapseItem,
+  ElDialog,
+  ElCard,
   // 指令
   ElLoading,
   ElInfiniteScroll
@@ -72,7 +74,9 @@ const components = [
   ElAvatar,
   ElEmpty,
   ElCollapse,
-  ElCollapseItem
+  ElCollapseItem,
+  ElDialog,
+  ElCard
 ];
 
 export function useElementPlus(app: App) {

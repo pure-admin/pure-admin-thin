@@ -23,15 +23,15 @@
 
 ## 捐赠
 
-如果你觉得这个项目对你有帮助，你可以帮作者买一杯咖啡表示支持
+如果你觉得这个项目对您有帮助，可以帮作者买一杯果汁 🍹 表示支持
 
-<img src="http://yiming_chang.gitee.io/manages/pay.jpg" width="150px" height="150px" />
+<img src="https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/f69bf13c5b854ed5b699807cafa0e3ce~tplv-k3u1fbpfcp-zoom-in-crop-mark:1304:0:0:0.awebp?" width="150px" height="150px" />
 
 ## QQ 交流群
 
 群里严禁`黄`、`赌`、`毒`、`vpn`等违法行为！
 
-<img src="http://yiming_chang.gitee.io/manages/qq.jpg" width="150px" height="225px" />
+<img src="https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/f0697596aec84661b724f6eebdf8db17~tplv-k3u1fbpfcp-watermark.awebp?" width="150px" height="225px" />
 
 ## 用法
 
@@ -47,7 +47,7 @@ pnpm add 包名
 
 pnpm remove 包名
 
-我认为你应该先 fork 项目去开发，以便我更新时你可以同步拉取更新！！！
+我认为你应该先 fork 项目去开发，以便我更新时您可以同步拉取更新！！！
 
 ## ⚠️ 注意
 
@@ -56,3 +56,5 @@ pnpm remove 包名
 ## 许可证
 
 原则上不收取任何费用及版权，可以放心使用，不过如需二次开源（比如用此平台二次开发并开源）请联系作者获取许可！
+
+[MIT © xiaoxian521-2020](./LICENSE)

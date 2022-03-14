@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useI18n } from "vue-i18n";
 import { useNav } from "../../hooks/nav";
+import Search from "../search/index.vue";
 import Notice from "../notice/index.vue";
 import { templateRef } from "@vueuse/core";
 import SidebarItem from "./sidebarItem.vue";
@@ -13,7 +14,7 @@ import { usePermissionStoreHook } from "/@/store/modules/permission";
 import globalization from "/@/assets/svg/globalization.svg?component";
 
 const route = useRoute();
-const { locale } = useI18n();
+const { locale, t } = useI18n();
 const routers = useRouter().options.routes;
 const menuRef = templateRef<ElRef | null>("menu", null);
 const instance =
@@ -91,6 +92,8 @@ function translationEn() {
       />
     </el-menu>
     <div class="horizontal-header-right">
+      <!-- 菜单搜索 -->
+      <Search />
       <!-- 通知 -->
       <Notice id="header-notice" />
       <!-- 全屏 -->
@@ -130,14 +133,14 @@ function translationEn() {
                 icon="logout-circle-r-line"
                 style="margin: 5px"
               />
-              {{ $t("buttons.hsLoginOut") }}</el-dropdown-item
+              {{ t("buttons.hsLoginOut") }}</el-dropdown-item
             >
           </el-dropdown-menu>
         </template>
       </el-dropdown>
       <el-icon
         class="el-icon-setting"
-        :title="$t('buttons.hssystemSet')"
+        :title="t('buttons.hssystemSet')"
         @click="onPanel"
       >
         <IconifyIconOffline icon="setting" />

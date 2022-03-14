@@ -3,11 +3,10 @@ const Layout = () => import("/@/layout/index.vue");
 
 const errorRouter = {
   path: "/error",
-  name: "error",
   component: Layout,
   redirect: "/error/403",
   meta: {
-    icon: "position",
+    icon: "information-line",
     title: $t("menus.hserror"),
     i18n: true,
     rank: 9

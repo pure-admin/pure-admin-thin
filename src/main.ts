@@ -3,7 +3,7 @@ import router from "./router";
 import { setupStore } from "/@/store";
 import { getServerConfig } from "./config";
 import { createApp, Directive } from "vue";
-import { usI18n } from "../src/plugins/i18n";
+import { useI18n } from "../src/plugins/i18n";
 import { MotionPlugin } from "@vueuse/motion";
 import { useElementPlus } from "../src/plugins/element-plus";
 import { injectResponsiveStorage } from "/@/utils/storage/responsive";
@@ -12,6 +12,8 @@ import "animate.css";
 import "virtual:windi.css";
 // 导入公共样式
 import "./style/index.scss";
+import "@pureadmin/components/dist/index.css";
+import "@pureadmin/components/dist/theme.css";
 // 导入字体图标
 import "./assets/iconfont/iconfont.js";
 import "./assets/iconfont/iconfont.css";
@@ -39,6 +41,6 @@ getServerConfig(app).then(async config => {
   await router.isReady();
   injectResponsiveStorage(app, config);
   setupStore(app);
-  app.use(MotionPlugin).use(useElementPlus).use(usI18n);
+  app.use(MotionPlugin).use(useI18n).use(useElementPlus);
   app.mount("#app");
 });
