@@ -428,7 +428,7 @@ function onClickDrop(key, item, selectRoute?: RouteConfigs) {
   });
 }
 
-function handleCommand(command: object) {
+function handleCommand(command: any) {
   const { key, item } = command;
   onClickDrop(key, item);
 }
