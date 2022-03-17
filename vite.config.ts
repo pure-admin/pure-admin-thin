@@ -87,7 +87,7 @@ export default ({ command, mode }: ConfigEnv): UserConfigExport => {
         "element-plus/lib/locale/lang/en",
         "element-plus/lib/locale/lang/zh-cn"
       ],
-      exclude: ["@zougt/vite-plugin-theme-preprocessor/dist/browser-utils"]
+      exclude: ["@pureadmin/theme/dist/browser-utils"]
     },
     build: {
       sourcemap: false,
