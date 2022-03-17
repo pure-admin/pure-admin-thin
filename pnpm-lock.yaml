@@ -13,6 +13,7 @@ specifiers:
   "@pureadmin/components": ^1.0.2
   "@types/element-resize-detector": 1.1.3
   "@types/js-cookie": ^3.0.1
+  "@types/lodash": ^4.14.180
   "@types/lodash-es": ^4.17.6
   "@types/mockjs": 1.0.3
   "@types/node": 14.14.14
@@ -43,6 +44,7 @@ specifiers:
   husky: 7.0.2
   js-cookie: ^3.0.1
   lint-staged: 11.1.2
+  lodash: ^4.17.21
   lodash-es: ^4.17.21
   lodash-unified: ^1.0.2
   mitt: ^3.0.0
@@ -100,8 +102,9 @@ dependencies:
   element-plus: 2.1.4_1a412d14def5ff5ca1122000e4bee666
   element-resize-detector: 1.2.4
   js-cookie: 3.0.1
+  lodash: 4.17.21
   lodash-es: 4.17.21
-  lodash-unified: 1.0.2_f567d1d3c0c6a67669f03af7a1aa4dad
+  lodash-unified: 1.0.2_da03a4540fbd16bbaafbb96724306afd
   mitt: 3.0.0
   mockjs: 1.1.0
   nprogress: 0.2.0
@@ -127,6 +130,7 @@ devDependencies:
   "@intlify/vite-plugin-vue-i18n": 3.3.1_5005873cfdafd7bccc775c7a0caf8390
   "@types/element-resize-detector": 1.1.3
   "@types/js-cookie": 3.0.1
+  "@types/lodash": 4.14.180
   "@types/lodash-es": 4.17.6
   "@types/mockjs": 1.0.3
   "@types/node": 14.14.14
@@ -1202,13 +1206,13 @@ packages:
         integrity: sha512-R+zTeVUKDdfoRxpAryaQNRKk3105Rrgx2CFRClIgRGaqDTdjsm8h6IYA8ir584W3ePzkZfst5xIgDwYrlh9HLg==
       }
     dependencies:
-      "@types/lodash": 4.14.179
+      "@types/lodash": 4.14.180
     dev: true
 
-  /@types/lodash/4.14.179:
+  /@types/lodash/4.14.180:
     resolution:
       {
-        integrity: sha512-uwc1x90yCKqGcIOAT6DwOSuxnrAbpkdPsUOZtwrXb4D/6wZs+6qG7QnIawDuZWg0sWpxl+ltIKCaLoMlna678w==
+        integrity: sha512-XOKXa1KIxtNXgASAnwj7cnttJxS4fksBRywK/9LzRV5YxrF80BXZIGeQSuoESQ/VkUj30Ae0+YcuHc15wJCB2g==
       }
     dev: true
 
@@ -3049,10 +3053,10 @@ packages:
       is-arrayish: 0.2.1
     dev: true
 
-  /es-module-lexer/0.10.0:
+  /es-module-lexer/0.10.1:
     resolution:
       {
-        integrity: sha512-0fHYovx7ETE13wPL8zG/V+ElEgSeSwsgRVOvNZ+g/Y/2YyJq75+IEY4ZBr59vUZ3Voci1jBIktwpj8oODaWa+g==
+        integrity: sha512-7zffMCLzbiuuRjL5FVs4BEIr6j+Istfrbwzrwg8de4ep1kSyZNJmmq5RQzyqJq4YhvOmAxZ3DBsZXDO4I5N71Q==
       }
     dev: true
 
@@ -4646,20 +4650,6 @@ packages:
     dependencies:
       "@types/lodash-es": 4.17.6
       lodash: 4.17.21
-      lodash-es: 4.17.21
-    dev: false
-
-  /lodash-unified/1.0.2_f567d1d3c0c6a67669f03af7a1aa4dad:
-    resolution:
-      {
-        integrity: sha512-OGbEy+1P+UT26CYi4opY4gebD8cWRDxAT6MAObIVQMiqYdxZr1g3QHWCToVsm31x2NkLS4K3+MC2qInaRMa39g==
-      }
-    peerDependencies:
-      "@types/lodash-es": "*"
-      lodash: "*"
-      lodash-es: "*"
-    dependencies:
-      "@types/lodash-es": 4.17.6
       lodash-es: 4.17.21
     dev: false
 
@@ -6903,7 +6893,7 @@ packages:
     engines: { node: ">=12.20.0" }
     dependencies:
       "@rollup/pluginutils": 4.2.0
-      es-module-lexer: 0.10.0
+      es-module-lexer: 0.10.1
       magic-string: 0.26.1
       unplugin: 0.3.3_rollup@2.70.1+vite@2.9.0-beta.3
     transitivePeerDependencies:
