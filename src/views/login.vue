@@ -8,26 +8,18 @@ import bg from "/@/assets/login/bg.png";
 import avatar from "/@/assets/login/avatar.svg?component";
 import illustration from "/@/assets/login/illustration.svg?component";
 
-import { useUserStoreHook } from "/@/store/modules/user";
-import { usePermissionStoreHook } from "/@/store/modules/permission";
-
 const router = useRouter();
 
 let user = ref("admin");
 let pwd = ref("123456");
 
 const onLogin = (): void => {
-  useUserStoreHook()
-    .loginByUsername({ username: user.value, password: pwd.value })
-    .then(async (res: any) => {
-      storageSession.setItem("info", {
-        username: res.username,
-        accessToken: res.accessToken
-      });
-      usePermissionStoreHook().clearAllCachePage();
-      initRouter(res.username);
-      router.push("/");
-    });
+  storageSession.setItem("info", {
+    username: "admin",
+    accessToken: "eyJhbGciOiJIUzUxMiJ9.test"
+  });
+  initRouter("admin").then(() => {});
+  router.push("/");
 };
 
 function onUserFocus() {
