@@ -9,6 +9,8 @@ import { storageSession } from "/@/utils/storage";
 import { useAppStoreHook } from "/@/store/modules/app";
 import { useEpThemeStoreHook } from "/@/store/modules/epTheme";
 
+const errorInfo = "当前路由配置不正确，请检查配置";
+
 export function useNav() {
   const pureApp = useAppStoreHook();
   // 用户名
@@ -22,6 +24,10 @@ export function useNav() {
         color: locale === t ? "#f4f4f5" : "#000"
       };
     };
+  });
+
+  const avatarsStyle = computed(() => {
+    return username ? { marginRight: "10px" } : "";
   });
 
   const isCollapse = computed(() => {
@@ -59,6 +65,7 @@ export function useNav() {
   }
 
   function resolvePath(route) {
+    if (!route.children) return console.error(errorInfo);
     const httpReg = /^http(s?):\/\//;
     const routeChildPath = route.children[0]?.path;
     if (httpReg.test(routeChildPath)) {
@@ -77,6 +84,7 @@ export function useNav() {
     }
     // 找到当前路由的信息
     function findCurrentRoute(indexPath: string, routes) {
+      if (!routes) return console.error(errorInfo);
       return routes.map(item => {
         if (item.path === indexPath) {
           if (item.redirect) {
@@ -113,6 +121,7 @@ export function useNav() {
     isCollapse,
     pureApp,
     username,
+    avatarsStyle,
     getDropdownItemStyle
   };
 }
