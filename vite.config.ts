@@ -78,22 +78,14 @@ export default ({ command, mode }: ConfigEnv): UserConfigExport => {
     },
     plugins: getPluginsList(command, VITE_LEGACY),
     optimizeDeps: {
-      include: [
-        "pinia",
-        "vue-i18n",
-        "lodash-es",
-        "@vueuse/core",
-        "@iconify/vue",
-        "element-plus/lib/locale/lang/en",
-        "element-plus/lib/locale/lang/zh-cn"
-      ],
+      include: ["pinia", "vue-i18n", "lodash-es", "@vueuse/core"],
       exclude: ["@pureadmin/theme/dist/browser-utils"]
     },
     build: {
       sourcemap: false,
       brotliSize: false,
       // 消除打包大小超过500kb警告
-      chunkSizeWarningLimit: 2000
+      chunkSizeWarningLimit: 4000
     },
     define: {
       __INTLIFY_PROD_DEVTOOLS__: false,
