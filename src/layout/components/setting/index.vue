@@ -447,7 +447,7 @@ nextTick(() => {
       @click="onReset"
     >
       <IconifyIconOffline
-        icon="fa-sign-out"
+        icon="logout-circle-r-line"
         width="15"
         height="15"
         style="margin-right: 4px"

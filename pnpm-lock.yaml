@@ -5,8 +5,6 @@ specifiers:
   "@commitlint/config-conventional": 13.1.0
   "@ctrl/tinycolor": ^3.4.0
   "@iconify-icons/ep": ^1.2.4
-  "@iconify-icons/fa": ^1.2.2
-  "@iconify-icons/fa-solid": ^1.2.2
   "@iconify-icons/ri": ^1.2.1
   "@iconify/vue": ^3.2.0
   "@intlify/vite-plugin-vue-i18n": ^3.4.0
@@ -120,8 +118,6 @@ devDependencies:
   "@commitlint/cli": 13.1.0
   "@commitlint/config-conventional": 13.1.0
   "@iconify-icons/ep": 1.2.4
-  "@iconify-icons/fa": 1.2.2
-  "@iconify-icons/fa-solid": 1.2.2
   "@iconify-icons/ri": 1.2.1
   "@iconify/vue": 3.2.0_vue@3.2.33
   "@intlify/vite-plugin-vue-i18n": 3.4.0_3d08e1d9025840888da5ae870455a383
@@ -919,24 +915,6 @@ packages:
     resolution:
       {
         integrity: sha512-EmNFcajYB1ZfvviG6296NtfMlg0Q+w619qx/0H+tUaVxHIlChPlmOYMKRiOPKeNTvoFgEN+u5jbYxMWBqSWYDg==
-      }
-    dependencies:
-      "@iconify/types": 1.1.0
-    dev: true
-
-  /@iconify-icons/fa-solid/1.2.2:
-    resolution:
-      {
-        integrity: sha512-XNU+pk89pMbozQk9YMpxA+K+rPsq07MXJa9TwZS1oyBlbaIdeH6r/KOOeNYzmDVk6yaaZyTh9wfSJhuc8zIVYw==
-      }
-    dependencies:
-      "@iconify/types": 1.1.0
-    dev: true
-
-  /@iconify-icons/fa/1.2.2:
-    resolution:
-      {
-        integrity: sha512-8lecoWNI7X/GRw7B9NPVyGlPrqUxi1w1aZyzAm1s+eiPixmmivxdHtg53tGeSJpYgm/grfSti8EbYoiFTIckrw==
       }
     dependencies:
       "@iconify/types": 1.1.0
