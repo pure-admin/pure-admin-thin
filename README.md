@@ -51,7 +51,8 @@ pnpm remove 包名
 
 ## ⚠️ 注意
 
-精简版不接受任何 issues 和 pr，如果有问题请到完整版 https://github.com/xiaoxian521/vue-pure-admin/issues/new/choose 去提，谢谢！！！
+- 精简版不接受任何 issues 和 pr，如果有问题请到完整版 https://github.com/xiaoxian521/vue-pure-admin/issues/new/choose 去提，谢谢！！！
+- 不要使用`delete-i18n`分支代码，这个分支只是给你们完全删除国际化的参考，不会同步代码的！！！[完全删除国际化教程](https://www.bilibili.com/video/BV1Ru411B7k3/)，请务必使用`main`分支的代码！！！
 
 ## 许可证
 
