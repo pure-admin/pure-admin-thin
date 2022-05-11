@@ -28,3 +28,5 @@ menus:
   permission: Permission Manage
   permissionPage: Page Permission
   permissionButton: Button Permission
+status:
+  hsLoad: Loading...
