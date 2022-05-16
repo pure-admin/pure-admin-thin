@@ -37,9 +37,10 @@ I think you should fork the project first to develop, so that you can pull the u
 
 bilibili: https://www.bilibili.com/video/BV1534y1S7HV/
 
-## ⚠️ Note
+## ⚠️ Attention
 
-The lite version does not accept any issues and prs. If you have any questions, please go to the full version https://github.com/xiaoxian521/vue-pure-admin/issues/new/choose to mention it, thank you! ! !
+- The Lite version does not accept any issues and prs. If you have any questions, please go to the full version https://github.com/xiaoxian521/vue-pure-admin/issues/new/choose to mention, thank you! ! !
+- Don't use the `delete-i18n` branch code, this branch is just for you to completely delete the internationalized references, it won't sync the code! ! ! [Completely remove the internationalization tutorial](https://www.bilibili.com/video/BV1Ru411B7k3/), please be sure to use the code from the `main` branch! ! !
 
 ## License
 
