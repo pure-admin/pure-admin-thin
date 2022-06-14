@@ -19,7 +19,7 @@ buttons:
   hscloseOtherTabs: 关闭其他标签页
   hscloseAllTabs: 关闭全部标签页
 menus:
-  hshome: 首页
+  hshome: 邮费计算
   hslogin: 登陆
   hserror: 错误页面
   hsfourZeroFour: "404"

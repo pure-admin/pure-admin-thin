@@ -19,7 +19,7 @@ buttons:
   hscloseOtherTabs: Close OtherTabs
   hscloseAllTabs: Close AllTabs
 menus:
-  hshome: Home
+  hshome: Postage calculation
   hslogin: Login
   hserror: Error Page
   hsfourZeroFour: "404"
