@@ -44,8 +44,7 @@
         <div class="w-99/100 mt-4 p-2 bg-white">
           <div class="pt-1 pb-3 pl-2 pr-2 flex items-center justify-between">
             <div class="left">
-              <span class="color-444">{{ item.provinces }}省</span>&nbsp;
-              &nbsp;&nbsp;&nbsp;&nbsp;
+              <span class="color-444">{{ item.provinces }}省</span>&nbsp;&nbsp;
               <span class="fs-14">单重：{{ item.weight }}kg</span>&nbsp;&nbsp;
               <span class="fs-14">数量：{{ item.total }}</span
               >&nbsp;&nbsp;
@@ -59,7 +58,7 @@
           </div>
           <el-table :data="item.data" border>
             <el-table-column prop="type" label="物流商" />
-            <el-table-column prop="weight" label="首重" />
+            <el-table-column prop="weight" label="首重/kg" />
             <el-table-column prop="price" label="总价" />
           </el-table>
         </div>
@@ -95,8 +94,6 @@ async function getData() {
 
   // 物流商价格信息
   let priceData = await getPrice();
-  console.log(priceData);
-
   allPrice.value = priceData.data;
 }
 getData();
@@ -142,9 +139,9 @@ async function onSearch(formRef: FormInstance | undefined) {
       total: form.total
     };
 
+    let business = [];
     for (let index = 0; index < allPrice.value.length; index++) {
       const element = allPrice.value[index];
-      let business = [];
 
       for (let i = 0; i < element.data.length; i++) {
         const obj = element.data[i];
@@ -180,26 +177,49 @@ const clearResult = (index: Number | String) => {
   tableDataAll.value.splice(index, 1);
 };
 
-const calculate = (weight: Number, o: Object) => {
-  if (!weight) return;
+const calculate = (weight: Number, o: Object, firstWeight: Number) => {
+  if (!weight || o.price.length === 0) return 0;
   let price = 0;
 
-  // 判断省市并计算运费
-  o.price.forEach(element => {
-    if (element.length == 3 || element.length == 4) {
-      if (element[0] <= weight && weight <= element[1]) {
-        if (element.length == 3) {
-          price = element[2];
+  // 分辨快运种类
+  switch (firstWeight) {
+    case 3: // 百世
+      // 判断省市并计算运费
+      o.price.forEach(element => {
+        if (element.length == 3 || element.length == 4) {
+          if (element[0] <= weight && weight <= element[1]) {
+            if (element.length == 3) {
+              price = element[2];
+            } else {
+              price = floor(element[3] + (weight - element[0]) * element[2], 2);
+            }
+          }
         } else {
-          price = floor(element[3] + (weight - element[0]) * element[2], 2);
+          if (weight > element[0]) {
+            price = floor(weight * element[1], 2);
+          }
         }
-      }
-    } else {
-      if (weight > element[0]) {
-        price = floor(weight * element[1], 2);
-      }
+      });
+      break;
+    case 25: {
+      // 中通快运
+      let minimum = o.price[0][2]; // 最低消费
+
+      o.price.forEach(element => {
+        if (weight < firstWeight) {
+          price = o.price[0][2];
+        }
+        if (element[0] <= weight && weight <= element[1]) {
+          price = floor(weight * element[2]);
+        }
+      });
+
+      if (price <= minimum) price = minimum;
+      break;
     }
-  });
+    default:
+      break;
+  }
 
   return price;
 };
