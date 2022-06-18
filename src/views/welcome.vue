@@ -26,16 +26,36 @@
           type="number"
           v-model="form.weight"
           placeholder="请输入单重"
+          @input="countWeight"
         />
       </el-form-item>
-      <el-form-item label="数量" prop="total">
-        <el-input type="number" v-model="form.total" placeholder="请输入数量" />
+      <el-form-item label="数量" prop="amount">
+        <el-input
+          type="number"
+          @input="countAmount"
+          v-model="form.amount"
+          placeholder="请输入数量"
+        />
+      </el-form-item>
+      <el-form-item label="总量" prop="total">
+        <el-input
+          type="number"
+          v-model="form.total"
+          placeholder="请输入总重量"
+        />
       </el-form-item>
       <el-form-item>
         <el-button type="primary" :loading="loading" @click="onSearch(formRef)">
           比价
         </el-button>
         <el-button @click="resetForm(formRef)"> 重置 </el-button>
+        <el-tooltip
+          content="单重和数量输入一个, 就必须两个都输入. 总重可以单独输入"
+        >
+          <span class="ml-5 cursor">
+            <IconifyIconOffline icon="warning" />
+          </span>
+        </el-tooltip>
       </el-form-item>
     </el-form>
 
@@ -45,12 +65,7 @@
           <div class="pt-1 pb-3 pl-2 pr-2 flex items-center justify-between">
             <div class="left">
               <span class="color-444">{{ item.provinces }}省</span>&nbsp;&nbsp;
-              <span class="fs-14">单重：{{ item.weight }}kg</span>&nbsp;&nbsp;
-              <span class="fs-14">数量：{{ item.total }}</span
-              >&nbsp;&nbsp;
-              <span class="fs-14"
-                >总重：{{ floor(item.weight * item.total, 2) }}kg</span
-              >
+              <span class="fs-14">重量：{{ item.total }}kg</span>&nbsp;&nbsp;
             </div>
             <div class="right pa-1" @click="clearResult(index)">
               <IconifyIconOffline icon="close-bold" class="fs-24" />
@@ -72,6 +87,7 @@ import { reactive, ref } from "vue";
 import { FormInstance, FormRules } from "element-plus";
 import { getProvinces, getPrice } from "/@/api/system";
 import { floor } from "lodash-unified";
+console.log("welcome");
 
 const formRef = ref<FormInstance>();
 
@@ -81,6 +97,7 @@ let tableDataAll = ref([]); // 查询结果信息
 const form = reactive({
   provinces: "",
   weight: "",
+  amount: "",
   total: ""
 });
 
@@ -100,14 +117,16 @@ getData();
 
 const rules = reactive<FormRules>({
   provinces: [{ required: true, message: "请选择省份", trigger: "change" }],
-  weight: [{ required: true, message: "请输入单重", trigger: "blur" }],
-  total: [{ required: true, message: "请输入数量", trigger: "blur" }]
+  weight: [{ message: "请输入单重", trigger: "blur" }],
+  amount: [{ message: "请输入单重", trigger: "blur" }],
+  total: [{ required: true, message: "请输入总重量", trigger: "blur" }]
 });
 
 // let table1 = {
 //   provinces: "北京1",
 //   city: "北京",
 //   weight: 0,
+//   amount: 0,
 //   total: 0,
 //   data: [
 //     {
@@ -120,7 +139,7 @@ const rules = reactive<FormRules>({
 // };
 
 async function onSearch(formRef: FormInstance | undefined) {
-  if (!formRef) return;
+  if (!formRef && !form.total) return;
   await formRef.validate(async valid => {
     // 表单校验
     if (!valid) return;
@@ -136,6 +155,7 @@ async function onSearch(formRef: FormInstance | undefined) {
     let TableData = {
       provinces: pro.label,
       weight: form.weight,
+      amount: form.amount,
       total: form.total
     };
 
@@ -149,11 +169,7 @@ async function onSearch(formRef: FormInstance | undefined) {
           business.push({
             type: element.name,
             weight: element.weight,
-            price: await calculate(
-              floor(form.weight * form.total, 2),
-              obj,
-              element.weight
-            )
+            price: await calculate(form.total, obj, element.weight)
           });
           TableData["data"] = business;
         }
@@ -177,8 +193,25 @@ const clearResult = (index: Number | String) => {
   tableDataAll.value.splice(index, 1);
 };
 
-const calculate = (weight: Number, o: Object, firstWeight: Number) => {
-  if (!weight || o.price.length === 0) return 0;
+const countWeight = (value: number) => {
+  if (form.amount > 0 && value > 0) {
+    form.total = floor(value * form.amount, 2);
+  }
+  if (!value) {
+    form.total = "";
+  }
+};
+const countAmount = (value: number) => {
+  if (form.weight > 0 && value > 0) {
+    form.total = floor(value * form.weight, 2);
+  }
+  if (!value) {
+    form.total = "";
+  }
+};
+
+const calculate = (total: Number, o: Object, firstWeight: Number) => {
+  if (!total || o.price.length === 0) return 0;
   let price = 0;
 
   // 分辨快运种类
@@ -187,16 +220,16 @@ const calculate = (weight: Number, o: Object, firstWeight: Number) => {
       // 判断省市并计算运费
       o.price.forEach(element => {
         if (element.length == 3 || element.length == 4) {
-          if (element[0] <= weight && weight <= element[1]) {
+          if (element[0] <= total && total <= element[1]) {
             if (element.length == 3) {
               price = element[2];
             } else {
-              price = floor(element[3] + (weight - element[0]) * element[2], 2);
+              price = floor(element[3] + (total - element[0]) * element[2], 2);
             }
           }
         } else {
-          if (weight > element[0]) {
-            price = floor(weight * element[1], 2);
+          if (total > element[0]) {
+            price = floor(total * element[1], 2);
           }
         }
       });
@@ -206,11 +239,11 @@ const calculate = (weight: Number, o: Object, firstWeight: Number) => {
       let minimum = o.price[0][2]; // 最低消费
 
       o.price.forEach(element => {
-        if (weight < firstWeight) {
+        if (total < firstWeight) {
           price = o.price[0][2];
         }
-        if (element[0] <= weight && weight <= element[1]) {
-          price = floor(weight * element[2]);
+        if (element[0] <= total && total <= element[1]) {
+          price = floor(total * element[2], 2);
         }
       });
 
@@ -238,5 +271,9 @@ const calculate = (weight: Number, o: Object, firstWeight: Number) => {
 .fs-14 {
   font-size: 14px;
   color: #444;
+}
+
+.cursor {
+  cursor: pointer;
 }
 </style>

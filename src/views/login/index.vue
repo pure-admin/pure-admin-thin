@@ -60,6 +60,8 @@ function onHandle(value) {
 }
 
 watch(imgCode, value => {
+  ruleForm.verifyCode = value; // 直接赋值
+
   useUserStoreHook().SET_VERIFYCODE(value);
 });
 </script>

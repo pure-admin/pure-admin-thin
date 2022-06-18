@@ -1,5 +1,6 @@
 import { MockMethod } from "vite-plugin-mock";
 
+// 中通快运  青海用的宁夏数据
 export default [
   {
     url: "/getPrice",
@@ -86,7 +87,11 @@ export default [
                 label: "黑龙江",
                 level: "1",
                 code: "2300",
-                price: []
+                price: [
+                  [0, 3, 25],
+                  [3, 60, 2.3, 25],
+                  [60, 2.2]
+                ]
               },
               {
                 label: "上海",
@@ -238,7 +243,11 @@ export default [
                 label: "贵州",
                 level: "1",
                 code: "5200",
-                price: []
+                price: [
+                  [0, 3, 20],
+                  [3, 60, 1.6, 25],
+                  [60, 1.6]
+                ]
               },
               {
                 label: "云南",
@@ -294,7 +303,11 @@ export default [
                 label: "宁夏回族自治区",
                 level: "1",
                 code: "6400",
-                price: []
+                price: [
+                  [0, 3, 25],
+                  [3, 60, 2.5, 25],
+                  [60, 2.5]
+                ]
               },
               {
                 label: "新疆维吾尔自治区",
@@ -619,7 +632,12 @@ export default [
                 label: "青海",
                 level: "1",
                 code: "6300",
-                price: []
+                price: [
+                  [0, 24, 50],
+                  [25, 200, 2.5],
+                  [201, 300, 2.4],
+                  [301, 800, 2.3]
+                ]
               },
               {
                 label: "宁夏回族自治区",
