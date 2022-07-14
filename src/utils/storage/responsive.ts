@@ -55,5 +55,5 @@ export const injectResponsiveStorage = (app: App, config: ServerConfigs) => {
       : {}
   );
 
-  app.use(Storage, configObj);
+  app.use(Storage, { memory: configObj });
 };
