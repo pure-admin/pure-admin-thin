@@ -67,7 +67,7 @@ export const useUserStore = defineStore({
           path: "/welcome",
           parentPath: "/",
           meta: {
-            title: "menus.hshome",
+            title: "首页",
             icon: "home-filled"
           }
         }

@@ -5,13 +5,6 @@ import Storage from "responsive-storage";
 export const injectResponsiveStorage = (app: App, config: ServerConfigs) => {
   const configObj = Object.assign(
     {
-      // 国际化 默认中文zh
-      locale: {
-        type: Object,
-        default: Storage.getData(undefined, "locale") ?? {
-          locale: config.Locale ?? "zh"
-        }
-      },
       // layout模式以及主题
       layout: {
         type: Object,
@@ -45,7 +38,7 @@ export const injectResponsiveStorage = (app: App, config: ServerConfigs) => {
                 path: "/welcome",
                 parentPath: "/",
                 meta: {
-                  title: "menus.hshome",
+                  title: "首页",
                   icon: "home-filled"
                 }
               }

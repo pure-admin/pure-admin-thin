@@ -67,8 +67,7 @@ function search() {
   const flatMenusData = flatTree(menusData.value);
   resultOptions.value = flatMenusData.filter(
     menu =>
-      keyword.value &&
-      transformI18n(menu.meta?.title)
+      keyword.value && menu.meta?.title
         .toLocaleLowerCase()
         .includes(keyword.value.toLocaleLowerCase().trim())
   );

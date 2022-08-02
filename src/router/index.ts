@@ -4,7 +4,6 @@ import { toRouteType } from "./types";
 import { openLink } from "/@/utils/link";
 import NProgress from "/@/utils/progress";
 import { findIndex } from "lodash-unified";
-import { transformI18n } from "/@/plugins/i18n";
 import { storageSession } from "/@/utils/storage";
 import { buildHierarchyTree } from "/@/utils/tree";
 import { useMultiTagsStoreHook } from "/@/store/modules/multiTags";
@@ -89,10 +88,10 @@ router.beforeEach((to: toRouteType, _from, next) => {
     to.matched.some(item => {
       if (!item.meta.title) return "";
       const Title = getConfig().Title;
-      if (Title)
-        document.title = `${transformI18n(item.meta.title)} | ${Title}`;
-      else document.title = transformI18n(item.meta.title);
-    });
+      if (Title) document.title = `${item.meta.title} | ${Title}`;
+      // @ts-expect-error
+      else document.title = item.meta.title;
+       });
   if (name) {
     if (_from?.name) {
       // name为超链接

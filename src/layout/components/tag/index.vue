@@ -20,12 +20,10 @@ import closeLeft from "/@/assets/svg/close_left.svg?component";
 import closeOther from "/@/assets/svg/close_other.svg?component";
 import closeRight from "/@/assets/svg/close_right.svg?component";
 
-import { useI18n } from "vue-i18n";
 import { emitter } from "/@/utils/mitt";
 import { storageLocal } from "/@/utils/storage";
 import { useRoute, useRouter } from "vue-router";
 import { isEqual, isEmpty } from "lodash-unified";
-import { transformI18n, $t } from "/@/plugins/i18n";
 import { RouteConfigs, tagsViewsType } from "../../types";
 import { useSettingStoreHook } from "/@/store/modules/settings";
 import { handleAliveRoute, delAliveRoutes } from "/@/router/utils";
@@ -34,7 +32,6 @@ import { usePermissionStoreHook } from "/@/store/modules/permission";
 import { toggleClass, removeClass, hasClass } from "/@/utils/operate";
 import { templateRef, useResizeObserver, useDebounceFn } from "@vueuse/core";
 
-const { t } = useI18n();
 const route = useRoute();
 const router = useRouter();
 const translateX = ref<number>(0);
@@ -195,42 +192,42 @@ const handleScroll = (offset: number): void => {
 const tagsViews = reactive<Array<tagsViewsType>>([
   {
     icon: refresh,
-    text: $t("buttons.hsreload"),
+    text: "重新加载",
     divided: false,
     disabled: false,
     show: true
   },
   {
     icon: close,
-    text: $t("buttons.hscloseCurrentTab"),
+    text: "关闭当前标签页",
     divided: false,
     disabled: multiTags.value.length > 1 ? false : true,
     show: true
   },
   {
     icon: closeLeft,
-    text: $t("buttons.hscloseLeftTabs"),
+    text: "关闭左侧标签页",
     divided: true,
     disabled: multiTags.value.length > 1 ? false : true,
     show: true
   },
   {
     icon: closeRight,
-    text: $t("buttons.hscloseRightTabs"),
+    text: "关闭右侧标签页",
     divided: false,
     disabled: multiTags.value.length > 1 ? false : true,
     show: true
   },
   {
     icon: closeOther,
-    text: $t("buttons.hscloseOtherTabs"),
+    text: "关闭其他标签页",
     divided: true,
     disabled: multiTags.value.length > 2 ? false : true,
     show: true
   },
   {
     icon: closeAll,
-    text: $t("buttons.hscloseAllTabs"),
+    text: "关闭全部标签页",
     divided: false,
     disabled: multiTags.value.length > 1 ? false : true,
     show: true
@@ -318,7 +315,7 @@ function deleteDynamicTag(obj: any, current: any, tag?: string) {
           path: "/welcome",
           parentPath: "/",
           meta: {
-            title: "menus.hshome",
+            title: "首页",
             icon: "home-filled"
           }
         },
@@ -661,9 +658,7 @@ const getContextMenuStyle = computed((): CSSProperties => {
           @mouseleave.prevent="onMouseleave(index)"
           @click="tagOnClick(item)"
         >
-          <router-link :to="item.path"
-            >{{ transformI18n(item.meta.title) }}
-          </router-link>
+          <router-link :to="item.path">{{ item.meta.title }} </router-link>
           <span
             v-if="
               iconIsActive(item, index) ||
@@ -703,7 +698,7 @@ const getContextMenuStyle = computed((): CSSProperties => {
         >
           <li v-if="item.show" @click="selectTag(key, item)">
             <component :is="toRaw(item.icon)" :key="key" />
-            {{ t(item.text) }}
+             {{ item.text }}
           </li>
         </div>
       </ul>
@@ -712,7 +707,7 @@ const getContextMenuStyle = computed((): CSSProperties => {
     <ul class="right-button">
       <li>
         <span
-          :title="t('buttons.hsrefreshRoute')"
+          title="刷新路由"
           class="el-icon-refresh-right rotate"
           @click="onFresh"
         >
@@ -740,7 +735,7 @@ const getContextMenuStyle = computed((): CSSProperties => {
                   :key="key"
                   style="margin-right: 6px"
                 />
-                {{ t(item.text) }}
+                {{ item.text }}
               </el-dropdown-item>
             </el-dropdown-menu>
           </template>
