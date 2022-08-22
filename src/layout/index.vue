@@ -1,20 +1,11 @@
 <script setup lang="ts">
-import {
-  h,
-  reactive,
-  computed,
-  onMounted,
-  defineComponent,
-  getCurrentInstance
-} from "vue";
 import { setType } from "./types";
-import { useI18n } from "vue-i18n";
-import { routerArrays } from "./types";
 import { emitter } from "/@/utils/mitt";
+import { useLayout } from "./hooks/useLayout";
 import { useAppStoreHook } from "/@/store/modules/app";
-import { deviceDetection } from "/@/utils/deviceDetection";
-import { useMultiTagsStore } from "/@/store/modules/multiTags";
 import { useSettingStoreHook } from "/@/store/modules/settings";
+import { deviceDetection, useDark, useGlobal } from "@pureadmin/utils";
+import { h, reactive, computed, onMounted, defineComponent } from "vue";
 
 import backTop from "/@/assets/svg/back_top.svg?component";
 import fullScreen from "/@/assets/svg/full_screen.svg?component";
@@ -27,51 +18,11 @@ import setting from "./components/setting/index.vue";
 import Vertical from "./components/sidebar/vertical.vue";
 import Horizontal from "./components/sidebar/horizontal.vue";
 
+const { isDark } = useDark();
+const { layout } = useLayout();
 const isMobile = deviceDetection();
 const pureSetting = useSettingStoreHook();
-const instance = getCurrentInstance().appContext.app.config.globalProperties;
-
-// 清空缓存后从serverConfig.json读取默认配置并赋值到storage中
-const layout = computed(() => {
-  // 路由
-  if (
-    useMultiTagsStore().multiTagsCache &&
-    (!instance.$storage.tags || instance.$storage.tags.length === 0)
-  ) {
-    // eslint-disable-next-line vue/no-side-effects-in-computed-properties
-    instance.$storage.tags = routerArrays;
-  }
-  // 国际化
-  if (!instance.$storage.locale) {
-    // eslint-disable-next-line
-    instance.$storage.locale = { locale: instance.$config?.Locale ?? "zh" };
-    useI18n().locale.value = instance.$config?.Locale ?? "zh";
-  }
-  // 导航
-  if (!instance.$storage.layout) {
-    // eslint-disable-next-line vue/no-side-effects-in-computed-properties
-    instance.$storage.layout = {
-      layout: instance.$config?.Layout ?? "vertical",
-      theme: instance.$config?.Theme ?? "default",
-      darkMode: instance.$config?.DarkMode ?? false,
-      sidebarStatus: instance.$config?.SidebarStatus ?? true,
-      epThemeColor: instance.$config?.EpThemeColor ?? "#409EFF"
-    };
-  }
-  // 灰色模式、色弱模式、隐藏标签页
-  if (!instance.$storage.configure) {
-    // eslint-disable-next-line
-    instance.$storage.configure = {
-      grey: instance.$config?.Grey ?? false,
-      weak: instance.$config?.Weak ?? false,
-      hideTabs: instance.$config?.HideTabs ?? false,
-      showLogo: instance.$config?.ShowLogo ?? true,
-      showModel: instance.$config?.ShowModel ?? "smart",
-      multiTagsCache: instance.$config?.MultiTagsCache ?? false
-    };
-  }
-  return instance.$storage?.layout.layout;
-});
+const { $storage } = useGlobal<GlobalPropertiesApi>();
 
 const set: setType = reactive({
   sidebar: computed(() => {
@@ -96,18 +47,18 @@ const set: setType = reactive({
   }),
 
   hideTabs: computed(() => {
-    return instance.$storage?.configure.hideTabs;
+    return $storage?.configure.hideTabs;
   })
 });
 
 function setTheme(layoutModel: string) {
   window.document.body.setAttribute("layout", layoutModel);
-  instance.$storage.layout = {
+  $storage.layout = {
     layout: `${layoutModel}`,
-    theme: instance.$storage.layout?.theme,
-    darkMode: instance.$storage.layout?.darkMode,
-    sidebarStatus: instance.$storage.layout?.sidebarStatus,
-    epThemeColor: instance.$storage.layout?.epThemeColor
+    theme: $storage.layout?.theme,
+    darkMode: $storage.layout?.darkMode,
+    sidebarStatus: $storage.layout?.sidebarStatus,
+    epThemeColor: $storage.layout?.epThemeColor
   };
 }
 
@@ -123,7 +74,7 @@ let isAutoCloseSidebar = true;
 emitter.on("resize", ({ detail }) => {
   if (isMobile) return;
   let { width } = detail;
-  width <= 670 ? setTheme("vertical") : setTheme(useAppStoreHook().layout);
+  width <= 760 ? setTheme("vertical") : setTheme(useAppStoreHook().layout);
   /** width app-wrapper类容器宽度
    * 0 < width <= 760 隐藏侧边栏
    * 760 < width <= 990 折叠侧边栏
@@ -138,7 +89,7 @@ emitter.on("resize", ({ detail }) => {
       isAutoCloseSidebar = false;
     }
   } else if (width > 990) {
-    if (!set.sidebar.isClickHamburger) {
+    if (!set.sidebar.isClickCollapse) {
       toggle("desktop", true);
       isAutoCloseSidebar = true;
     }
@@ -165,7 +116,9 @@ const layoutHeader = defineComponent({
         class: { "fixed-header": set.fixedHeader },
         style: [
           set.hideTabs && layout.value.includes("horizontal")
-            ? "box-shadow: 0 1px 4px rgb(0 21 41 / 8%);"
+            ? isDark.value
+              ? "box-shadow: 0 1px 4px #0d0d0d"
+              : "box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08)"
             : ""
         ]
       },
@@ -185,10 +138,14 @@ const layoutHeader = defineComponent({
               default: () => [
                 h(
                   "span",
-                  { onClick: onFullScreen },
+                  {
+                    onClick: onFullScreen
+                  },
                   {
                     default: () => [
-                      !pureSetting.hiddenSideBar ? h(fullScreen) : h(exitScreen)
+                      !pureSetting.hiddenSideBar
+                        ? h(fullScreen, { class: "dark:color-white" })
+                        : h(exitScreen, { class: "dark:color-white" })
                     ]
                   }
                 )
@@ -234,7 +191,8 @@ const layoutHeader = defineComponent({
         <el-backtop
           title="回到顶部"
           target=".main-container .el-scrollbar__wrap"
-          ><backTop />
+        >
+          <backTop />
         </el-backtop>
         <layout-header />
         <!-- 主体内容 -->

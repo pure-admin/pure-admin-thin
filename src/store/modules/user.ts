@@ -2,7 +2,8 @@ import { defineStore } from "pinia";
 import { store } from "/@/store";
 import { userType } from "./types";
 import { router } from "/@/router";
-import { storageSession } from "/@/utils/storage";
+import { routerArrays } from "/@/layout/types";
+import { storageSession } from "@pureadmin/utils";
 import { getLogin, refreshToken } from "/@/api/user";
 import { getToken, setToken, removeToken } from "/@/utils/auth";
 import { useMultiTagsStoreHook } from "/@/store/modules/multiTags";
@@ -25,7 +26,7 @@ export const useUserStore = defineStore({
     name,
     // 前端生成的验证码（按实际需求替换）
     verifyCode: "",
-    // 登陆显示组件判断 0：登陆 1：手机登陆 2：二维码登陆 3：注册 4：忘记密码，默认0：登陆
+    // 登录显示组件判断 0：登录 1：手机登录 2：二维码登录 3：注册 4：忘记密码，默认0：登录
     currentPage: 0
   }),
   actions: {
@@ -62,16 +63,7 @@ export const useUserStore = defineStore({
       this.name = "";
       removeToken();
       storageSession.clear();
-      useMultiTagsStoreHook().handleTags("equal", [
-        {
-          path: "/welcome",
-          parentPath: "/",
-          meta: {
-            title: "menus.hshome",
-            icon: "home-filled"
-          }
-        }
-      ]);
+      useMultiTagsStoreHook().handleTags("equal", routerArrays);
       router.push("/login");
     },
     // 刷新token

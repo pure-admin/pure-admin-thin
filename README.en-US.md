@@ -6,7 +6,7 @@
 
 ## introduce
 
-The lite version is based on the shelf extracted from [vue-pure-admin](https://github.com/xiaoxian521/vue-pure-admin), which contains the main functions and is more suitable for actual project development, the packaged size is only more than `3MB`
+The lite version is based on the shelf extracted from [vue-pure-admin](https://github.com/xiaoxian521/vue-pure-admin), which contains the main functions and is more suitable for actual project development, the packaged size is only `3MB`
 
 ## Supporting Video
 

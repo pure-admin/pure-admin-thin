@@ -1,5 +1,9 @@
 <script setup lang="ts">
 import noServer from "/@/assets/status/500.svg?component";
+
+defineOptions({
+  name: "500"
+});
 </script>
 
 <template>
@@ -21,7 +25,7 @@ import noServer from "/@/assets/status/500.svg?component";
           }
         }"
       >
-        403
+        500
       </p>
       <p
         class="mb-4 text-gray-500"
@@ -55,8 +59,9 @@ import noServer from "/@/assets/status/500.svg?component";
             delay: 500
           }
         }"
-        >返回首页</el-button
       >
+        返回首页
+      </el-button>
     </div>
   </div>
 </template>

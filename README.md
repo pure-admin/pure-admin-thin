@@ -6,7 +6,7 @@
 
 ## 介绍
 
-精简版是基于[vue-pure-admin](https://github.com/xiaoxian521/vue-pure-admin)提炼出的架子，包含主体功能，更适合实际项目开发，打包后的大小仅 `3MB`多
+精简版是基于[vue-pure-admin](https://github.com/xiaoxian521/vue-pure-admin)提炼出的架子，包含主体功能，更适合实际项目开发，打包后的大小仅 `3MB`
 
 ## 配套视频
 
@@ -29,9 +29,9 @@
 
 ## QQ 交流群
 
-群里严禁`黄`、`赌`、`毒`、`vpn`等违法行为！
+一群已满，下面是二群，群里严禁`黄`、`赌`、`毒`、`vpn`等违法行为！
 
-<img src="https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/f0697596aec84661b724f6eebdf8db17~tplv-k3u1fbpfcp-watermark.awebp?" width="150px" height="225px" />
+<img src="https://pure-admin-doc.vercel.app/img/support/qq.png" width="150px" height="225px" />
 
 ## 用法
 

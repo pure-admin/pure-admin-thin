@@ -1,9 +1,10 @@
 import { $t } from "/@/plugins/i18n";
+import type { RouteConfigsTable } from "/#/index";
 const Layout = () => import("/@/layout/index.vue");
 
-const homeRouter = {
+const homeRouter: RouteConfigsTable = {
   path: "/",
-  name: "home",
+  name: "Home",
   component: Layout,
   redirect: "/welcome",
   meta: {
@@ -14,8 +15,8 @@ const homeRouter = {
   children: [
     {
       path: "/welcome",
-      name: "welcome",
-      component: () => import("/@/views/welcome.vue"),
+      name: "Welcome",
+      component: () => import("/@/views/welcome/index.vue"),
       meta: {
         title: $t("menus.hshome")
       }

@@ -1,65 +1,51 @@
 <script setup lang="ts">
-import { useI18n } from "vue-i18n";
-import { useNav } from "../hooks/nav";
-import { useRoute } from "vue-router";
 import Search from "./search/index.vue";
 import Notice from "./notice/index.vue";
 import mixNav from "./sidebar/mixNav.vue";
 import avatars from "/@/assets/avatars.jpg";
-import Hamburger from "./sidebar/hamBurger.vue";
-import { watch, getCurrentInstance } from "vue";
+import { useNav } from "/@/layout/hooks/useNav";
 import Breadcrumb from "./sidebar/breadCrumb.vue";
-import { deviceDetection } from "/@/utils/deviceDetection";
+import { deviceDetection } from "@pureadmin/utils";
+import topCollapse from "./sidebar/topCollapse.vue";
 import screenfull from "../components/screenfull/index.vue";
+import { useTranslationLang } from "../hooks/useTranslationLang";
 import globalization from "/@/assets/svg/globalization.svg?component";
 
-const route = useRoute();
-const { locale, t } = useI18n();
-const instance =
-  getCurrentInstance().appContext.config.globalProperties.$storage;
 const {
+  layout,
+  device,
   logout,
   onPanel,
-  changeTitle,
-  toggleSideBar,
   pureApp,
   username,
   avatarsStyle,
-  getDropdownItemStyle
+  toggleSideBar,
+  getDropdownItemStyle,
+  getDropdownItemClass
 } = useNav();
 
-watch(
-  () => locale.value,
-  () => {
-    changeTitle(route.meta);
-  }
-);
-
-function translationCh() {
-  instance.locale = { locale: "zh" };
-  locale.value = "zh";
-}
-
-function translationEn() {
-  instance.locale = { locale: "en" };
-  locale.value = "en";
-}
+const { t, locale, translationCh, translationEn } = useTranslationLang();
 </script>
 
 <template>
-  <div class="navbar">
-    <Hamburger
-      v-if="pureApp.layout !== 'mix'"
-      :is-active="pureApp.sidebar.opened"
+  <div
+    class="navbar bg-[#fff] shadow-sm shadow-[rgba(0, 21, 41, 0.08)] dark:shadow-[#0d0d0d]"
+  >
+    <topCollapse
+      v-if="device === 'mobile'"
       class="hamburger-container"
+      :is-active="pureApp.sidebar.opened"
       @toggleClick="toggleSideBar"
     />
 
-    <Breadcrumb v-if="pureApp.layout !== 'mix'" class="breadcrumb-container" />
+    <Breadcrumb
+      v-if="layout !== 'mix' && device !== 'mobile'"
+      class="breadcrumb-container"
+    />
 
-    <mixNav v-if="pureApp.layout === 'mix'" />
+    <mixNav v-if="layout === 'mix'" />
 
-    <div v-if="pureApp.layout === 'vertical'" class="vertical-header-right">
+    <div v-if="layout === 'vertical'" class="vertical-header-right">
       <!-- 菜单搜索 -->
       <Search />
       <!-- 通知 -->
@@ -68,34 +54,41 @@ function translationEn() {
       <screenfull id="header-screenfull" v-show="!deviceDetection()" />
       <!-- 国际化 -->
       <el-dropdown id="header-translation" trigger="click">
-        <globalization />
+        <globalization
+          class="navbar-bg-hover w-40px h-48px p-11px cursor-pointer outline-none"
+        />
         <template #dropdown>
           <el-dropdown-menu class="translation">
             <el-dropdown-item
               :style="getDropdownItemStyle(locale, 'zh')"
+              :class="['!dark:color-white', getDropdownItemClass(locale, 'zh')]"
               @click="translationCh"
-              ><IconifyIconOffline
+            >
+              <IconifyIconOffline
                 class="check-zh"
                 v-show="locale === 'zh'"
                 icon="check"
-              />简体中文</el-dropdown-item
-            >
+              />
+              简体中文
+            </el-dropdown-item>
             <el-dropdown-item
               :style="getDropdownItemStyle(locale, 'en')"
+              :class="['!dark:color-white', getDropdownItemClass(locale, 'en')]"
               @click="translationEn"
             >
               <span class="check-en" v-show="locale === 'en'">
-                <IconifyIconOffline icon="check" /> </span
-              >English
+                <IconifyIconOffline icon="check" />
+              </span>
+              English
             </el-dropdown-item>
           </el-dropdown-menu>
         </template>
       </el-dropdown>
-      <!-- 退出登陆 -->
+      <!-- 退出登录 -->
       <el-dropdown trigger="click">
-        <span class="el-dropdown-link">
+        <span class="el-dropdown-link navbar-bg-hover">
           <img v-if="avatars" :src="avatars" :style="avatarsStyle" />
-          <p v-if="username">{{ username }}</p>
+          <p v-if="username" class="dark:color-white">{{ username }}</p>
         </span>
         <template #dropdown>
           <el-dropdown-menu class="logout">
@@ -103,13 +96,14 @@ function translationEn() {
               <IconifyIconOffline
                 icon="logout-circle-r-line"
                 style="margin: 5px"
-              />{{ t("buttons.hsLoginOut") }}</el-dropdown-item
-            >
+              />
+              {{ t("buttons.hsLoginOut") }}
+            </el-dropdown-item>
           </el-dropdown-menu>
         </template>
       </el-dropdown>
       <span
-        class="el-icon-setting"
+        class="el-icon-setting navbar-bg-hover"
         :title="t('buttons.hssystemSet')"
         @click="onPanel"
       >
@@ -124,16 +118,12 @@ function translationEn() {
   width: 100%;
   height: 48px;
   overflow: hidden;
-  background: #fff;
-  box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
 
   .hamburger-container {
     line-height: 48px;
     height: 100%;
     float: left;
     cursor: pointer;
-    transition: background 0.3s;
-    -webkit-tap-highlight-color: transparent;
   }
 
   .vertical-header-right {
@@ -144,31 +134,6 @@ function translationEn() {
     color: #000000d9;
     justify-content: flex-end;
 
-    :deep(.dropdown-badge) {
-      &:hover {
-        background: #f6f6f6;
-      }
-    }
-
-    .screen-full {
-      cursor: pointer;
-
-      &:hover {
-        background: #f6f6f6;
-      }
-    }
-
-    .globalization {
-      height: 48px;
-      width: 40px;
-      padding: 11px;
-      cursor: pointer;
-
-      &:hover {
-        background: #f6f6f6;
-      }
-    }
-
     .el-dropdown-link {
       height: 48px;
       padding: 10px;
@@ -177,10 +142,6 @@ function translationEn() {
       justify-content: space-around;
       cursor: pointer;
       color: #000000d9;
-
-      &:hover {
-        background: #f6f6f6;
-      }
 
       p {
         font-size: 14px;
@@ -200,15 +161,12 @@ function translationEn() {
       display: flex;
       cursor: pointer;
       align-items: center;
-
-      &:hover {
-        background: #f6f6f6;
-      }
     }
   }
 
   .breadcrumb-container {
     float: left;
+    margin-left: 16px;
   }
 }
 

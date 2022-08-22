@@ -28,22 +28,26 @@ import LogoutCircleRLine from "@iconify-icons/ri/logout-circle-r-line";
 import InformationLine from "@iconify-icons/ri/information-line";
 import ArrowUpLine from "@iconify-icons/ri/arrow-up-line";
 import ArrowDownLine from "@iconify-icons/ri/arrow-down-line";
-import Bookmark from "@iconify-icons/ri/bookmark-2-line";
+import Bookmark2Line from "@iconify-icons/ri/bookmark-2-line";
 import User from "@iconify-icons/ri/user-3-fill";
 import Lock from "@iconify-icons/ri/lock-fill";
+import MenuUnfold from "@iconify-icons/ri/menu-unfold-fill";
+import MenuFold from "@iconify-icons/ri/menu-fold-fill";
 addIcon("arrow-right-s-line", ArrowRightSLine);
 addIcon("arrow-left-s-line", ArrowLeftSLine);
 addIcon("logout-circle-r-line", LogoutCircleRLine);
 addIcon("information-line", InformationLine);
 addIcon("arrow-up-line", ArrowUpLine);
 addIcon("arrow-down-line", ArrowDownLine);
-addIcon("bookmark", Bookmark);
+addIcon("bookmark-2-line", Bookmark2Line);
 addIcon("user", User);
 addIcon("lock", Lock);
+addIcon("menu-unfold", MenuUnfold);
+addIcon("menu-fold", MenuFold);
 
 // Iconify Icon在Vue里离线使用（用于内网环境）https://docs.iconify.design/icon-components/vue/offline.html
 export default defineComponent({
-  name: "IconifyIcon",
+  name: "IconifyIconOffline",
   components: { IconifyIcon },
   props: {
     icon: {
@@ -57,6 +61,9 @@ export default defineComponent({
       IconifyIcon,
       {
         icon: `${this.icon}`,
+        style: attrs?.style
+          ? Object.assign(attrs.style, { outline: "none" })
+          : { outline: "none" },
         ...attrs
       },
       {

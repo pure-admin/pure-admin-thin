@@ -1,5 +1,9 @@
 <script setup lang="ts">
 import noExist from "/@/assets/status/404.svg?component";
+
+defineOptions({
+  name: "404"
+});
 </script>
 
 <template>
@@ -55,8 +59,9 @@ import noExist from "/@/assets/status/404.svg?component";
             delay: 500
           }
         }"
-        >返回首页</el-button
       >
+        返回首页
+      </el-button>
     </div>
   </div>
 </template>

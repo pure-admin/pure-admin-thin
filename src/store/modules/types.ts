@@ -14,8 +14,8 @@ export type appType = {
   sidebar: {
     opened: boolean;
     withoutAnimation: boolean;
-    // 判断是否手动点击Hamburger
-    isClickHamburger: boolean;
+    // 判断是否手动点击Collapse
+    isClickCollapse: boolean;
   };
   layout: string;
   device: string;
@@ -27,6 +27,7 @@ export type multiType = {
   name: string;
   meta: any;
   query?: object;
+  params?: object;
 };
 
 export type setType = {

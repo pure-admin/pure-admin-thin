@@ -2,7 +2,7 @@
   "compilerOptions": {
     "target": "esnext",
     "module": "esnext",
-    "moduleResolution": "node",
+    "moduleResolution": "Node",
     "strict": false,
     "jsx": "preserve",
     "importHelpers": true,
@@ -24,7 +24,14 @@
       "@build/*": ["build/*"],
       "/#/*": ["types/*"]
     },
-    "types": ["node", "vite/client", "element-plus/global"],
+    "types": [
+      "node",
+      "vite/client",
+      "element-plus/global",
+      "@pureadmin/table/volar",
+      "unplugin-vue-define-options",
+      "@pureadmin/descriptions/volar"
+    ],
     "typeRoots": ["./node_modules/@types/", "./types"]
   },
   "include": [

@@ -2,12 +2,11 @@ import iconifyIconOffline from "./src/iconifyIconOffline";
 import iconifyIconOnline from "./src/iconifyIconOnline";
 import fontIcon from "./src/iconfont";
 
-export const IconifyIconOffline = iconifyIconOffline;
-export const IconifyIconOnline = iconifyIconOnline;
-export const FontIcon = fontIcon;
+/** 离线图标组件 */
+const IconifyIconOffline = iconifyIconOffline;
+/** 在线图标组件 */
+const IconifyIconOnline = iconifyIconOnline;
+/** iconfont组件 */
+const FontIcon = fontIcon;
 
-export default {
-  IconifyIconOffline,
-  IconifyIconOnline,
-  FontIcon
-};
+export { IconifyIconOffline, IconifyIconOnline, FontIcon };

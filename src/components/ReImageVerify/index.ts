@@ -1,12 +1,7 @@
-import { App } from "vue";
 import reImageVerify from "./src/index.vue";
+import { withInstall } from "@pureadmin/utils";
 
-export const ReImageVerify = Object.assign(reImageVerify, {
-  install(app: App) {
-    app.component(reImageVerify.name, reImageVerify);
-  }
-});
+/** 图形验证码组件 */
+export const ReImageVerify = withInstall(reImageVerify);
 
-export default {
-  ReImageVerify
-};
+export default ReImageVerify;

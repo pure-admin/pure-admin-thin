@@ -1,14 +1,15 @@
-<script lang="ts">
-export default {
-  name: "permissionButton"
-};
-</script>
-
 <script setup lang="ts">
 import { ref } from "vue";
-import { storageSession } from "/@/utils/storage";
+import type { StorageConfigs } from "/#/index";
+import { storageSession } from "@pureadmin/utils";
 
-const auth = ref<boolean>(storageSession.getItem("info").username || "admin");
+defineOptions({
+  name: "PermissionButton"
+});
+
+const auth = ref(
+  storageSession.getItem<StorageConfigs>("info").username || "admin"
+);
 
 function changRole(value) {
   storageSession.setItem("info", {

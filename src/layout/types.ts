@@ -12,7 +12,6 @@ export const routerArrays: Array<RouteConfigs> = [
 
 export type routeMetaType = {
   title?: string;
-  i18n?: boolean;
   icon?: string;
   showLink?: boolean;
   savedPosition?: boolean;
@@ -23,6 +22,7 @@ export type RouteConfigs = {
   path?: string;
   parentPath?: string;
   query?: object;
+  params?: object;
   meta?: routeMetaType;
   children?: RouteConfigs[];
   name?: string;
@@ -44,7 +44,7 @@ export interface setType {
   sidebar: {
     opened: boolean;
     withoutAnimation: boolean;
-    isClickHamburger: boolean;
+    isClickCollapse: boolean;
   };
   device: string;
   fixedHeader: boolean;
@@ -65,7 +65,6 @@ export type childrenType = {
   meta?: {
     icon?: string;
     title?: string;
-    i18n?: boolean;
     showParent?: boolean;
     extraIcon?: {
       svg?: boolean;

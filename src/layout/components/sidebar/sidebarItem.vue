@@ -1,14 +1,12 @@
 <script setup lang="ts">
 import path from "path";
-import { useNav } from "../../hooks/nav";
 import { childrenType } from "../../types";
+import { useNav } from "/@/layout/hooks/useNav";
 import { transformI18n } from "/@/plugins/i18n";
-import { useAppStoreHook } from "/@/store/modules/app";
 import { useRenderIcon } from "/@/components/ReIcon/src/hooks";
-import { ref, PropType, nextTick, computed, CSSProperties } from "vue";
+import { ref, toRaw, PropType, nextTick, computed, CSSProperties } from "vue";
 
-const { pureApp } = useNav();
-const menuMode = ["vertical", "mix"].includes(pureApp.layout);
+const { layout, isCollapse } = useNav();
 
 const props = defineProps({
   item: {
@@ -25,7 +23,7 @@ const props = defineProps({
 });
 
 const getExtraIconStyle = computed((): CSSProperties => {
-  if (useAppStoreHook().getSidebarStatus) {
+  if (!isCollapse.value) {
     return {
       position: "absolute",
       right: "10px"
@@ -46,7 +44,7 @@ const getNoDropdownStyle = computed((): CSSProperties => {
 
 const getDivStyle = computed((): CSSProperties => {
   return {
-    width: pureApp.sidebar.opened ? "" : "100%",
+    width: !isCollapse.value ? "" : "100%",
     display: "flex",
     alignItems: "center",
     justifyContent: "space-between",
@@ -54,9 +52,8 @@ const getDivStyle = computed((): CSSProperties => {
   };
 });
 
-const getMenuTextStyle = computed((): CSSProperties => {
+const getMenuTextStyle = computed(() => {
   return {
-    width: pureApp.sidebar.opened ? "125px" : "",
     overflow: "hidden",
     textOverflow: "ellipsis",
     outline: "none"
@@ -65,14 +62,14 @@ const getMenuTextStyle = computed((): CSSProperties => {
 
 const getSubTextStyle = computed((): CSSProperties => {
   return {
-    width: pureApp.sidebar.opened ? "125px" : "",
+    width: !isCollapse.value ? "210px" : "",
     display: "inline-block",
     overflow: "hidden",
     textOverflow: "ellipsis"
   };
 });
 
-const getSpanStyle = computed((): CSSProperties => {
+const getSpanStyle = computed(() => {
   return {
     overflow: "hidden",
     textOverflow: "ellipsis"
@@ -148,21 +145,31 @@ function resolvePath(routePath) {
       :class="{ 'submenu-title-noDropdown': !isNest }"
       :style="getNoDropdownStyle"
     >
-      <div class="sub-menu-icon" v-show="props.item.meta.icon">
+      <div class="sub-menu-icon" v-if="toRaw(props.item.meta.icon)">
         <component
           :is="
             useRenderIcon(
-              onlyOneChild.meta.icon ||
-                (props.item.meta && props.item.meta.icon)
+              toRaw(onlyOneChild.meta.icon) ||
+                (props.item.meta && toRaw(props.item.meta.icon))
             )
           "
         />
       </div>
       <div
         v-if="
-          !pureApp.sidebar.opened &&
-          pureApp.layout === 'mix' &&
-          props.item?.pathList?.length === 2
+          isCollapse &&
+          layout === 'vertical' &&
+          props.item?.pathList?.length === 1
+        "
+        :style="getDivStyle"
+      >
+        <span :style="getMenuTextStyle">
+          {{ transformI18n(onlyOneChild.meta.title) }}
+        </span>
+      </div>
+      <div
+        v-if="
+          isCollapse && layout === 'mix' && props.item?.pathList?.length === 2
         "
         :style="getDivStyle"
       >
@@ -172,9 +179,9 @@ function resolvePath(routePath) {
       </div>
       <template #title>
         <div :style="getDivStyle">
-          <span v-if="!menuMode">{{
-            transformI18n(onlyOneChild.meta.title)
-          }}</span>
+          <span v-if="layout === 'horizontal'">
+            {{ transformI18n(onlyOneChild.meta.title) }}
+          </span>
           <el-tooltip
             v-else
             placement="top"
@@ -205,24 +212,21 @@ function resolvePath(routePath) {
     </el-menu-item>
   </template>
 
-  <el-sub-menu
-    v-else
-    ref="subMenu"
-    :index="resolvePath(props.item.path)"
-    popper-append-to-body
-  >
+  <el-sub-menu v-else ref="subMenu" :index="resolvePath(props.item.path)">
     <template #title>
-      <div v-show="props.item.meta.icon" class="sub-menu-icon">
+      <div v-if="toRaw(props.item.meta.icon)" class="sub-menu-icon">
         <component
-          :is="useRenderIcon(props.item.meta && props.item.meta.icon)"
+          :is="useRenderIcon(props.item.meta && toRaw(props.item.meta.icon))"
         />
       </div>
-      <span v-if="!menuMode">{{ transformI18n(props.item.meta.title) }}</span>
+      <span v-if="layout === 'horizontal'">
+        {{ transformI18n(props.item.meta.title) }}
+      </span>
       <el-tooltip
         v-else
         placement="top"
         :offset="-10"
-        :disabled="!pureApp.sidebar.opened || !props.item.showTooltip"
+        :disabled="!isCollapse || !props.item.showTooltip"
       >
         <template #content>
           {{ transformI18n(props.item.meta.title) }}
