@@ -37,7 +37,6 @@ specifiers:
   autoprefixer: ^10.4.8
   axios: ^0.27.2
   cloc: ^2.10.0
-  cross-env: 7.0.3
   dayjs: ^1.11.4
   echarts: ^5.3.3
   element-plus: ^2.2.16
@@ -155,7 +154,6 @@ devDependencies:
   "@vue/runtime-core": 3.2.38
   autoprefixer: 10.4.8_postcss@8.4.16
   cloc: 2.10.0
-  cross-env: 7.0.3
   eslint: 8.23.0
   eslint-plugin-prettier: 4.2.1_eslint@8.23.0+prettier@2.7.1
   eslint-plugin-vue: 8.7.1_eslint@8.23.0
@@ -2371,7 +2369,7 @@ packages:
     hasBin: true
     dependencies:
       caniuse-lite: 1.0.30001390
-      electron-to-chromium: 1.4.242
+      electron-to-chromium: 1.4.243
       node-releases: 2.0.6
       update-browserslist-db: 1.0.7_browserslist@4.21.3
     dev: true
@@ -2777,17 +2775,6 @@ packages:
       {
         integrity: sha512-dcKFX3jn0MpIaXjisoRvexIJVEKzaq7z2rZKxf+MSr9TkdmHmsU4m2lcLojrj/FHl8mk5VxMmYA+ftRkP/3oKQ==
       }
-    dev: true
-
-  /cross-env/7.0.3:
-    resolution:
-      {
-        integrity: sha512-+/HKd6EgcQCJGh2PSjZuUitQBQynKor4wrFbRg4DtAgS1aWO+gU52xpH7M9ScGgXSYmAVS9bIJ8EzuaGw0oNAw==
-      }
-    engines: { node: ">=10.14", npm: ">=6", yarn: ">=1" }
-    hasBin: true
-    dependencies:
-      cross-spawn: 7.0.3
     dev: true
 
   /cross-spawn/7.0.3:
@@ -3218,10 +3205,10 @@ packages:
       }
     dev: true
 
-  /electron-to-chromium/1.4.242:
+  /electron-to-chromium/1.4.243:
     resolution:
       {
-        integrity: sha512-nPdgMWtjjWGCtreW/2adkrB2jyHjClo9PtVhR6rW+oxa4E4Wom642Tn+5LslHP3XPL5MCpkn5/UEY60EXylNeQ==
+        integrity: sha512-BgLD2gBX43OSXwlT01oYRRD5NIB4n3okTRxkzEAC6G0SZG4TTlyrWMjbOo0fajCwqwpRtMHXQNMjtRN6qpNtfw==
       }
     dev: true
 
