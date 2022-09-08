@@ -37,6 +37,7 @@ specifiers:
   autoprefixer: ^10.4.8
   axios: ^0.27.2
   cloc: ^2.10.0
+  cssnano: ^5.1.13
   dayjs: ^1.11.4
   echarts: ^5.3.3
   element-plus: ^2.2.16
@@ -154,6 +155,7 @@ devDependencies:
   "@vue/runtime-core": 3.2.38
   autoprefixer: 10.4.8_postcss@8.4.16
   cloc: 2.10.0
+  cssnano: 5.1.13_postcss@8.4.16
   eslint: 8.23.0
   eslint-plugin-prettier: 4.2.1_eslint@8.23.0+prettier@2.7.1
   eslint-plugin-vue: 8.7.1_eslint@8.23.0
