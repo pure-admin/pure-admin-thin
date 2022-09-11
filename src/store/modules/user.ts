@@ -32,7 +32,7 @@ export const useUserStore = defineStore({
     SET_NAME(name) {
       this.name = name;
     },
-    // 登入
+    /** 登入 */
     async loginByUsername(data) {
       return new Promise<void>((resolve, reject) => {
         getLogin(data)
@@ -47,7 +47,7 @@ export const useUserStore = defineStore({
           });
       });
     },
-    // 登出 清空缓存
+    /** 登出 清空缓存 */
     logOut() {
       this.token = "";
       this.name = "";
@@ -56,7 +56,7 @@ export const useUserStore = defineStore({
       useMultiTagsStoreHook().handleTags("equal", routerArrays);
       router.push("/login");
     },
-    // 刷新token
+    /** 刷新token */
     async refreshToken(data) {
       removeToken();
       return refreshToken(data).then(data => {
