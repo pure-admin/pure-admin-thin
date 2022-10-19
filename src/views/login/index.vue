@@ -3,7 +3,6 @@ import { useI18n } from "vue-i18n";
 import Motion from "./utils/motion";
 import { useRouter } from "vue-router";
 import { loginRules } from "./utils/rule";
-import { ref, reactive, toRaw } from "vue";
 import { initRouter } from "/@/router/utils";
 import { useNav } from "/@/layout/hooks/useNav";
 import { message } from "@pureadmin/components";
@@ -13,6 +12,7 @@ import { $t, transformI18n } from "/@/plugins/i18n";
 import { useLayout } from "/@/layout/hooks/useLayout";
 import { bg, avatar, illustration } from "./utils/static";
 import { useRenderIcon } from "/@/components/ReIcon/src/hooks";
+import { ref, reactive, toRaw, onMounted, onBeforeUnmount } from "vue";
 import { useTranslationLang } from "/@/layout/hooks/useTranslationLang";
 import { useDataThemeChange } from "/@/layout/hooks/useDataThemeChange";
 
@@ -64,6 +64,21 @@ const onLogin = async (formEl: FormInstance | undefined) => {
 };
 
 dataThemeChange();
+
+/** 使用公共函数，避免`removeEventListener`失效 */
+function onkeypress({ code }: KeyboardEvent) {
+  if (code === "Enter") {
+    onLogin(ruleFormRef.value);
+  }
+}
+
+onMounted(() => {
+  window.document.addEventListener("keypress", onkeypress);
+});
+
+onBeforeUnmount(() => {
+  window.document.removeEventListener("keypress", onkeypress);
+});
 </script>
 
 <template>
@@ -127,7 +142,6 @@ dataThemeChange();
             :model="ruleForm"
             :rules="loginRules"
             size="large"
-            @keyup.enter="onLogin(ruleFormRef)"
           >
             <Motion :delay="100">
               <el-form-item

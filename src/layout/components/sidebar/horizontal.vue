@@ -1,12 +1,10 @@
 <script setup lang="ts">
-import { ref, watch } from "vue";
 import Search from "../search/index.vue";
 import Notice from "../notice/index.vue";
+import { ref, watch, nextTick } from "vue";
 import SidebarItem from "./sidebarItem.vue";
 import avatars from "/@/assets/avatars.jpg";
 import { useNav } from "/@/layout/hooks/useNav";
-import screenfull from "../screenfull/index.vue";
-import { deviceDetection } from "@pureadmin/utils";
 import { useTranslationLang } from "../../hooks/useTranslationLang";
 import { usePermissionStoreHook } from "/@/store/modules/permission";
 import globalization from "/@/assets/svg/globalization.svg?component";
@@ -27,6 +25,10 @@ const {
   getDropdownItemStyle,
   getDropdownItemClass
 } = useNav();
+
+nextTick(() => {
+  menuRef.value?.handleResize();
+});
 
 watch(
   () => route.path,
@@ -62,8 +64,6 @@ watch(
       <Search />
       <!-- 通知 -->
       <Notice id="header-notice" />
-      <!-- 全屏 -->
-      <screenfull id="header-screenfull" v-show="!deviceDetection()" />
       <!-- 国际化 -->
       <el-dropdown id="header-translation" trigger="click">
         <globalization
@@ -113,7 +113,7 @@ watch(
         </template>
       </el-dropdown>
       <span
-        class="el-icon-setting navbar-bg-hover"
+        class="set-icon navbar-bg-hover"
         :title="t('buttons.hssystemSet')"
         @click="onPanel"
       >
