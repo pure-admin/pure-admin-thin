@@ -25,7 +25,7 @@ buttons:
 menus:
   hshome: 首页
   hslogin: 登录
-  hserror: 错误页面
+  hsabnormal: 异常页面
   hsfourZeroFour: "404"
   hsfourZeroOne: "403"
   hsFive: "500"

@@ -25,7 +25,7 @@ buttons:
 menus:
   hshome: Home
   hslogin: Login
-  hserror: Error Page
+  hsabnormal: Abnormal Page
   hsfourZeroFour: "404"
   hsfourZeroOne: "403"
   hsFive: "500"
