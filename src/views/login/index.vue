@@ -3,22 +3,22 @@ import { useI18n } from "vue-i18n";
 import Motion from "./utils/motion";
 import { useRouter } from "vue-router";
 import { loginRules } from "./utils/rule";
-import { initRouter } from "/@/router/utils";
-import { useNav } from "/@/layout/hooks/useNav";
+import { initRouter } from "@/router/utils";
+import { useNav } from "@/layout/hooks/useNav";
 import { message } from "@pureadmin/components";
 import type { FormInstance } from "element-plus";
-import { $t, transformI18n } from "/@/plugins/i18n";
-import { useLayout } from "/@/layout/hooks/useLayout";
-import { useUserStoreHook } from "/@/store/modules/user";
+import { $t, transformI18n } from "@/plugins/i18n";
+import { useLayout } from "@/layout/hooks/useLayout";
+import { useUserStoreHook } from "@/store/modules/user";
 import { bg, avatar, illustration } from "./utils/static";
-import { useRenderIcon } from "/@/components/ReIcon/src/hooks";
+import { useRenderIcon } from "@/components/ReIcon/src/hooks";
 import { ref, reactive, toRaw, onMounted, onBeforeUnmount } from "vue";
-import { useTranslationLang } from "/@/layout/hooks/useTranslationLang";
-import { useDataThemeChange } from "/@/layout/hooks/useDataThemeChange";
+import { useTranslationLang } from "@/layout/hooks/useTranslationLang";
+import { useDataThemeChange } from "@/layout/hooks/useDataThemeChange";
 
-import dayIcon from "/@/assets/svg/day.svg?component";
-import darkIcon from "/@/assets/svg/dark.svg?component";
-import globalization from "/@/assets/svg/globalization.svg?component";
+import dayIcon from "@/assets/svg/day.svg?component";
+import darkIcon from "@/assets/svg/dark.svg?component";
+import globalization from "@/assets/svg/globalization.svg?component";
 
 defineOptions({
   name: "Login"
@@ -193,7 +193,7 @@ onBeforeUnmount(() => {
 </template>
 
 <style scoped>
-@import url("/@/style/login.css");
+@import url("@/style/login.css");
 </style>
 
 <style lang="scss" scoped>

@@ -1,12 +1,12 @@
-import { $t } from "/@/plugins/i18n";
+import { $t } from "@/plugins/i18n";
 import type { RouteConfigsTable } from "/#/index";
-const Layout = () => import("/@/layout/index.vue");
+const Layout = () => import("@/layout/index.vue");
 
 const remainingRouter: Array<RouteConfigsTable> = [
   {
     path: "/login",
     name: "Login",
-    component: () => import("/@/views/login/index.vue"),
+    component: () => import("@/views/login/index.vue"),
     meta: {
       title: $t("menus.hslogin"),
       showLink: false,
@@ -26,7 +26,7 @@ const remainingRouter: Array<RouteConfigsTable> = [
       {
         path: "/redirect/:path(.*)",
         name: "Redirect",
-        component: () => import("/@/layout/redirect.vue")
+        component: () => import("@/layout/redirect.vue")
       }
     ]
   }
