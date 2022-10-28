@@ -7,7 +7,6 @@ export interface StorageConfigs {
   hiddenSideBar?: boolean;
   multiTagsCache?: boolean;
   keepAlive?: boolean;
-  locale?: string;
   layout?: string;
   theme?: string;
   darkMode?: boolean;
@@ -30,9 +29,6 @@ export interface StorageConfigs {
 }
 
 export interface ResponsiveStorage {
-  locale: {
-    locale?: string;
-  };
   layout: {
     layout?: string;
     theme?: string;

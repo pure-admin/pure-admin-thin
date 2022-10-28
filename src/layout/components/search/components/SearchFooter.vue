@@ -18,7 +18,7 @@
 
 <script lang="ts" setup>
 import enterOutlined from "@/assets/svg/enter_outlined.svg?component";
-import mdiKeyboardEsc from "@/assets/svg/mdi_keyboard_esc.svg?component";
+import mdiKeyboardEsc from "@/assets/svg/keyboard_esc.svg?component";
 </script>
 <style lang="scss" scoped>
 .search-footer {

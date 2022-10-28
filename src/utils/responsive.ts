@@ -8,10 +8,6 @@ const nameSpace = "responsive-";
 export const injectResponsiveStorage = (app: App, config: ServerConfigs) => {
   const configObj = Object.assign(
     {
-      // 国际化 默认中文zh
-      locale: Storage.getData("locale", nameSpace) ?? {
-        locale: config.Locale ?? "zh"
-      },
       // layout模式以及主题
       layout: Storage.getData("layout", nameSpace) ?? {
         layout: config.Layout ?? "vertical",

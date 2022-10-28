@@ -1,4 +1,3 @@
-import { $t } from "@/plugins/i18n";
 import type { RouteConfigsTable } from "/#/index";
 
 const errorRouter: RouteConfigsTable = {
@@ -6,7 +5,7 @@ const errorRouter: RouteConfigsTable = {
   redirect: "/error/403",
   meta: {
     icon: "information-line",
-    title: $t("menus.hsabnormal"),
+    title: "异常页面",
     rank: 9
   },
   children: [
@@ -15,7 +14,7 @@ const errorRouter: RouteConfigsTable = {
       name: "403",
       component: () => import("@/views/error/403.vue"),
       meta: {
-        title: $t("menus.hsfourZeroOne")
+        title: "403"
       }
     },
     {
@@ -23,7 +22,7 @@ const errorRouter: RouteConfigsTable = {
       name: "404",
       component: () => import("@/views/error/404.vue"),
       meta: {
-        title: $t("menus.hsfourZeroFour")
+        title: "404"
       }
     },
     {
@@ -31,7 +30,7 @@ const errorRouter: RouteConfigsTable = {
       name: "500",
       component: () => import("@/views/error/500.vue"),
       meta: {
-        title: $t("menus.hsFive")
+        title: "500"
       }
     }
   ]

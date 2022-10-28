@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { isEqual } from "lodash-unified";
-import { transformI18n } from "@/plugins/i18n";
 import { ref, watch, onMounted, toRaw } from "vue";
 import { getParentPaths, findRouteByPath } from "@/router/utils";
 import { useMultiTagsStoreHook } from "@/store/modules/multiTags";
@@ -53,7 +52,7 @@ const getBreadcrumb = (): void => {
       {
         path: "/welcome",
         parentPath: "/",
-        meta: { title: "menus.hshome" }
+        meta: { title: "首页" }
       } as unknown as RouteLocationMatched
     ].concat(matched);
   }
@@ -100,7 +99,7 @@ watch(
     <transition-group appear name="breadcrumb">
       <el-breadcrumb-item v-for="item in levelList" :key="item.path">
         <a @click.prevent="handleLink(item)">
-          {{ transformI18n(item.meta.title) }}
+          {{ item.meta.title }}
         </a>
       </el-breadcrumb-item>
     </transition-group>

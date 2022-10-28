@@ -1,4 +1,4 @@
-<h1>vue-pure-admin Lite Edition</h1>
+<h1>vue-pure-admin Lite Edition（no i18n version）</h1>
 
 [![license](https://img.shields.io/github/license/xiaoxian521/vue-pure-admin.svg)](LICENSE)
 
@@ -6,7 +6,7 @@
 
 ## introduce
 
-The lite version is based on the shelf extracted from [vue-pure-admin](https://github.com/xiaoxian521/vue-pure-admin), which contains the main functions and is more suitable for actual project development, the packaged size is only `3MB`, and will permanently sync the full version of the code
+The Lite version is based on the shelf extracted from [vue-pure-admin](https://github.com/xiaoxian521/vue-pure-admin), including the main functions, which is more suitable for actual project development, and the packaged size is lower than ` 3MB`, and will permanently sync the full version of the code. After enabling `brotli` compression and `cdn` to replace the native library mode, the package size is less than `500kb`
 
 ## Supporting Video
 
@@ -42,7 +42,6 @@ bilibili: https://www.bilibili.com/video/BV1534y1S7HV/
 ## ⚠️ Attention
 
 - The Lite version does not accept any issues and prs. If you have any questions, please go to the full version https://github.com/xiaoxian521/vue-pure-admin/issues/new/choose to mention, thank you! ! !
-- Don't use the `delete-i18n` branch code, this branch is just for you to completely delete the internationalized references, it won't sync the code! ! ! [Completely remove the internationalization tutorial](https://www.bilibili.com/video/BV1Ru411B7k3/), please be sure to use the code from the `main` branch! ! !
 
 ## License
 

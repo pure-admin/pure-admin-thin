@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import { useI18n } from "vue-i18n";
 import { useRoute } from "vue-router";
 import { ref, unref, onMounted, nextTick } from "vue";
 
@@ -7,7 +6,6 @@ defineOptions({
   name: "FrameView"
 });
 
-const { t } = useI18n();
 const loading = ref(true);
 const currentRoute = useRoute();
 const frameSrc = ref<string>("");
@@ -45,11 +43,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div
-    class="frame"
-    v-loading="loading"
-    :element-loading-text="t('status.hsLoad')"
-  >
+  <div class="frame" v-loading="loading" element-loading-text="加载中...">
     <iframe :src="frameSrc" class="frame-iframe" ref="frameRef" />
   </div>
 </template>

@@ -1,8 +1,6 @@
 <script setup lang="ts">
-import { useI18n } from "vue-i18n";
 import { useFullscreen } from "@vueuse/core";
 
-const { t } = useI18n();
 const { isFullscreen, toggle } = useFullscreen();
 </script>
 
@@ -12,9 +10,7 @@ const { isFullscreen, toggle } = useFullscreen();
     @click="toggle"
   >
     <FontIcon
-      :title="
-        isFullscreen ? t('buttons.hsexitfullscreen') : t('buttons.hsfullscreen')
-      "
+      :title="isFullscreen ? '退出全屏' : '全屏'"
       :icon="isFullscreen ? 'team-iconexit-fullscreen' : 'team-iconfullscreen'"
     />
   </div>

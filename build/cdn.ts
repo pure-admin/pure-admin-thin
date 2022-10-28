@@ -20,11 +20,6 @@ export const cdn = importToCDN({
       var: "VueRouter",
       path: "vue-router.global.min.js"
     },
-    {
-      name: "vue-i18n",
-      var: "VueI18n",
-      path: "vue-i18n.runtime.global.prod.min.js"
-    },
     // 项目中没有直接安装vue-demi，但是pinia用到了，所以需要在引入pinia前引入vue-demi（https://github.com/vuejs/pinia/blob/v2/packages/pinia/package.json#L77）
     {
       name: "vue-demi",

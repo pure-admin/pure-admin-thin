@@ -1,11 +1,7 @@
 import "xe-utils";
 import "./index.scss";
-import XEUtils from "xe-utils";
-import { App, unref } from "vue";
-import { i18n } from "@/plugins/i18n";
+import { App } from "vue";
 import "font-awesome/css/font-awesome.min.css";
-import zh from "vxe-table/lib/locale/lang/zh-CN";
-import en from "vxe-table/lib/locale/lang/en-US";
 
 import {
   // 核心
@@ -60,18 +56,6 @@ VXETable.setup({
   },
   input: {
     clearable: true
-  },
-  i18n: (key, args) => {
-    return unref(i18n.global.locale) === "zh"
-      ? XEUtils.toFormatString(XEUtils.get(zh, key), args)
-      : XEUtils.toFormatString(XEUtils.get(en, key), args);
-  },
-  translate(key) {
-    const NAMESPACED = ["el.", "buttons."];
-    if (key && NAMESPACED.findIndex(v => key.includes(v)) !== -1) {
-      return i18n.global.t.call(i18n.global.locale, key);
-    }
-    return key;
   }
 });
 
