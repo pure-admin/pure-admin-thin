@@ -15,9 +15,8 @@
 
 ## 配套文档
 
-- [点我查看国内文档站](http://yiming_chang.gitee.io/pure-admin-doc)
-- [点我查看国外文档站 1](https://xiaoxian521.github.io/pure-admin-doc)
-- [点我查看国外文档站 2](https://pure-admin-doc.vercel.app)
+- [点我查看国内文档站](https://yiming_chang.gitee.io/pure-admin-doc)
+- [点我查看国外文档站](https://xiaoxian521.github.io/pure-admin-doc)
 
 ## 维护者
 

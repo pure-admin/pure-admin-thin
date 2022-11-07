@@ -15,9 +15,8 @@ The Lite version is based on the shelf extracted from [vue-pure-admin](https://g
 
 ## Docs
 
-- [Click me to view the domestic documentation site](http://yiming_chang.gitee.io/pure-admin-doc)
-- [Click me to view foreign document site 1](https://xiaoxian521.github.io/pure-admin-doc)
-- [Click me to view foreign document site 2](https://pure-admin-doc.vercel.app)
+- [Click me to view the domestic documentation site](https://yiming_chang.gitee.io/pure-admin-doc)
+- [Click me to view foreign document site](https://xiaoxian521.github.io/pure-admin-doc)
 
 ## Usage
 
