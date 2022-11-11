@@ -8,7 +8,7 @@ import { getParentPaths, findRouteByPath } from "@/router/utils";
 import { usePermissionStoreHook } from "@/store/modules/permission";
 
 const menuRef = ref();
-let defaultActive = ref(null);
+const defaultActive = ref(null);
 
 const {
   route,
