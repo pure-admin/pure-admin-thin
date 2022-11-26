@@ -1,7 +1,6 @@
-import type { RouteConfigsTable } from "/#/index";
 const Layout = () => import("@/layout/index.vue");
 
-const homeRouter: RouteConfigsTable = {
+export default {
   path: "/",
   name: "Home",
   component: Layout,
@@ -21,6 +20,4 @@ const homeRouter: RouteConfigsTable = {
       }
     }
   ]
-};
-
-export default homeRouter;
+} as RouteConfigsTable;

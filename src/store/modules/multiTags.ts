@@ -1,7 +1,6 @@
 import { defineStore } from "pinia";
 import { store } from "@/store";
-import { isEqual } from "lodash-unified";
-import type { StorageConfigs } from "/#/index";
+import { isEqual } from "@pureadmin/utils";
 import { routerArrays } from "@/layout/types";
 import { multiType, positionType } from "./types";
 import { isUrl, storageLocal } from "@pureadmin/utils";
@@ -11,11 +10,11 @@ export const useMultiTagsStore = defineStore({
   state: () => ({
     // 存储标签页信息（路由信息）
     multiTags: storageLocal.getItem<StorageConfigs>("responsive-configure")
-      .multiTagsCache
+      ?.multiTagsCache
       ? storageLocal.getItem<StorageConfigs>("responsive-tags")
       : [...routerArrays],
     multiTagsCache: storageLocal.getItem<StorageConfigs>("responsive-configure")
-      .multiTagsCache
+      ?.multiTagsCache
   }),
   getters: {
     getMultiTagsCache() {

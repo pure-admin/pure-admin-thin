@@ -1,7 +1,6 @@
-import type { RouteConfigsTable } from "/#/index";
 const Layout = () => import("@/layout/index.vue");
 
-const remainingRouter: Array<RouteConfigsTable> = [
+export default [
   {
     path: "/login",
     name: "Login",
@@ -29,6 +28,4 @@ const remainingRouter: Array<RouteConfigsTable> = [
       }
     ]
   }
-];
-
-export default remainingRouter;
+] as Array<RouteConfigsTable>;

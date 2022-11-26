@@ -16,11 +16,7 @@ export const useUserStore = defineStore({
     username:
       storageSession.getItem<DataInfo<number>>(sessionKey)?.username ?? "",
     // 页面级别权限
-    roles: storageSession.getItem<DataInfo<number>>(sessionKey)?.roles ?? [],
-    // 前端生成的验证码（按实际需求替换）
-    verifyCode: "",
-    // 判断登录页面显示哪个组件（0：登录（默认）、1：手机登录、2：二维码登录、3：注册、4：忘记密码）
-    currentPage: 0
+    roles: storageSession.getItem<DataInfo<number>>(sessionKey)?.roles ?? []
   }),
   actions: {
     /** 存储用户名 */
@@ -30,14 +26,6 @@ export const useUserStore = defineStore({
     /** 存储角色 */
     SET_ROLES(roles: Array<string>) {
       this.roles = roles;
-    },
-    /** 存储前端生成的验证码 */
-    SET_VERIFYCODE(verifyCode: string) {
-      this.verifyCode = verifyCode;
-    },
-    /** 存储登录页面显示哪个组件 */
-    SET_CURRENTPAGE(value: number) {
-      this.currentPage = value;
     },
     /** 登入 */
     async loginByUsername(data) {
@@ -59,9 +47,9 @@ export const useUserStore = defineStore({
       this.username = "";
       this.roles = [];
       removeToken();
-      router.push("/login");
       useMultiTagsStoreHook().handleTags("equal", [...routerArrays]);
       resetRouter();
+      router.push("/login");
     },
     /** 刷新`token` */
     async handRefreshToken(data) {

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { isEqual } from "lodash-unified";
+import { isEqual } from "@pureadmin/utils";
 import { ref, watch, onMounted, toRaw } from "vue";
 import { getParentPaths, findRouteByPath } from "@/router/utils";
 import { useMultiTagsStoreHook } from "@/store/modules/multiTags";

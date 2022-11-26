@@ -8,6 +8,10 @@
 
 精简版是基于 [vue-pure-admin](https://github.com/xiaoxian521/vue-pure-admin) 提炼出的架子，包含主体功能，更适合实际项目开发，打包后的大小低于 `3MB`，并且会永久同步完整版的代码。开启 `brotli` 压缩和 `cdn` 替换本地库模式后，打包大小低于 `500kb`
 
+## 版本选择
+
+当前是非国际化版本哦，如果您需要国际化版本 [请点击](https://github.com/xiaoxian521/pure-admin-thin/tree/i18n)
+
 ## 配套视频
 
 - [点我查看教程](https://www.bilibili.com/video/BV1534y1S7HV)
