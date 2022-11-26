@@ -10,5 +10,4 @@ declare module "*.scss" {
 }
 
 declare module "@pureadmin/theme";
-declare module "@pureadmin/components";
 declare module "@pureadmin/theme/dist/browser-utils";

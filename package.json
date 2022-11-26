@@ -30,7 +30,6 @@
   ],
   "dependencies": {
     "@ctrl/tinycolor": "^3.4.1",
-    "@pureadmin/components": "^1.1.0",
     "@pureadmin/descriptions": "^1.1.0",
     "@pureadmin/table": "^1.8.0",
     "@pureadmin/utils": "^1.6.7",

@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import Motion from "./utils/motion";
 import { useRouter } from "vue-router";
+import { message } from "@/utils/message";
 import { loginRules } from "./utils/rule";
 import { initRouter } from "@/router/utils";
 import { useNav } from "@/layout/hooks/useNav";
-import { message } from "@pureadmin/components";
 import type { FormInstance } from "element-plus";
 import { useLayout } from "@/layout/hooks/useLayout";
 import { useUserStoreHook } from "@/store/modules/user";
@@ -46,8 +46,8 @@ const onLogin = async (formEl: FormInstance | undefined) => {
           if (res.success) {
             // 获取后端路由
             initRouter().then(() => {
-              message.success("登录成功");
               router.push("/");
+              message("登录成功", "success");
             });
           }
         });

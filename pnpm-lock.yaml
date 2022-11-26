@@ -7,7 +7,6 @@ specifiers:
   "@iconify-icons/ep": ^1.2.7
   "@iconify-icons/ri": ^1.2.3
   "@iconify/vue": ^4.0.0
-  "@pureadmin/components": ^1.1.0
   "@pureadmin/descriptions": ^1.1.0
   "@pureadmin/table": ^1.8.0
   "@pureadmin/theme": ^2.4.0
@@ -94,7 +93,6 @@ specifiers:
 
 dependencies:
   "@ctrl/tinycolor": 3.4.1
-  "@pureadmin/components": 1.1.0_vue@3.2.45
   "@pureadmin/descriptions": 1.1.1_element-plus@2.2.25
   "@pureadmin/table": 1.8.0_element-plus@2.2.25
   "@pureadmin/utils": 1.6.7_aotapuqn7htzdjltsyimavekky
@@ -197,35 +195,6 @@ packages:
       "@jridgewell/gen-mapping": 0.1.1
       "@jridgewell/trace-mapping": 0.3.17
     dev: true
-
-  /@ant-design/colors/6.0.0:
-    resolution:
-      {
-        integrity: sha512-qAZRvPzfdWHtfameEGP2Qvuf838NhergR35o+EuVyB5XvSA98xod5r4utvi4TJ3ywmevm290g9nsCG5MryrdWQ==
-      }
-    dependencies:
-      "@ctrl/tinycolor": 3.4.1
-    dev: false
-
-  /@ant-design/icons-svg/4.2.1:
-    resolution:
-      {
-        integrity: sha512-EB0iwlKDGpG93hW8f85CTJTs4SvMX7tt5ceupvhALp1IF44SeUFOMhKUOYqpsoYWQKAOuTRDMqn75rEaKDp0Xw==
-      }
-    dev: false
-
-  /@ant-design/icons-vue/6.1.0_vue@3.2.45:
-    resolution:
-      {
-        integrity: sha512-EX6bYm56V+ZrKN7+3MT/ubDkvJ5rK/O2t380WFRflDcVFgsvl3NLH7Wxeau6R8DbrO5jWR6DSTC3B6gYFp77AA==
-      }
-    peerDependencies:
-      vue: ">=3.0.3"
-    dependencies:
-      "@ant-design/colors": 6.0.0
-      "@ant-design/icons-svg": 4.2.1
-      vue: 3.2.45
-    dev: false
 
   /@antfu/utils/0.6.3:
     resolution:
@@ -1073,19 +1042,6 @@ packages:
       "@nodelib/fs.scandir": 2.1.5
       fastq: 1.13.0
     dev: true
-
-  /@pureadmin/components/1.1.0_vue@3.2.45:
-    resolution:
-      {
-        integrity: sha512-Y7FCUVQVkZ2P3K/3vLrfQOfpjbf8g0TDPUWuFUlaq6aIW3BRduiVfqn4k/r3TX6LtasxGvgnJ/TO9tGed5VlTg==
-      }
-    peerDependencies:
-      vue: ^3.2.0
-    dependencies:
-      "@ant-design/icons-svg": 4.2.1
-      "@ant-design/icons-vue": 6.1.0_vue@3.2.45
-      vue: 3.2.45
-    dev: false
 
   /@pureadmin/descriptions/1.1.1_element-plus@2.2.25:
     resolution:
