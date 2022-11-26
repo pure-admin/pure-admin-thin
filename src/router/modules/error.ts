@@ -1,7 +1,6 @@
 import { $t } from "@/plugins/i18n";
-import type { RouteConfigsTable } from "/#/index";
 
-const errorRouter: RouteConfigsTable = {
+export default {
   path: "/error",
   redirect: "/error/403",
   meta: {
@@ -35,6 +34,4 @@ const errorRouter: RouteConfigsTable = {
       }
     }
   ]
-};
-
-export default errorRouter;
+} as RouteConfigsTable;

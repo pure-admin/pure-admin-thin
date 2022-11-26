@@ -10,6 +10,10 @@ import Close from "@iconify-icons/ep/close";
 import CloseBold from "@iconify-icons/ep/close-bold";
 import Bell from "@iconify-icons/ep/bell";
 import Search from "@iconify-icons/ep/search";
+import EpArrowDown from "@iconify-icons/ep/arrow-down";
+import ArrowUp from "@iconify-icons/ep/arrow-up";
+import ArrowRight from "@iconify-icons/ep/arrow-right";
+import ArrowLeft from "@iconify-icons/ep/arrow-left";
 addIcon("check", Check);
 addIcon("home-filled", HomeFilled);
 addIcon("lollipop", Lollipop);
@@ -18,6 +22,10 @@ addIcon("close", Close);
 addIcon("close-bold", CloseBold);
 addIcon("bell", Bell);
 addIcon("search", Search);
+addIcon("ep-arrow-down", EpArrowDown);
+addIcon("ep-arrow-up", ArrowUp);
+addIcon("ep-arrow-right", ArrowRight);
+addIcon("ep-arrow-left", ArrowLeft);
 
 // remixicon
 import ArrowRightSLine from "@iconify-icons/ri/arrow-right-s-line";

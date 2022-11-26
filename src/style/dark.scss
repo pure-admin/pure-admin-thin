@@ -26,11 +26,6 @@ html.dark {
     filter: invert(0.9) hue-rotate(180deg);
   }
 
-  .ant-tabs {
-    background: var(--el-bg-color);
-    color: $color-white;
-  }
-
   /* 标签页 */
   .tags-view {
     .arrow-left,
@@ -127,7 +122,7 @@ html.dark {
     color: var(--el-text-color-primary);
   }
 
-  .vxe-button.type--button.size--medium:hover {
+  .vxe-button.type--button:hover {
     background: var(--el-color-primary) !important;
   }
 

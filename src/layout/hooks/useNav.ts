@@ -1,4 +1,5 @@
 import { computed } from "vue";
+import { storeToRefs } from "pinia";
 import { getConfig } from "@/config";
 import { useRouter } from "vue-router";
 import { emitter } from "@/utils/mitt";
@@ -9,12 +10,14 @@ import { router, remainingPaths } from "@/router";
 import { useAppStoreHook } from "@/store/modules/app";
 import { useUserStoreHook } from "@/store/modules/user";
 import { useEpThemeStoreHook } from "@/store/modules/epTheme";
+import { usePermissionStoreHook } from "@/store/modules/permission";
 
 const errorInfo = "当前路由配置不正确，请检查配置";
 
 export function useNav() {
   const pureApp = useAppStoreHook();
   const routers = useRouter().options.routes;
+  const { wholeMenus } = storeToRefs(usePermissionStoreHook());
 
   /** 用户名 */
   const username = computed(() => {
@@ -98,6 +101,7 @@ export function useNav() {
   }
 
   function menuSelect(indexPath: string, routers): void {
+    if (wholeMenus.value.length === 0) return;
     if (isRemaining(indexPath)) return;
     let parentPath = "";
     const parentPathIndex = indexPath.lastIndexOf("/");
