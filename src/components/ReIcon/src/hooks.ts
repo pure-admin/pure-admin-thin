@@ -34,6 +34,16 @@ export function useRenderIcon(icon: any, attrs?: iconType): Component {
   } else if (typeof icon === "function" || typeof icon?.render === "function") {
     // svg
     return icon;
+  } else if (typeof icon === "object") {
+    return defineComponent({
+      name: "OfflineIcon",
+      render() {
+        return h(IconifyIconOffline, {
+          icon: icon,
+          ...attrs
+        });
+      }
+    });
   } else {
     // 通过是否存在 : 符号来判断是在线还是本地图标，存在即是在线图标，反之
     return defineComponent({

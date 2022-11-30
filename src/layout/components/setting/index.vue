@@ -30,6 +30,8 @@ import { toggleTheme } from "@pureadmin/theme/dist/browser-utils";
 
 import dayIcon from "@/assets/svg/day.svg?component";
 import darkIcon from "@/assets/svg/dark.svg?component";
+import Check from "@iconify-icons/ep/check";
+import Logout from "@iconify-icons/ri/logout-circle-r-line";
 
 const router = useRouter();
 const { device } = useNav();
@@ -42,7 +44,6 @@ const verticalRef = ref();
 const horizontalRef = ref();
 
 const {
-  body,
   dataTheme,
   layoutTheme,
   themeColors,
@@ -165,8 +166,6 @@ function setFalse(Doms): any {
 }
 
 watch($storage, ({ layout }) => {
-  /* 设置wangeditorV5主题色 */
-  body.style.setProperty("--w-e-toolbar-active-color", layout["epThemeColor"]);
   switch (layout["layout"]) {
     case "vertical":
       toggleClass(true, isSelect, unref(verticalRef));
@@ -302,7 +301,7 @@ nextTick(() => {
           :size="17"
           :color="getThemeColor(item.themeColor)"
         >
-          <IconifyIconOffline icon="check" />
+          <IconifyIconOffline :icon="Check" />
         </el-icon>
       </li>
     </ul>
@@ -383,7 +382,7 @@ nextTick(() => {
       @click="onReset"
     >
       <IconifyIconOffline
-        icon="fa-sign-out"
+        :icon="Logout"
         width="15"
         height="15"
         style="margin-right: 4px"
