@@ -1,8 +1,10 @@
+import InformationLine from "@iconify-icons/ri/information-line";
+
 export default {
   path: "/error",
   redirect: "/error/403",
   meta: {
-    icon: "information-line",
+    icon: InformationLine,
     title: "异常页面",
     rank: 9
   },

@@ -16,6 +16,14 @@ import { useSettingStoreHook } from "@/store/modules/settings";
 import { useMultiTagsStoreHook } from "@/store/modules/multiTags";
 import { storageLocal, toggleClass, hasClass } from "@pureadmin/utils";
 
+import Fullscreen from "@iconify-icons/ri/fullscreen-fill";
+import CloseAllTags from "@iconify-icons/ri/subtract-line";
+import CloseOtherTags from "@iconify-icons/ri/text-spacing";
+import CloseRightTags from "@iconify-icons/ri/text-direction-l";
+import CloseLeftTags from "@iconify-icons/ri/text-direction-r";
+import RefreshRight from "@iconify-icons/ep/refresh-right";
+import Close from "@iconify-icons/ep/close";
+
 export function useTags() {
   const route = useRoute();
   const router = useRouter();
@@ -46,56 +54,56 @@ export function useTags() {
 
   const tagsViews = reactive<Array<tagsViewsType>>([
     {
-      icon: "refresh-right",
+      icon: RefreshRight,
       text: "重新加载",
       divided: false,
       disabled: false,
       show: true
     },
     {
-      icon: "close",
+      icon: Close,
       text: "关闭当前标签页",
       divided: false,
       disabled: multiTags.value.length > 1 ? false : true,
       show: true
     },
     {
-      icon: "close-left-tags",
+      icon: CloseLeftTags,
       text: "关闭左侧标签页",
       divided: true,
       disabled: multiTags.value.length > 1 ? false : true,
       show: true
     },
     {
-      icon: "close-right-tags",
+      icon: CloseRightTags,
       text: "关闭右侧标签页",
       divided: false,
       disabled: multiTags.value.length > 1 ? false : true,
       show: true
     },
     {
-      icon: "close-other-tags",
+      icon: CloseOtherTags,
       text: "关闭其他标签页",
       divided: true,
       disabled: multiTags.value.length > 2 ? false : true,
       show: true
     },
     {
-      icon: "close-all-tags",
+      icon: CloseAllTags,
       text: "关闭全部标签页",
       divided: false,
       disabled: multiTags.value.length > 1 ? false : true,
       show: true
     },
     {
-      icon: "fullscreen",
+      icon: Fullscreen,
       text: "整体页面全屏",
       divided: true,
       disabled: false,
       show: true
     },
     {
-      icon: "fullscreen",
+      icon: Fullscreen,
       text: "内容区全屏",
       divided: false,
       disabled: false,

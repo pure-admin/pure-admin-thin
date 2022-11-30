@@ -5,6 +5,8 @@ import mixNav from "./sidebar/mixNav.vue";
 import { useNav } from "@/layout/hooks/useNav";
 import Breadcrumb from "./sidebar/breadCrumb.vue";
 import topCollapse from "./sidebar/topCollapse.vue";
+import LogoutCircleRLine from "@iconify-icons/ri/logout-circle-r-line";
+import Setting from "@iconify-icons/ri/settings-3-line";
 
 const {
   layout,
@@ -54,7 +56,7 @@ const {
           <el-dropdown-menu class="logout">
             <el-dropdown-item @click="logout">
               <IconifyIconOffline
-                icon="logout-circle-r-line"
+                :icon="LogoutCircleRLine"
                 style="margin: 5px"
               />
               退出系统
@@ -67,7 +69,7 @@ const {
         title="打开项目配置"
         @click="onPanel"
       >
-        <IconifyIconOffline icon="setting" />
+        <IconifyIconOffline :icon="Setting" />
       </span>
     </div>
   </div>

@@ -10,6 +10,13 @@ import { handleAliveRoute, delAliveRoutes } from "@/router/utils";
 import { useMultiTagsStoreHook } from "@/store/modules/multiTags";
 import { useResizeObserver, useDebounceFn, useFullscreen } from "@vueuse/core";
 
+import ExitFullscreen from "@iconify-icons/ri/fullscreen-exit-fill";
+import Fullscreen from "@iconify-icons/ri/fullscreen-fill";
+import ArrowDown from "@iconify-icons/ri/arrow-down-s-line";
+import ArrowRightSLine from "@iconify-icons/ri/arrow-right-s-line";
+import ArrowLeftSLine from "@iconify-icons/ri/arrow-left-s-line";
+import CloseBold from "@iconify-icons/ep/close-bold";
+
 const {
   route,
   router,
@@ -282,11 +289,11 @@ function onClickDrop(key, item, selectRoute?: RouteConfigs) {
       toggle();
       setTimeout(() => {
         if (isFullscreen.value) {
-          tagsViews[6].icon = "exit-fullscreen";
-          tagsViews[6].text = "整体页面退出全屏";
+          tagsViews[6].icon = ExitFullscreen;
+          tagsViews[6].text = "退出全屏";
         } else {
-          tagsViews[6].icon = "fullscreen";
-          tagsViews[6].text = "整体页面全屏";
+          tagsViews[6].icon = Fullscreen;
+          tagsViews[6].text = "全屏";
         }
       }, 100);
       break;
@@ -295,10 +302,10 @@ function onClickDrop(key, item, selectRoute?: RouteConfigs) {
       onContentFullScreen();
       setTimeout(() => {
         if (pureSetting.hiddenSideBar) {
-          tagsViews[7].icon = "exit-fullscreen";
+          tagsViews[7].icon = ExitFullscreen;
           tagsViews[7].text = "内容区退出全屏";
         } else {
-          tagsViews[7].icon = "fullscreen";
+          tagsViews[7].icon = Fullscreen;
           tagsViews[7].text = "内容区全屏";
         }
       }, 100);
@@ -494,7 +501,7 @@ onMounted(() => {
 <template>
   <div ref="containerDom" class="tags-view" v-if="!showTags">
     <span v-show="isShowArrow" class="arrow-left">
-      <IconifyIconOffline icon="arrow-left-s-line" @click="handleScroll(200)" />
+      <IconifyIconOffline :icon="ArrowLeftSLine" @click="handleScroll(200)" />
     </span>
     <div ref="scrollbarDom" class="scroll-container">
       <div class="tab select-none" ref="tabDom" :style="getTabStyle">
@@ -528,7 +535,7 @@ onMounted(() => {
             class="el-icon-close"
             @click.stop="deleteMenu(item)"
           >
-            <IconifyIconOffline icon="close-bold" />
+            <IconifyIconOffline :icon="CloseBold" />
           </span>
           <div
             :ref="'schedule' + index"
@@ -539,10 +546,7 @@ onMounted(() => {
       </div>
     </div>
     <span v-show="isShowArrow" class="arrow-right">
-      <IconifyIconOffline
-        icon="arrow-right-s-line"
-        @click="handleScroll(-200)"
-      />
+      <IconifyIconOffline :icon="ArrowRightSLine" @click="handleScroll(-200)" />
     </span>
     <!-- 右键菜单按钮 -->
     <transition name="el-zoom-in-top">
@@ -571,7 +575,7 @@ onMounted(() => {
       @command="handleCommand"
     >
       <span class="arrow-down">
-        <IconifyIconOffline icon="arrow-down" class="dark:text-white" />
+        <IconifyIconOffline :icon="ArrowDown" class="dark:text-white" />
       </span>
       <template #dropdown>
         <el-dropdown-menu>

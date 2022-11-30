@@ -12,13 +12,11 @@ import { injectResponsiveStorage } from "@/utils/responsive";
 // import Table from "@pureadmin/table";
 // import PureDescriptions from "@pureadmin/descriptions";
 
-import "animate.css";
 // 引入重置样式
 import "./style/reset.scss";
 // 导入公共样式
 import "./style/index.scss";
 import "element-plus/dist/index.css";
-
 // 导入字体图标
 import "./assets/iconfont/iconfont.js";
 import "./assets/iconfont/iconfont.css";

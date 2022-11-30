@@ -1,6 +1,8 @@
 // 模拟后端动态生成路由
 import { MockMethod } from "vite-plugin-mock";
 
+import Lollipop from "@iconify-icons/ep/lollipop";
+
 /**
  * roles：页面级别权限，这里模拟二种 "admin"、"common"
  * admin：管理员角色
@@ -11,7 +13,7 @@ const permissionRouter = {
   path: "/permission",
   meta: {
     title: "权限管理",
-    icon: "lollipop",
+    icon: Lollipop,
     rank: 10
   },
   children: [

@@ -6,6 +6,8 @@ import { ref, toRaw, watch, onMounted, nextTick } from "vue";
 import { useRenderIcon } from "@/components/ReIcon/src/hooks";
 import { getParentPaths, findRouteByPath } from "@/router/utils";
 import { usePermissionStoreHook } from "@/store/modules/permission";
+import LogoutCircleRLine from "@iconify-icons/ri/logout-circle-r-line";
+import Setting from "@iconify-icons/ri/settings-3-line";
 
 const menuRef = ref();
 const defaultActive = ref(null);
@@ -102,7 +104,7 @@ watch(
           <el-dropdown-menu class="logout">
             <el-dropdown-item @click="logout">
               <IconifyIconOffline
-                icon="logout-circle-r-line"
+                :icon="LogoutCircleRLine"
                 style="margin: 5px"
               />
               退出系统
@@ -115,7 +117,7 @@ watch(
         title="打开项目配置"
         @click="onPanel"
       >
-        <IconifyIconOffline icon="setting" />
+        <IconifyIconOffline :icon="Setting" />
       </span>
     </div>
   </div>

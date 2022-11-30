@@ -15,6 +15,8 @@ import { useDataThemeChange } from "@/layout/hooks/useDataThemeChange";
 
 import dayIcon from "@/assets/svg/day.svg?component";
 import darkIcon from "@/assets/svg/dark.svg?component";
+import Lock from "@iconify-icons/ri/lock-fill";
+import User from "@iconify-icons/ri/user-3-fill";
 
 defineOptions({
   name: "Login"
@@ -119,7 +121,7 @@ onBeforeUnmount(() => {
                   clearable
                   v-model="ruleForm.username"
                   placeholder="账号"
-                  :prefix-icon="useRenderIcon('user')"
+                  :prefix-icon="useRenderIcon(User)"
                 />
               </el-form-item>
             </Motion>
@@ -131,7 +133,7 @@ onBeforeUnmount(() => {
                   show-password
                   v-model="ruleForm.password"
                   placeholder="密码"
-                  :prefix-icon="useRenderIcon('lock')"
+                  :prefix-icon="useRenderIcon(Lock)"
                 />
               </el-form-item>
             </Motion>

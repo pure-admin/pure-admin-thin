@@ -1,4 +1,5 @@
 const Layout = () => import("@/layout/index.vue");
+import HomeFilled from "@iconify-icons/ep/home-filled";
 
 export default [
   {
@@ -15,7 +16,7 @@ export default [
     path: "/redirect",
     component: Layout,
     meta: {
-      icon: "home-filled",
+      icon: HomeFilled,
       title: "首页",
       showLink: false,
       rank: 104

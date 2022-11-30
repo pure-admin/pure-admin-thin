@@ -3,6 +3,7 @@ import { computed } from "vue";
 import { useEpThemeStoreHook } from "@/store/modules/epTheme";
 import { useRenderIcon } from "@/components/ReIcon/src/hooks";
 import enterOutlined from "@/assets/svg/enter_outlined.svg?component";
+import Bookmark2Line from "@iconify-icons/ri/bookmark-2-line";
 
 interface optionsItem {
   path: string;
@@ -64,7 +65,7 @@ function handleTo() {
         @click="handleTo"
         @mouseenter="handleMouse(item)"
       >
-        <component :is="useRenderIcon(item.meta?.icon ?? 'bookmark-2-line')" />
+        <component :is="useRenderIcon(item.meta?.icon ?? Bookmark2Line)" />
         <span class="result-item-title">{{ item.meta?.title }}</span>
         <enterOutlined />
       </div>
