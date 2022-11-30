@@ -1,7 +1,6 @@
 import "xe-utils";
 import "./index.scss";
 import { App } from "vue";
-import "font-awesome/css/font-awesome.min.css";
 
 import {
   // 核心
