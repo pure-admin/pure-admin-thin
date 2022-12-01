@@ -15,5 +15,6 @@
   "EpThemeColor": "#409EFF",
   "ShowLogo": true,
   "ShowModel": "smart",
-  "MenuArrowIconNoTransition": true
+  "MenuArrowIconNoTransition": true,
+  "CachingAsyncRoutes": true
 }

@@ -95,14 +95,7 @@ declare global {
     ShowLogo?: boolean;
     ShowModel?: string;
     MenuArrowIconNoTransition?: boolean;
-    MapConfigure?: {
-      amapKey?: string;
-      options: {
-        resizeEnable?: boolean;
-        center?: number[];
-        zoom?: number;
-      };
-    };
+    CachingAsyncRoutes?: boolean;
   }
 
   /**
@@ -127,14 +120,6 @@ declare global {
     epThemeColor?: string;
     showLogo?: boolean;
     showModel?: string;
-    mapConfigure?: {
-      amapKey?: string;
-      options: {
-        resizeEnable?: boolean;
-        center?: number[];
-        zoom?: number;
-      };
-    };
     username?: string;
   }
 
