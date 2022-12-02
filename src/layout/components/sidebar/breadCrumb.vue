@@ -96,8 +96,12 @@ watch(
 
 <template>
   <el-breadcrumb class="!leading-[50px] select-none" separator="/">
-    <transition-group appear name="breadcrumb">
-      <el-breadcrumb-item v-for="item in levelList" :key="item.path">
+    <transition-group name="breadcrumb">
+      <el-breadcrumb-item
+        class="!inline !items-stretch"
+        v-for="item in levelList"
+        :key="item.path"
+      >
         <a @click.prevent="handleLink(item)">
           {{ item.meta.title }}
         </a>

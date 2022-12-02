@@ -1,6 +1,6 @@
 {
   "name": "pure-admin-thin",
-  "version": "3.9.0",
+  "version": "3.9.1",
   "private": true,
   "scripts": {
     "dev": "NODE_OPTIONS=--max-old-space-size=4096 vite",
@@ -39,7 +39,7 @@
     "axios": "^1.2.0",
     "dayjs": "^1.11.6",
     "echarts": "^5.4.0",
-    "element-plus": "^2.2.25",
+    "element-plus": "^2.2.26",
     "element-resize-detector": "^1.2.4",
     "js-cookie": "^3.0.1",
     "lodash": "^4.17.21",

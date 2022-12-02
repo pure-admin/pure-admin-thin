@@ -17,6 +17,8 @@ export function useNav() {
   const pureApp = useAppStoreHook();
   const routers = useRouter().options.routes;
   const { wholeMenus } = storeToRefs(usePermissionStoreHook());
+  /** 平台`layout`中所有`el-tooltip`的`effect`配置，默认`light` */
+  const tooltipEffect = getConfig()?.TooltipEffect ?? "light";
 
   /** 用户名 */
   const username = computed(() => {
@@ -136,6 +138,7 @@ export function useNav() {
     isCollapse,
     pureApp,
     username,
-    avatarsStyle
+    avatarsStyle,
+    tooltipEffect
   };
 }
