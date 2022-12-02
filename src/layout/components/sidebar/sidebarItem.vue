@@ -12,7 +12,7 @@ import EpArrowDown from "@iconify-icons/ep/arrow-down";
 import ArrowLeft from "@iconify-icons/ep/arrow-left";
 import ArrowRight from "@iconify-icons/ep/arrow-right";
 
-const { layout, isCollapse } = useNav();
+const { layout, isCollapse, tooltipEffect } = useNav();
 
 const props = defineProps({
   item: {
@@ -201,8 +201,9 @@ function resolvePath(routePath) {
           <el-tooltip
             v-else
             placement="top"
+            :effect="tooltipEffect"
             :offset="-10"
-            :disabled="!onlyOneChild.showTooltip"
+            :disabled="!isCollapse && !onlyOneChild.showTooltip"
           >
             <template #content>
               {{ transformI18n(onlyOneChild.meta.title) }}
@@ -246,8 +247,9 @@ function resolvePath(routePath) {
       <el-tooltip
         v-else
         placement="top"
+        :effect="tooltipEffect"
         :offset="-10"
-        :disabled="!isCollapse || !props.item.showTooltip"
+        :disabled="!props.item.showTooltip"
       >
         <template #content>
           {{ transformI18n(props.item.meta.title) }}
