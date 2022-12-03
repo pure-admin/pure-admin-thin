@@ -8,9 +8,9 @@ specifiers:
   '@iconify-icons/ri': ^1.2.3
   '@iconify/vue': ^4.0.0
   '@pureadmin/descriptions': ^1.1.0
-  '@pureadmin/table': ^1.8.1
+  '@pureadmin/table': ^1.8.2
   '@pureadmin/theme': ^2.4.0
-  '@pureadmin/utils': ^1.7.1
+  '@pureadmin/utils': ^1.7.2
   '@types/element-resize-detector': 1.1.3
   '@types/js-cookie': ^3.0.1
   '@types/lodash': ^4.14.180
@@ -52,7 +52,7 @@ specifiers:
   nprogress: ^0.2.0
   path: ^0.12.7
   picocolors: ^1.0.0
-  pinia: ^2.0.26
+  pinia: ^2.0.27
   postcss: ^8.4.18
   postcss-html: ^1.5.0
   postcss-import: ^15.0.0
@@ -93,8 +93,8 @@ specifiers:
 dependencies:
   '@ctrl/tinycolor': 3.4.1
   '@pureadmin/descriptions': 1.1.1_element-plus@2.2.26
-  '@pureadmin/table': 1.8.1_element-plus@2.2.26
-  '@pureadmin/utils': 1.7.1_aotapuqn7htzdjltsyimavekky
+  '@pureadmin/table': 1.8.2_element-plus@2.2.26
+  '@pureadmin/utils': 1.7.2_aotapuqn7htzdjltsyimavekky
   '@vueuse/core': 9.6.0_vue@3.2.45
   '@vueuse/motion': 2.0.0-beta.12_vue@3.2.45
   animate.css: 4.1.1
@@ -111,7 +111,7 @@ dependencies:
   mockjs: 1.1.0
   nprogress: 0.2.0
   path: 0.12.7
-  pinia: 2.0.26_mgnvym7yiazkylwwogi5r767ue
+  pinia: 2.0.27_mgnvym7yiazkylwwogi5r767ue
   qs: 6.11.0
   responsive-storage: 2.1.0
   vue: 3.2.45
@@ -823,8 +823,8 @@ packages:
       vue: 3.2.45
     dev: false
 
-  /@pureadmin/table/1.8.1_element-plus@2.2.26:
-    resolution: {integrity: sha512-oZ5GYmLTDgQ64U6+yKFjvpZG2Seuudk3hOWnUogMvKxhIvaRQsGBHbvyg47asMmXxUyeilq+nRumyuiuV7WJTg==}
+  /@pureadmin/table/1.8.2_element-plus@2.2.26:
+    resolution: {integrity: sha512-FGh1aOfgQtX16pCnP+bxg49TetcZDhdykIue0m5d8NIj6zkvJP53JU+DkUpvqvKmUiMsvIwme6e17BLZMmMiOw==}
     peerDependencies:
       element-plus: ^2.0.0
     dependencies:
@@ -840,8 +840,8 @@ packages:
       string-hash: 1.1.3
     dev: true
 
-  /@pureadmin/utils/1.7.1_aotapuqn7htzdjltsyimavekky:
-    resolution: {integrity: sha512-LqYdMR1xvRDtPp66osOY6usmta6LNGMuON14iONv4ZUC/esQ3RflHlT5glGjOfGUSGCk8O94F5LVS/PVC9Q3Ng==}
+  /@pureadmin/utils/1.7.2_aotapuqn7htzdjltsyimavekky:
+    resolution: {integrity: sha512-L8tmogs9HCX6nuga1g79DcZr3KXNoWnIFcyP2z4zpmUmdBBAmMpXXz3Z+emI6HELmZu8DFx+v1MfKxccgsODRQ==}
     peerDependencies:
       dayjs: '*'
       echarts: '*'
@@ -3981,8 +3981,8 @@ packages:
     engines: {node: '>=0.10.0'}
     dev: true
 
-  /pinia/2.0.26_mgnvym7yiazkylwwogi5r767ue:
-    resolution: {integrity: sha512-tSxZNUcMGxQOvKZRjPKXxd2+/2NZhRF/CoYVE/+K6uE/Z3v1Oi4fcQFpxu5nMB1dCchjXUZ+lz0tBxV5ntwmQQ==}
+  /pinia/2.0.27_mgnvym7yiazkylwwogi5r767ue:
+    resolution: {integrity: sha512-nOnXP0OFeL8R4WjAHsterU+11vptda643gH02xKNtSCDPiRzVfRYodOLihLDoa0gL1KKuQKV+KOzEgdt3YvqEw==}
     peerDependencies:
       '@vue/composition-api': ^1.4.0
       typescript: '>=4.4.4'
