@@ -1,6 +1,6 @@
 {
   "name": "pure-admin-thin",
-  "version": "3.9.1",
+  "version": "3.9.2",
   "private": true,
   "scripts": {
     "dev": "NODE_OPTIONS=--max-old-space-size=4096 vite",
@@ -31,8 +31,8 @@
   "dependencies": {
     "@ctrl/tinycolor": "^3.4.1",
     "@pureadmin/descriptions": "^1.1.0",
-    "@pureadmin/table": "^1.8.1",
-    "@pureadmin/utils": "^1.7.1",
+    "@pureadmin/table": "^1.8.2",
+    "@pureadmin/utils": "^1.7.2",
     "@vueuse/core": "^9.6.0",
     "@vueuse/motion": "2.0.0-beta.12",
     "animate.css": "^4.1.1",
@@ -49,7 +49,7 @@
     "mockjs": "^1.1.0",
     "nprogress": "^0.2.0",
     "path": "^0.12.7",
-    "pinia": "^2.0.26",
+    "pinia": "^2.0.27",
     "qs": "^6.11.0",
     "responsive-storage": "^2.1.0",
     "vue": "^3.2.45",
