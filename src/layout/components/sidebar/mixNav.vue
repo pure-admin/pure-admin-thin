@@ -51,7 +51,11 @@ watch(
 </script>
 
 <template>
-  <div v-if="device !== 'mobile'" class="horizontal-header">
+  <div
+    v-if="device !== 'mobile'"
+    class="horizontal-header"
+    v-loading="usePermissionStoreHook().wholeMenus.length === 0"
+  >
     <el-menu
       router
       ref="menuRef"
@@ -124,6 +128,9 @@ watch(
 </template>
 
 <style lang="scss" scoped>
+:deep(.el-loading-mask) {
+  opacity: 0.45;
+}
 .logout {
   max-width: 120px;
 
