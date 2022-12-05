@@ -1,6 +1,6 @@
 {
   "name": "pure-admin-thin",
-  "version": "3.9.3",
+  "version": "3.9.4",
   "private": true,
   "scripts": {
     "dev": "NODE_OPTIONS=--max-old-space-size=4096 vite",
@@ -54,9 +54,7 @@
     "responsive-storage": "^2.1.0",
     "vue": "^3.2.45",
     "vue-router": "^4.1.6",
-    "vue-types": "^4.2.1",
-    "vxe-table": "^4.3.6",
-    "xe-utils": "^3.5.7"
+    "vue-types": "^4.2.1"
   },
   "devDependencies": {
     "@commitlint/cli": "13.1.0",
@@ -86,7 +84,6 @@
     "eslint": "^8.8.0",
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-vue": "^9.7.0",
-    "font-awesome": "^4.7.0",
     "husky": "^7.0.4",
     "lint-staged": "11.1.2",
     "picocolors": "^1.0.0",

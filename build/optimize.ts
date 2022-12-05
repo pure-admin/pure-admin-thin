@@ -12,8 +12,6 @@ const include = [
   "pinia",
   "lodash",
   "echarts",
-  "xe-utils",
-  "vxe-table",
   "js-cookie",
   "lodash-es",
   "@vueuse/core",
