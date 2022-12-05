@@ -13,8 +13,6 @@ const include = [
   "lodash",
   "echarts",
   "vue-i18n",
-  "xe-utils",
-  "vxe-table",
   "js-cookie",
   "lodash-es",
   "@vueuse/core",
