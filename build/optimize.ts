@@ -16,7 +16,6 @@ const include = [
   "lodash-es",
   "@vueuse/core",
   "lodash-unified",
-  "@ctrl/tinycolor",
   "@pureadmin/utils",
   "responsive-storage",
   "element-resize-detector"

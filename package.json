@@ -29,7 +29,6 @@
     "not op_mini all"
   ],
   "dependencies": {
-    "@ctrl/tinycolor": "^3.4.1",
     "@pureadmin/descriptions": "^1.1.0",
     "@pureadmin/table": "^1.9.0",
     "@pureadmin/utils": "^1.8.2",

@@ -3,7 +3,6 @@ lockfileVersion: 5.4
 specifiers:
   "@commitlint/cli": 13.1.0
   "@commitlint/config-conventional": 13.1.0
-  "@ctrl/tinycolor": ^3.4.1
   "@iconify-icons/ep": ^1.2.7
   "@iconify-icons/ri": ^1.2.3
   "@iconify/vue": ^4.0.0
@@ -88,7 +87,6 @@ specifiers:
   vue-types: ^4.2.1
 
 dependencies:
-  "@ctrl/tinycolor": 3.4.1
   "@pureadmin/descriptions": 1.1.1_element-plus@2.2.26
   "@pureadmin/table": 1.9.0_element-plus@2.2.26
   "@pureadmin/utils": 1.8.2_echarts@5.4.0+vue@3.2.45
