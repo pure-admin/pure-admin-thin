@@ -3,7 +3,7 @@ import { emitter } from "@/utils/mitt";
 import { RouteConfigs } from "../../types";
 import { useTags } from "../../hooks/useTag";
 import { routerArrays } from "@/layout/types";
-import { isEqual, isEmpty } from "lodash-unified";
+import { isEqual, isAllEmpty } from "@pureadmin/utils";
 import { useSettingStoreHook } from "@/store/modules/settings";
 import { ref, watch, unref, nextTick, onBeforeMount } from "vue";
 import { handleAliveRoute, delAliveRoutes } from "@/router/utils";
@@ -347,7 +347,7 @@ function showMenuModel(
   const allRoute = multiTags.value;
   const routeLength = multiTags.value.length;
   let currentIndex = -1;
-  if (isEmpty(query)) {
+  if (isAllEmpty(query)) {
     currentIndex = allRoute.findIndex(v => v.path === currentPath);
   } else {
     currentIndex = allRoute.findIndex(v => isEqual(v.query, query));

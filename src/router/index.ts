@@ -1,7 +1,6 @@
 // import "@/utils/sso";
 import { getConfig } from "@/config";
 import NProgress from "@/utils/progress";
-import { findIndex } from "lodash-unified";
 import { sessionKey, type DataInfo } from "@/utils/auth";
 import { useMultiTagsStoreHook } from "@/store/modules/multiTags";
 import { usePermissionStoreHook } from "@/store/modules/permission";
@@ -142,14 +141,10 @@ router.beforeEach((to: toRouteType, _from, next) => {
         initRouter().then((router: Router) => {
           if (!useMultiTagsStoreHook().getMultiTagsCache) {
             const { path } = to;
-            const index = findIndex(remainingRouter, v => {
-              return v.path == path;
-            });
-            const routes: any =
-              index === -1
-                ? router.options.routes[0].children
-                : router.options.routes;
-            const route = findRouteByPath(path, routes);
+            const route = findRouteByPath(
+              path,
+              router.options.routes[0].children
+            );
             // query、params模式路由传参数的标签页不在此处处理
             if (route && route.meta?.title) {
               useMultiTagsStoreHook().handleTags("push", {

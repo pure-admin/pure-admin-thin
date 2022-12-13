@@ -10,12 +10,9 @@ const include = [
   "dayjs",
   "axios",
   "pinia",
-  "lodash",
   "echarts",
   "js-cookie",
-  "lodash-es",
   "@vueuse/core",
-  "lodash-unified",
   "@pureadmin/utils",
   "responsive-storage",
   "element-resize-detector"
