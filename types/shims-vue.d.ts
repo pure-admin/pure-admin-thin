@@ -8,6 +8,3 @@ declare module "*.scss" {
   const scss: Record<string, string>;
   export default scss;
 }
-
-declare module "@pureadmin/theme";
-declare module "@pureadmin/theme/dist/browser-utils";

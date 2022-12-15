@@ -9,7 +9,7 @@ specifiers:
   "@intlify/vite-plugin-vue-i18n": ^6.0.3
   "@pureadmin/descriptions": ^1.1.0
   "@pureadmin/table": ^1.9.0
-  "@pureadmin/theme": ^2.4.0
+  "@pureadmin/theme": ^3.0.0
   "@pureadmin/utils": ^1.8.5
   "@types/element-resize-detector": 1.1.3
   "@types/js-cookie": ^3.0.1
@@ -115,11 +115,11 @@ devDependencies:
   "@iconify-icons/ri": 1.2.4
   "@iconify/vue": 4.0.2_vue@3.2.45
   "@intlify/vite-plugin-vue-i18n": 6.0.3_vite@3.1.8+vue-i18n@9.2.2
-  "@pureadmin/theme": 2.4.0
+  "@pureadmin/theme": 3.0.0
   "@types/element-resize-detector": 1.1.3
   "@types/js-cookie": 3.0.2
   "@types/mockjs": 1.0.7
-  "@types/node": 18.11.14
+  "@types/node": 18.11.15
   "@types/nprogress": 0.2.0
   "@types/qs": 6.9.7
   "@typescript-eslint/eslint-plugin": 5.46.1_imrg37k3svwu377c6q7gkarwmi
@@ -858,10 +858,10 @@ packages:
       "@floating-ui/core": 1.0.4
     dev: false
 
-  /@humanwhocodes/config-array/0.11.7:
+  /@humanwhocodes/config-array/0.11.8:
     resolution:
       {
-        integrity: sha512-kBbPWzN8oVMLb0hOUYXhmxggL/1cJE6ydvjDIGi9EnAGUyA7cLVKQg+d/Dsm+KZwx2czGHrCmMVLiyg8s5JPKw==
+        integrity: sha512-UybHIJzJnR5Qc/MsD9Kr+RpO2h+/P1GhOwdiLPXK5TWk5sgTdu88bTD9UP+CKbPPh5Rni1u0GjAdYQLemG8g+g==
       }
     engines: { node: ">=10.10.0" }
     dependencies:
@@ -1165,10 +1165,10 @@ packages:
       vue: 3.2.45
     dev: false
 
-  /@pureadmin/theme/2.4.0:
+  /@pureadmin/theme/3.0.0:
     resolution:
       {
-        integrity: sha512-aqX2O5WpqOCUiy6jhle92Pj7gDqF1/cHPWD+fWcDmmgmV7l7zqEDMWmZI1Iueg55fGxR39D400LaD2VrE8ihGA==
+        integrity: sha512-1qs0fve9DY4XgI5xafTd9qRPuWSo2QGON7avBqKSSSjXpCbo2BOccsH6qh5N2BxVBVZQJBYZoMq3bAUdK2Q0Jw==
       }
     dependencies:
       "@zougt/some-loader-utils": 1.4.3
@@ -1329,10 +1329,10 @@ packages:
       }
     dev: true
 
-  /@types/node/18.11.14:
+  /@types/node/18.11.15:
     resolution:
       {
-        integrity: sha512-0KXV57tENYmmJMl+FekeW9V3O/rlcqGQQJ/hNh9r8pKIj304pskWuEd8fCyNT86g/TpO0gcOTiLzsHLEURFMIQ==
+        integrity: sha512-VkhBbVo2+2oozlkdHXLrb3zjsRkpdnaU2bXmX8Wgle3PUi569eLRaHGlgETQHR7lLL1w7GiG3h9SnePhxNDecw==
       }
     dev: true
 
@@ -1370,7 +1370,7 @@ packages:
         integrity: sha512-yy7HuzQhj0dhGpD8RLXSZWEkLsV9ibvxvi6EiJ3bkqLAO1RGo0WbkWQiwpRlSFymTJRz0d3k5LM3kkx8ArDbLw==
       }
     dependencies:
-      "@types/node": 18.11.14
+      "@types/node": 18.11.15
     dev: true
 
   /@types/semver/7.3.13:
@@ -2329,7 +2329,7 @@ packages:
     dependencies:
       caniuse-lite: 1.0.30001439
       electron-to-chromium: 1.4.284
-      node-releases: 2.0.6
+      node-releases: 2.0.7
       update-browserslist-db: 1.0.10_browserslist@4.21.4
     dev: true
 
@@ -2817,12 +2817,12 @@ packages:
       source-map-js: 1.0.2
     dev: true
 
-  /css-tree/2.3.0:
+  /css-tree/2.3.1:
     resolution:
       {
-        integrity: sha512-1rg0LiK2MFi4R3/lVvnRokEWTZb30ljSAe5x+0HHkZ+OqZaAeiP8g8Eh91VmkyCtQn9vMgQRiaTDYgLBt+2Qyw==
+        integrity: sha512-6Fv1DV/TYw//QF5IzQdqsNDjx/wc8TrMBZsqjL9eW01tWb7R7k/mq+/VXfJCl7SoD5emsJop9cOByJZfs8hYIw==
       }
-    engines: { node: ^10 || ^12.20.0 || ^14.13.0 || >=15.0.0, npm: ">=7.0.0" }
+    engines: { node: ^10 || ^12.20.0 || ^14.13.0 || >=15.0.0 }
     dependencies:
       mdn-data: 2.0.30
       source-map-js: 1.0.2
@@ -3780,7 +3780,7 @@ packages:
     hasBin: true
     dependencies:
       "@eslint/eslintrc": 1.3.3
-      "@humanwhocodes/config-array": 0.11.7
+      "@humanwhocodes/config-array": 0.11.8
       "@humanwhocodes/module-importer": 1.0.1
       "@nodelib/fs.walk": 1.2.8
       ajv: 6.12.6
@@ -5366,10 +5366,10 @@ packages:
       }
     dev: true
 
-  /node-releases/2.0.6:
+  /node-releases/2.0.7:
     resolution:
       {
-        integrity: sha512-PiVXnNuFm5+iYkLBNeq5211hvO38y63T0i2KKh2KnUs3RpzJ+JtODFjkD8yjLwnDkTYF1eKXheUwdssR+NRZdg==
+        integrity: sha512-EJ3rzxL9pTWPjk5arA0s0dgXpnyiAbJDE6wHT62g7VsgrgQgmmZ+Ru++M1BFofncWja+Pnn3rEr3fieRySAdKQ==
       }
     dev: true
 
@@ -7199,7 +7199,7 @@ packages:
       "@trysound/sax": 0.2.0
       commander: 7.2.0
       css-select: 5.1.0
-      css-tree: 2.3.0
+      css-tree: 2.3.1
       csso: 5.0.5
       picocolors: 1.0.0
     dev: true
