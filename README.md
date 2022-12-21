@@ -26,17 +26,15 @@
 
 [xiaoxian521](https://github.com/xiaoxian521)
 
-## 捐赠
+## 支持
 
 如果你觉得这个项目对您有帮助，可以帮作者买一杯果汁 🍹 表示支持
 
 <img src="https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/f69bf13c5b854ed5b699807cafa0e3ce~tplv-k3u1fbpfcp-zoom-in-crop-mark:1304:0:0:0.awebp?" width="150px" height="150px" />
 
-## QQ 交流群
+## `QQ` 交流群
 
-一群已满，下面是二群，群里严禁 `黄` 、 `赌` 、 `毒` 、 `vpn` 等违法行为！
-
-<img src="http://yiming_chang.gitee.io/pure-admin-doc/img/support/qq.png" width="150px" height="225px" />
+[点击去加入](https://yiming_chang.gitee.io/pure-admin-doc/pages/support/#qq-%E4%BA%A4%E6%B5%81%E7%BE%A4)
 
 ## 用法
 
