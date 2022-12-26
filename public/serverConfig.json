@@ -1,5 +1,5 @@
 {
-  "Version": "3.9.6",
+  "Version": "3.9.7",
   "Title": "PureAdmin",
   "FixedHeader": true,
   "HiddenSideBar": false,
@@ -17,6 +17,6 @@
   "ShowLogo": true,
   "ShowModel": "smart",
   "MenuArrowIconNoTransition": true,
-  "CachingAsyncRoutes": true,
+  "CachingAsyncRoutes": false,
   "TooltipEffect": "light"
 }
