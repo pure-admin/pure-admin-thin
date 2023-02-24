@@ -1,21 +1,19 @@
 <script setup lang="ts">
-import { ref, nextTick, unref } from "vue";
-import { HTMLElementPlus } from "./types";
-// import { formatDate } from "@vueuse/core";
+import { ref, onMounted, unref } from "vue";
 import { formatDate } from "@/utils/formatDate";
 import Flippers from "./Flippers.vue";
 // defineOptions({
 //   name: "Countdown"
 // });
 
-const flipObjs = ref<(HTMLElementPlus | null)[]>([]);
+const flipObjs = ref([]);
 
-const flipperHour1 = ref<HTMLElementPlus | null>(null);
-const flipperHour2 = ref<HTMLElementPlus | null>(null);
-const flipperMinute1 = ref<HTMLElementPlus | null>(null);
-const flipperMinute2 = ref<HTMLElementPlus | null>(null);
-const flipperSecond1 = ref<HTMLElementPlus | null>(null);
-const flipperSecond2 = ref<HTMLElementPlus | null>(null);
+const flipperHour1 = ref(null);
+const flipperHour2 = ref(null);
+const flipperMinute1 = ref(null);
+const flipperMinute2 = ref(null);
+const flipperSecond1 = ref(null);
+const flipperSecond2 = ref(null);
 
 // 初始化数字
 const init = () => {
@@ -25,8 +23,17 @@ const init = () => {
     flipObjs?.value[i]?.setFront(nowTimeStr[i]);
   }
 };
-
-nextTick(() => {
+// 倒计时
+const start = () => {
+  const now = new Date();
+  const nowTimeStr = formatDate(new Date(now.getTime()), "hhiiss");
+  setInterval(() => {
+    for (let i = 0; i < flipObjs.value.length; i++) {
+      flipObjs?.value[i]?.setBack(nowTimeStr[i]);
+    }
+  }, 1000);
+};
+onMounted(() => {
   flipObjs.value = [
     unref(flipperHour1),
     unref(flipperHour2),
@@ -36,6 +43,7 @@ nextTick(() => {
     unref(flipperSecond2)
   ];
   init();
+  start();
 });
 </script>
 
