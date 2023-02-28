@@ -40,8 +40,8 @@ watch(
     class="horizontal-header"
   >
     <div class="horizontal-header-left" @click="backHome">
-      <FontIcon icon="team-iconlogo" svg style="width: 35px; height: 35px" />
-      <h4>{{ title }}</h4>
+      <img src="/logo.svg" alt="logo" />
+      <span>{{ title }}</span>
     </div>
     <el-menu
       router

@@ -11,10 +11,15 @@ import {
 import { tagsViewsType } from "../types";
 import { useEventListener } from "@vueuse/core";
 import { useRoute, useRouter } from "vue-router";
-import { isEqual, isBoolean } from "@pureadmin/utils";
 import { useSettingStoreHook } from "@/store/modules/settings";
 import { useMultiTagsStoreHook } from "@/store/modules/multiTags";
-import { storageLocal, toggleClass, hasClass } from "@pureadmin/utils";
+import {
+  isEqual,
+  isBoolean,
+  storageLocal,
+  toggleClass,
+  hasClass
+} from "@pureadmin/utils";
 
 import Fullscreen from "@iconify-icons/ri/fullscreen-fill";
 import CloseAllTags from "@iconify-icons/ri/subtract-line";

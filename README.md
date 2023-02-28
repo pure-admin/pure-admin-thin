@@ -22,6 +22,10 @@
 - [点我查看国内文档站](https://yiming_chang.gitee.io/pure-admin-doc)
 - [点我查看国外文档站](https://pure-admin.github.io/pure-admin-doc)
 
+## 预览
+
+- [点我查看预览站](https://pure-admin-thin.netlify.app/#/login)
+
 ## 维护者
 
 [xiaoxian521](https://github.com/xiaoxian521)

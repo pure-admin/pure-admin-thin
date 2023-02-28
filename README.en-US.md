@@ -18,6 +18,10 @@ The simplified version is based on the shelf extracted from [vue-pure-admin](htt
 - [Click me to view the domestic documentation site](https://yiming_chang.gitee.io/pure-admin-doc)
 - [Click me to view foreign document site](https://pure-admin.github.io/pure-admin-doc)
 
+## Preview
+
+- [Click me to view the preview station](https://pure-admin-thin.netlify.app/#/login)
+
 ## Usage
 
 ### Installation dependencies
