@@ -3,11 +3,10 @@ import { useRouter } from "vue-router";
 import { cloneDeep } from "@pureadmin/utils";
 import SearchResult from "./SearchResult.vue";
 import SearchFooter from "./SearchFooter.vue";
-import { deleteChildren } from "@/utils/tree";
 import { useNav } from "@/layout/hooks/useNav";
 import { transformI18n } from "@/plugins/i18n";
+import { ref, computed, shallowRef } from "vue";
 import { useDebounceFn, onKeyStroke } from "@vueuse/core";
-import { ref, watch, computed, nextTick, shallowRef } from "vue";
 import { usePermissionStoreHook } from "@/store/modules/permission";
 import Search from "@iconify-icons/ep/search";
 
@@ -33,7 +32,7 @@ const handleSearch = useDebounceFn(search, 300);
 
 /** 菜单树形结构 */
 const menusData = computed(() => {
-  return deleteChildren(cloneDeep(usePermissionStoreHook().wholeMenus));
+  return cloneDeep(usePermissionStoreHook().wholeMenus);
 });
 
 const show = computed({
@@ -42,14 +41,6 @@ const show = computed({
   },
   set(val: boolean) {
     emit("update:value", val);
-  }
-});
-
-watch(show, async val => {
-  if (val) {
-    /** 自动聚焦 */
-    await nextTick();
-    inputRef.value?.focus();
   }
 });
 
@@ -136,9 +127,11 @@ onKeyStroke("ArrowDown", handleDown);
 <template>
   <el-dialog
     top="5vh"
-    :width="device === 'mobile' ? '80vw' : '50vw'"
     v-model="show"
+    :width="device === 'mobile' ? '80vw' : '50vw'"
     :before-close="handleClose"
+    @opened="inputRef.focus()"
+    @closed="inputRef.blur()"
   >
     <el-input
       ref="inputRef"
