@@ -1,9 +1,9 @@
-import { computed } from "vue";
 import { storeToRefs } from "pinia";
 import { getConfig } from "@/config";
 import { emitter } from "@/utils/mitt";
 import { routeMetaType } from "../types";
 import { useGlobal } from "@pureadmin/utils";
+import { computed, CSSProperties } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import { router, remainingPaths } from "@/router";
 import { useAppStoreHook } from "@/store/modules/app";
@@ -19,6 +19,16 @@ export function useNav() {
   const { wholeMenus } = storeToRefs(usePermissionStoreHook());
   /** 平台`layout`中所有`el-tooltip`的`effect`配置，默认`light` */
   const tooltipEffect = getConfig()?.TooltipEffect ?? "light";
+
+  const getDivStyle = computed((): CSSProperties => {
+    return {
+      width: "100%",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "space-between",
+      overflow: "hidden"
+    };
+  });
 
   /** 用户名 */
   const username = computed(() => {
@@ -130,6 +140,7 @@ export function useNav() {
     $storage,
     backHome,
     onPanel,
+    getDivStyle,
     changeTitle,
     toggleSideBar,
     menuSelect,
