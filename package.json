@@ -104,6 +104,8 @@
     "vite": "^4.1.4",
     "vite-plugin-cdn-import": "^0.3.5",
     "vite-plugin-compression": "^0.5.1",
+    "vite-plugin-http2-proxy": "^0.4.1",
+    "vite-plugin-mkcert": "^1.13.3",
     "vite-plugin-mock": "^2.9.6",
     "vite-plugin-remove-console": "^2.1.0",
     "vite-svg-loader": "^4.0.0",

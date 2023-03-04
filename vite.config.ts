@@ -38,7 +38,7 @@ export default ({ command, mode }: ConfigEnv): UserConfigExport => {
     // 服务端渲染
     server: {
       // 是否开启 https
-      https: false,
+      https: true,
       // 端口号
       port: VITE_PORT,
       host: "0.0.0.0",
