@@ -3,28 +3,28 @@ import Axios, {
   AxiosError,
   AxiosResponse,
   AxiosRequestConfig
-} from "axios";
+} from 'axios'
 
 export type resultType = {
-  accessToken?: string;
-};
+  accessToken?: string
+}
 
 export type RequestMethods = Extract<
   Method,
-  "get" | "post" | "put" | "delete" | "patch" | "option" | "head"
->;
+  'get' | 'post' | 'put' | 'delete' | 'patch' | 'option' | 'head'
+>
 
 export interface PureHttpError extends AxiosError {
-  isCancelRequest?: boolean;
+  isCancelRequest?: boolean
 }
 
 export interface PureHttpResponse extends AxiosResponse {
-  config: PureHttpRequestConfig;
+  config: PureHttpRequestConfig
 }
 
 export interface PureHttpRequestConfig extends AxiosRequestConfig {
-  beforeRequestCallback?: (request: PureHttpRequestConfig) => void;
-  beforeResponseCallback?: (response: PureHttpResponse) => void;
+  beforeRequestCallback?: (request: PureHttpRequestConfig) => void
+  beforeResponseCallback?: (response: PureHttpResponse) => void
 }
 
 export default class PureHttp {
@@ -33,15 +33,11 @@ export default class PureHttp {
     url: string,
     param?: AxiosRequestConfig,
     axiosConfig?: PureHttpRequestConfig
-  ): Promise<T>;
+  ): Promise<T>
   post<T, P>(
     url: string,
     params?: T,
     config?: PureHttpRequestConfig
-  ): Promise<P>;
-  get<T, P>(
-    url: string,
-    params?: T,
-    config?: PureHttpRequestConfig
-  ): Promise<P>;
+  ): Promise<P>
+  get<T, P>(url: string, params?: T, config?: PureHttpRequestConfig): Promise<P>
 }

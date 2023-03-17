@@ -1,47 +1,47 @@
 <script setup lang="ts">
-import { useI18n } from "vue-i18n";
-import { useRoute } from "vue-router";
-import { ref, unref, onMounted, nextTick } from "vue";
+import { useI18n } from 'vue-i18n'
+import { useRoute } from 'vue-router'
+import { ref, unref, onMounted, nextTick } from 'vue'
 
 defineOptions({
-  name: "FrameView"
-});
+  name: 'FrameView'
+})
 
-const { t } = useI18n();
-const loading = ref(true);
-const currentRoute = useRoute();
-const frameSrc = ref<string>("");
-const frameRef = ref<HTMLElement | null>(null);
+const { t } = useI18n()
+const loading = ref(true)
+const currentRoute = useRoute()
+const frameSrc = ref<string>('')
+const frameRef = ref<HTMLElement | null>(null)
 
 if (unref(currentRoute.meta)?.frameSrc) {
-  frameSrc.value = unref(currentRoute.meta)?.frameSrc as string;
+  frameSrc.value = unref(currentRoute.meta)?.frameSrc as string
 }
-unref(currentRoute.meta)?.frameLoading === false && hideLoading();
+unref(currentRoute.meta)?.frameLoading === false && hideLoading()
 
 function hideLoading() {
-  loading.value = false;
+  loading.value = false
 }
 
 function init() {
   nextTick(() => {
-    const iframe = unref(frameRef);
-    if (!iframe) return;
-    const _frame = iframe as any;
+    const iframe = unref(frameRef)
+    if (!iframe) return
+    const _frame = iframe as any
     if (_frame.attachEvent) {
-      _frame.attachEvent("onload", () => {
-        hideLoading();
-      });
+      _frame.attachEvent('onload', () => {
+        hideLoading()
+      })
     } else {
       iframe.onload = () => {
-        hideLoading();
-      };
+        hideLoading()
+      }
     }
-  });
+  })
 }
 
 onMounted(() => {
-  init();
-});
+  init()
+})
 </script>
 
 <template>

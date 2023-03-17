@@ -1,32 +1,32 @@
-import { $t } from "@/plugins/i18n";
-const Layout = () => import("@/layout/index.vue");
+import { $t } from '@/plugins/i18n'
+const Layout = () => import('@/layout/index.vue')
 
 export default [
   {
-    path: "/login",
-    name: "Login",
-    component: () => import("@/views/login/index.vue"),
+    path: '/login',
+    name: 'Login',
+    component: () => import('@/views/login/index.vue'),
     meta: {
-      title: $t("menus.hslogin"),
+      title: $t('menus.hslogin'),
       showLink: false,
       rank: 101
     }
   },
   {
-    path: "/redirect",
+    path: '/redirect',
     component: Layout,
     meta: {
-      icon: "homeFilled",
-      title: $t("menus.hshome"),
+      icon: 'homeFilled',
+      title: $t('menus.hshome'),
       showLink: false,
       rank: 102
     },
     children: [
       {
-        path: "/redirect/:path(.*)",
-        name: "Redirect",
-        component: () => import("@/layout/redirect.vue")
+        path: '/redirect/:path(.*)',
+        name: 'Redirect',
+        component: () => import('@/layout/redirect.vue')
       }
     ]
   }
-] as Array<RouteConfigsTable>;
+] as Array<RouteConfigsTable>

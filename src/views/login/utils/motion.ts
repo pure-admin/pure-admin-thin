@@ -1,8 +1,8 @@
-import { h, defineComponent, withDirectives, resolveDirective } from "vue";
+import { h, defineComponent, withDirectives, resolveDirective } from 'vue'
 
 /** 封装@vueuse/motion动画库中的自定义指令v-motion */
 export default defineComponent({
-  name: "Motion",
+  name: 'Motion',
   props: {
     delay: {
       type: Number,
@@ -10,11 +10,11 @@ export default defineComponent({
     }
   },
   render() {
-    const { delay } = this;
-    const motion = resolveDirective("motion");
+    const { delay } = this
+    const motion = resolveDirective('motion')
     return withDirectives(
       h(
-        "div",
+        'div',
         {},
         {
           default: () => [this.$slots.default()]
@@ -35,6 +35,6 @@ export default defineComponent({
           }
         ]
       ]
-    );
+    )
   }
-});
+})

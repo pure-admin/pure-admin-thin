@@ -1,42 +1,42 @@
 <script setup lang="ts">
-import { ref, computed } from "vue";
-import { useNav } from "@/layout/hooks/useNav";
-import MenuFold from "@iconify-icons/ri/menu-fold-fill";
+import { ref, computed } from 'vue'
+import { useNav } from '@/layout/hooks/useNav'
+import MenuFold from '@iconify-icons/ri/menu-fold-fill'
 
 interface Props {
-  isActive: boolean;
+  isActive: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
   isActive: false
-});
+})
 
-const visible = ref(false);
-const { tooltipEffect } = useNav();
+const visible = ref(false)
+const { tooltipEffect } = useNav()
 
 const iconClass = computed(() => {
   return [
-    "ml-4",
-    "mb-1",
-    "w-[16px]",
-    "h-[16px]",
-    "inline-block",
-    "align-middle",
-    "text-primary",
-    "cursor-pointer",
-    "duration-[100ms]",
-    "hover:text-primary",
-    "dark:hover:!text-white"
-  ];
-});
+    'ml-4',
+    'mb-1',
+    'w-[16px]',
+    'h-[16px]',
+    'inline-block',
+    'align-middle',
+    'text-primary',
+    'cursor-pointer',
+    'duration-[100ms]',
+    'hover:text-primary',
+    'dark:hover:!text-white'
+  ]
+})
 
 const emit = defineEmits<{
-  (e: "toggleClick"): void;
-}>();
+  (e: 'toggleClick'): void
+}>()
 
 const toggleClick = () => {
-  emit("toggleClick");
-};
+  emit('toggleClick')
+}
 </script>
 
 <template>

@@ -1,4 +1,4 @@
-import { App, Component } from "vue";
+import { App, Component } from 'vue'
 import {
   ElTag,
   ElAffix,
@@ -62,10 +62,10 @@ import {
   // 指令
   ElLoading,
   ElInfiniteScroll
-} from "element-plus";
+} from 'element-plus'
 
 // Directives
-const plugins = [ElLoading, ElInfiniteScroll];
+const plugins = [ElLoading, ElInfiniteScroll]
 
 const components = [
   ElTag,
@@ -127,15 +127,15 @@ const components = [
   ElResult,
   ElSteps,
   ElStep
-];
+]
 
 export function useElementPlus(app: App) {
   // 注册组件
   components.forEach((component: Component) => {
-    app.component(component.name, component);
-  });
+    app.component(component.name, component)
+  })
   // 注册指令
   plugins.forEach(plugin => {
-    app.use(plugin);
-  });
+    app.use(plugin)
+  })
 }

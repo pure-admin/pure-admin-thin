@@ -1,15 +1,15 @@
 <script setup lang="ts">
-import Search from "./search/index.vue";
-import Notice from "./notice/index.vue";
-import mixNav from "./sidebar/mixNav.vue";
-import { useNav } from "@/layout/hooks/useNav";
-import Breadcrumb from "./sidebar/breadCrumb.vue";
-import topCollapse from "./sidebar/topCollapse.vue";
-import { useTranslationLang } from "../hooks/useTranslationLang";
-import globalization from "@/assets/svg/globalization.svg?component";
-import LogoutCircleRLine from "@iconify-icons/ri/logout-circle-r-line";
-import Setting from "@iconify-icons/ri/settings-3-line";
-import Check from "@iconify-icons/ep/check";
+import Search from './search/index.vue'
+import Notice from './notice/index.vue'
+import mixNav from './sidebar/mixNav.vue'
+import { useNav } from '@/layout/hooks/useNav'
+import Breadcrumb from './sidebar/breadCrumb.vue'
+import topCollapse from './sidebar/topCollapse.vue'
+import { useTranslationLang } from '../hooks/useTranslationLang'
+import globalization from '@/assets/svg/globalization.svg?component'
+import LogoutCircleRLine from '@iconify-icons/ri/logout-circle-r-line'
+import Setting from '@iconify-icons/ri/settings-3-line'
+import Check from '@iconify-icons/ep/check'
 
 const {
   layout,
@@ -22,9 +22,9 @@ const {
   toggleSideBar,
   getDropdownItemStyle,
   getDropdownItemClass
-} = useNav();
+} = useNav()
 
-const { t, locale, translationCh, translationEn } = useTranslationLang();
+const { t, locale, translationCh, translationEn } = useTranslationLang()
 </script>
 
 <template>
@@ -98,7 +98,7 @@ const { t, locale, translationCh, translationEn } = useTranslationLang();
                 :icon="LogoutCircleRLine"
                 style="margin: 5px"
               />
-              {{ t("buttons.hsLoginOut") }}
+              {{ t('buttons.hsLoginOut') }}
             </el-dropdown-item>
           </el-dropdown-menu>
         </template>

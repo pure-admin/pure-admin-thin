@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { SearchModal } from "./components";
-import { useBoolean } from "../../hooks/useBoolean";
-import Search from "@iconify-icons/ep/search";
+import { SearchModal } from './components'
+import { useBoolean } from '../../hooks/useBoolean'
+import Search from '@iconify-icons/ep/search'
 
-const { bool: show, toggle } = useBoolean();
+const { bool: show, toggle } = useBoolean()
 function handleSearch() {
-  toggle();
+  toggle()
 }
 </script>
 

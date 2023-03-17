@@ -168,7 +168,7 @@
     }
 
     .el-menu-item.is-active.nest-menu::before {
-      content: "";
+      content: '';
       clear: both;
       position: absolute;
       left: 8px;
@@ -197,14 +197,14 @@
       width: 2px;
       height: 100%;
       background-color: $menuActiveBefore;
-      content: "";
+      content: '';
       clear: both;
       transition: all var(--pure-transition-duration) ease-in-out;
       transform: translateY(0);
     }
 
     .el-menu--collapse .outer-most.el-sub-menu > .el-sub-menu__title::before {
-      content: "";
+      content: '';
       display: block;
       position: absolute;
       height: 0;
@@ -219,7 +219,7 @@
       color: #fff;
     }
     .is-active.submenu-title-noDropdown.outer-most::before {
-      content: "";
+      content: '';
       clear: both;
       position: absolute;
       left: 8px;
@@ -289,7 +289,7 @@
     }
 
     .el-menu-item.is-active.nest-menu::before {
-      content: "";
+      content: '';
       clear: both;
       position: absolute;
       left: 8px;
@@ -381,7 +381,7 @@
     }
 
     .el-menu-item.is-active.nest-menu::before {
-      content: "";
+      content: '';
       clear: both;
       position: absolute;
       left: 5px;
@@ -567,7 +567,7 @@
   }
 }
 
-body[layout="vertical"] {
+body[layout='vertical'] {
   $sideBarWidth: 210px;
   @include merge-style($sideBarWidth);
 
@@ -641,7 +641,7 @@ body[layout="vertical"] {
   }
 }
 
-body[layout="horizontal"] {
+body[layout='horizontal'] {
   $sideBarWidth: 0;
   @include merge-style($sideBarWidth);
 
@@ -655,7 +655,7 @@ body[layout="horizontal"] {
   }
 }
 
-body[layout="mix"] {
+body[layout='mix'] {
   $sideBarWidth: 210px;
   @include merge-style($sideBarWidth);
 

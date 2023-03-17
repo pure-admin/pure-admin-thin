@@ -29,6 +29,13 @@ menus:
   hsfourZeroFour: "404"
   hsfourZeroOne: "403"
   hsFive: "500"
+  basicData: Basic Data
+  liveData: Live Data
+  userData: User Data
+  searchUser: Search User
+  gameData: Game Data
+  clubData: Club Data
+  searchClub: Search Club
   permission: Permission Manage
   permissionPage: Page Permission
   permissionButton: Button Permission
@@ -41,3 +48,6 @@ login:
   usernameReg: Please enter username
   passwordReg: Please enter password
   passwordRuleReg: The password format should be any combination of 8-18 digits
+others:
+  backHome: Back Home
+  comingSoon: Coming soon.

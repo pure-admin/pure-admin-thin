@@ -1,7 +1,7 @@
 <script setup lang="ts">
 defineOptions({
-  name: "Welcome"
-});
+  name: 'Welcome'
+})
 </script>
 
 <template>

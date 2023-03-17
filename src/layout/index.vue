@@ -1,40 +1,40 @@
 <script setup lang="ts">
-import "animate.css";
+import 'animate.css'
 // 引入 src/components/ReIcon/src/offlineIcon.ts 文件中所有使用addIcon添加过的本地图标
-import "@/components/ReIcon/src/offlineIcon";
-import { setType } from "./types";
-import { emitter } from "@/utils/mitt";
-import { useLayout } from "./hooks/useLayout";
-import { useAppStoreHook } from "@/store/modules/app";
-import { useSettingStoreHook } from "@/store/modules/settings";
-import { deviceDetection, useDark, useGlobal } from "@pureadmin/utils";
-import { h, reactive, computed, onMounted, defineComponent } from "vue";
+import '@/components/ReIcon/src/offlineIcon'
+import { setType } from './types'
+import { emitter } from '@/utils/mitt'
+import { useLayout } from './hooks/useLayout'
+import { useAppStoreHook } from '@/store/modules/app'
+import { useSettingStoreHook } from '@/store/modules/settings'
+import { deviceDetection, useDark, useGlobal } from '@pureadmin/utils'
+import { h, reactive, computed, onMounted, defineComponent } from 'vue'
 
-import navbar from "./components/navbar.vue";
-import tag from "./components/tag/index.vue";
-import appMain from "./components/appMain.vue";
-import setting from "./components/setting/index.vue";
-import Vertical from "./components/sidebar/vertical.vue";
-import Horizontal from "./components/sidebar/horizontal.vue";
-import backTop from "@/assets/svg/back_top.svg?component";
+import navbar from './components/navbar.vue'
+import tag from './components/tag/index.vue'
+import appMain from './components/appMain.vue'
+import setting from './components/setting/index.vue'
+import Vertical from './components/sidebar/vertical.vue'
+import Horizontal from './components/sidebar/horizontal.vue'
+import backTop from '@/assets/svg/back_top.svg?component'
 
-const { isDark } = useDark();
-const { layout } = useLayout();
-const isMobile = deviceDetection();
-const pureSetting = useSettingStoreHook();
-const { $storage } = useGlobal<GlobalPropertiesApi>();
+const { isDark } = useDark()
+const { layout } = useLayout()
+const isMobile = deviceDetection()
+const pureSetting = useSettingStoreHook()
+const { $storage } = useGlobal<GlobalPropertiesApi>()
 
 const set: setType = reactive({
   sidebar: computed(() => {
-    return useAppStoreHook().sidebar;
+    return useAppStoreHook().sidebar
   }),
 
   device: computed(() => {
-    return useAppStoreHook().device;
+    return useAppStoreHook().device
   }),
 
   fixedHeader: computed(() => {
-    return pureSetting.fixedHeader;
+    return pureSetting.fixedHeader
   }),
 
   classes: computed(() => {
@@ -42,95 +42,95 @@ const set: setType = reactive({
       hideSidebar: !set.sidebar.opened,
       openSidebar: set.sidebar.opened,
       withoutAnimation: set.sidebar.withoutAnimation,
-      mobile: set.device === "mobile"
-    };
+      mobile: set.device === 'mobile'
+    }
   }),
 
   hideTabs: computed(() => {
-    return $storage?.configure.hideTabs;
+    return $storage?.configure.hideTabs
   })
-});
+})
 
 function setTheme(layoutModel: string) {
-  window.document.body.setAttribute("layout", layoutModel);
+  window.document.body.setAttribute('layout', layoutModel)
   $storage.layout = {
     layout: `${layoutModel}`,
     theme: $storage.layout?.theme,
     darkMode: $storage.layout?.darkMode,
     sidebarStatus: $storage.layout?.sidebarStatus,
     epThemeColor: $storage.layout?.epThemeColor
-  };
+  }
 }
 
 function toggle(device: string, bool: boolean) {
-  useAppStoreHook().toggleDevice(device);
-  useAppStoreHook().toggleSideBar(bool, "resize");
+  useAppStoreHook().toggleDevice(device)
+  useAppStoreHook().toggleSideBar(bool, 'resize')
 }
 
 // 判断是否可自动关闭菜单栏
-let isAutoCloseSidebar = true;
+let isAutoCloseSidebar = true
 
 // 监听容器
-emitter.on("resize", ({ detail }) => {
-  if (isMobile) return;
-  const { width } = detail;
-  width <= 760 ? setTheme("vertical") : setTheme(useAppStoreHook().layout);
+emitter.on('resize', ({ detail }) => {
+  if (isMobile) return
+  const { width } = detail
+  width <= 760 ? setTheme('vertical') : setTheme(useAppStoreHook().layout)
   /** width app-wrapper类容器宽度
    * 0 < width <= 760 隐藏侧边栏
    * 760 < width <= 990 折叠侧边栏
    * width > 990 展开侧边栏
    */
   if (width > 0 && width <= 760) {
-    toggle("mobile", false);
-    isAutoCloseSidebar = true;
+    toggle('mobile', false)
+    isAutoCloseSidebar = true
   } else if (width > 760 && width <= 990) {
     if (isAutoCloseSidebar) {
-      toggle("desktop", false);
-      isAutoCloseSidebar = false;
+      toggle('desktop', false)
+      isAutoCloseSidebar = false
     }
   } else if (width > 990) {
     if (!set.sidebar.isClickCollapse) {
-      toggle("desktop", true);
-      isAutoCloseSidebar = true;
+      toggle('desktop', true)
+      isAutoCloseSidebar = true
     }
   }
-});
+})
 
 onMounted(() => {
   if (isMobile) {
-    toggle("mobile", false);
+    toggle('mobile', false)
   }
-});
+})
 
 const layoutHeader = defineComponent({
   render() {
     return h(
-      "div",
+      'div',
       {
-        class: { "fixed-header": set.fixedHeader },
+        class: { 'fixed-header': set.fixedHeader },
         style: [
-          set.hideTabs && layout.value.includes("horizontal")
+          set.hideTabs && layout.value.includes('horizontal')
             ? isDark.value
-              ? "box-shadow: 0 1px 4px #0d0d0d"
-              : "box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08)"
-            : ""
+              ? 'box-shadow: 0 1px 4px #0d0d0d'
+              : 'box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08)'
+            : ''
         ]
       },
       {
         default: () => [
           !pureSetting.hiddenSideBar &&
-          (layout.value.includes("vertical") || layout.value.includes("mix"))
+          (layout.value.includes('vertical') || layout.value.includes('mix'))
             ? h(navbar)
             : null,
-          !pureSetting.hiddenSideBar && layout.value.includes("horizontal")
+          !pureSetting.hiddenSideBar && layout.value.includes('horizontal')
             ? h(Horizontal)
             : null,
           h(tag)
         ]
       }
-    );
+    )
   }
-});
+})
 </script>
 
 <template>
@@ -181,7 +181,7 @@ const layoutHeader = defineComponent({
 <style lang="scss" scoped>
 @mixin clearfix {
   &::after {
-    content: "";
+    content: '';
     display: table;
     clear: both;
   }

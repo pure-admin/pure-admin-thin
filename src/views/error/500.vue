@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import noServer from "@/assets/status/500.svg?component";
+import noServer from '@/assets/status/500.svg?component'
 
 defineOptions({
-  name: "500"
-});
+  name: '500'
+})
 </script>
 
 <template>

@@ -1,22 +1,22 @@
 <script setup lang="ts">
-import MenuFold from "@iconify-icons/ri/menu-fold-fill";
-import MenuUnfold from "@iconify-icons/ri/menu-unfold-fill";
+import MenuFold from '@iconify-icons/ri/menu-fold-fill'
+import MenuUnfold from '@iconify-icons/ri/menu-unfold-fill'
 
 interface Props {
-  isActive: boolean;
+  isActive: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
   isActive: false
-});
+})
 
 const emit = defineEmits<{
-  (e: "toggleClick"): void;
-}>();
+  (e: 'toggleClick'): void
+}>()
 
 const toggleClick = () => {
-  emit("toggleClick");
-};
+  emit('toggleClick')
+}
 </script>
 
 <template>

@@ -29,6 +29,13 @@ menus:
   hsfourZeroFour: "404"
   hsfourZeroOne: "403"
   hsFive: "500"
+  basicData: "基础数据"
+  liveData: "实时数据"
+  userData: "用户数据"
+  searchUser: "搜索用户"
+  gameData: "牌局数据"
+  clubData: "俱乐部数据"
+  searchClub: "搜索俱乐部"
   permission: 权限管理
   permissionPage: 页面权限
   permissionButton: 按钮权限
@@ -41,3 +48,7 @@ login:
   usernameReg: 请输入账号
   passwordReg: 请输入密码
   passwordRuleReg: 密码格式应为8-18位数字、字母、符号的任意两种组合
+others:
+  backHome: 返回首页
+  comingSoon: 敬请期待。
+

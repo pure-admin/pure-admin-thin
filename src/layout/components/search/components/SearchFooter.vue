@@ -17,10 +17,10 @@
 </template>
 
 <script setup lang="ts">
-import ArrowUpLine from "@iconify-icons/ri/arrow-up-line";
-import ArrowDownLine from "@iconify-icons/ri/arrow-down-line";
-import mdiKeyboardEsc from "@/assets/svg/keyboard_esc.svg?component";
-import enterOutlined from "@/assets/svg/enter_outlined.svg?component";
+import ArrowUpLine from '@iconify-icons/ri/arrow-up-line'
+import ArrowDownLine from '@iconify-icons/ri/arrow-down-line'
+import mdiKeyboardEsc from '@/assets/svg/keyboard_esc.svg?component'
+import enterOutlined from '@/assets/svg/enter_outlined.svg?component'
 </script>
 
 <style lang="scss" scoped>

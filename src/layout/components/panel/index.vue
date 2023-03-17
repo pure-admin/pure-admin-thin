@@ -1,35 +1,35 @@
 <script setup lang="ts">
-import { ref, computed } from "vue";
-import { emitter } from "@/utils/mitt";
-import { onClickOutside } from "@vueuse/core";
-import Close from "@iconify-icons/ep/close";
+import { ref, computed } from 'vue'
+import { emitter } from '@/utils/mitt'
+import { onClickOutside } from '@vueuse/core'
+import Close from '@iconify-icons/ep/close'
 
-const target = ref(null);
-const show = ref<Boolean>(false);
+const target = ref(null)
+const show = ref<Boolean>(false)
 
 const iconClass = computed(() => {
   return [
-    "mr-[20px]",
-    "outline-none",
-    "width-[20px]",
-    "height-[20px]",
-    "rounded-[4px]",
-    "cursor-pointer",
-    "transition-colors",
-    "hover:bg-[#0000000f]",
-    "dark:hover:bg-[#ffffff1f]",
-    "dark:hover:text-[#ffffffd9]"
-  ];
-});
+    'mr-[20px]',
+    'outline-none',
+    'width-[20px]',
+    'height-[20px]',
+    'rounded-[4px]',
+    'cursor-pointer',
+    'transition-colors',
+    'hover:bg-[#0000000f]',
+    'dark:hover:bg-[#ffffff1f]',
+    'dark:hover:text-[#ffffffd9]'
+  ]
+})
 
 onClickOutside(target, (event: any) => {
-  if (event.clientX > target.value.offsetLeft) return;
-  show.value = false;
-});
+  if (event.clientX > target.value.offsetLeft) return
+  show.value = false
+})
 
-emitter.on("openPanel", () => {
-  show.value = true;
-});
+emitter.on('openPanel', () => {
+  show.value = true
+})
 </script>
 
 <template>

@@ -1,3 +1,3 @@
-import SearchModal from "./SearchModal.vue";
+import SearchModal from './SearchModal.vue'
 
-export { SearchModal };
+export { SearchModal }

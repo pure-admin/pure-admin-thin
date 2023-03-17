@@ -1,22 +1,22 @@
 <script setup lang="ts">
-import { $t } from "@/plugins/i18n";
-import { emitter } from "@/utils/mitt";
-import { RouteConfigs } from "../../types";
-import { useTags } from "../../hooks/useTag";
-import { routerArrays } from "@/layout/types";
-import { isEqual, isAllEmpty } from "@pureadmin/utils";
-import { useSettingStoreHook } from "@/store/modules/settings";
-import { ref, watch, unref, nextTick, onBeforeMount } from "vue";
-import { handleAliveRoute, delAliveRoutes } from "@/router/utils";
-import { useMultiTagsStoreHook } from "@/store/modules/multiTags";
-import { useResizeObserver, useDebounceFn, useFullscreen } from "@vueuse/core";
+import { $t } from '@/plugins/i18n'
+import { emitter } from '@/utils/mitt'
+import { RouteConfigs } from '../../types'
+import { useTags } from '../../hooks/useTag'
+import { routerArrays } from '@/layout/types'
+import { isEqual, isAllEmpty } from '@pureadmin/utils'
+import { useSettingStoreHook } from '@/store/modules/settings'
+import { ref, watch, unref, nextTick, onBeforeMount } from 'vue'
+import { handleAliveRoute, delAliveRoutes } from '@/router/utils'
+import { useMultiTagsStoreHook } from '@/store/modules/multiTags'
+import { useResizeObserver, useDebounceFn, useFullscreen } from '@vueuse/core'
 
-import ExitFullscreen from "@iconify-icons/ri/fullscreen-exit-fill";
-import Fullscreen from "@iconify-icons/ri/fullscreen-fill";
-import ArrowDown from "@iconify-icons/ri/arrow-down-s-line";
-import ArrowRightSLine from "@iconify-icons/ri/arrow-right-s-line";
-import ArrowLeftSLine from "@iconify-icons/ri/arrow-left-s-line";
-import CloseBold from "@iconify-icons/ep/close-bold";
+import ExitFullscreen from '@iconify-icons/ri/fullscreen-exit-fill'
+import Fullscreen from '@iconify-icons/ri/fullscreen-fill'
+import ArrowDown from '@iconify-icons/ri/arrow-down-s-line'
+import ArrowRightSLine from '@iconify-icons/ri/arrow-right-s-line'
+import ArrowLeftSLine from '@iconify-icons/ri/arrow-left-s-line'
+import CloseBold from '@iconify-icons/ep/close-bold'
 
 const {
   route,
@@ -44,52 +44,52 @@ const {
   onMouseleave,
   transformI18n,
   onContentFullScreen
-} = useTags();
+} = useTags()
 
-const tabDom = ref();
-const containerDom = ref();
-const scrollbarDom = ref();
-const isShowArrow = ref(false);
-const { isFullscreen, toggle } = useFullscreen();
+const tabDom = ref()
+const containerDom = ref()
+const scrollbarDom = ref()
+const isShowArrow = ref(false)
+const { isFullscreen, toggle } = useFullscreen()
 
 const dynamicTagView = () => {
   const index = multiTags.value.findIndex(item => {
     if (item.query) {
-      return isEqual(route.query, item.query);
+      return isEqual(route.query, item.query)
     } else if (item.params) {
-      return isEqual(route.params, item.params);
+      return isEqual(route.params, item.params)
     } else {
-      return item.path === route.path;
+      return item.path === route.path
     }
-  });
-  moveToView(index);
-};
+  })
+  moveToView(index)
+}
 
 const moveToView = async (index: number): Promise<void> => {
-  const tabNavPadding = 10;
-  if (!instance.refs["dynamic" + index]) return;
-  const tabItemEl = instance.refs["dynamic" + index][0];
-  const tabItemElOffsetLeft = (tabItemEl as HTMLElement)?.offsetLeft;
-  const tabItemOffsetWidth = (tabItemEl as HTMLElement)?.offsetWidth;
+  const tabNavPadding = 10
+  if (!instance.refs['dynamic' + index]) return
+  const tabItemEl = instance.refs['dynamic' + index][0]
+  const tabItemElOffsetLeft = (tabItemEl as HTMLElement)?.offsetLeft
+  const tabItemOffsetWidth = (tabItemEl as HTMLElement)?.offsetWidth
   // 标签页导航栏可视长度（不包含溢出部分）
   const scrollbarDomWidth = scrollbarDom.value
     ? scrollbarDom.value?.offsetWidth
-    : 0;
+    : 0
 
   // 获取视图更新后dom
-  await nextTick();
+  await nextTick()
 
   // 已有标签页总长度（包含溢出部分）
-  const tabDomWidth = tabDom.value ? tabDom.value?.offsetWidth : 0;
+  const tabDomWidth = tabDom.value ? tabDom.value?.offsetWidth : 0
 
   scrollbarDomWidth <= tabDomWidth
     ? (isShowArrow.value = true)
-    : (isShowArrow.value = false);
+    : (isShowArrow.value = false)
   if (tabDomWidth < scrollbarDomWidth || tabItemElOffsetLeft === 0) {
-    translateX.value = 0;
+    translateX.value = 0
   } else if (tabItemElOffsetLeft < -translateX.value) {
     // 标签在可视区域左侧
-    translateX.value = -tabItemElOffsetLeft + tabNavPadding;
+    translateX.value = -tabItemElOffsetLeft + tabNavPadding
   } else if (
     tabItemElOffsetLeft > -translateX.value &&
     tabItemElOffsetLeft + tabItemOffsetWidth <
@@ -102,89 +102,89 @@ const moveToView = async (index: number): Promise<void> => {
         tabItemOffsetWidth -
         tabItemElOffsetLeft -
         tabNavPadding
-    );
+    )
   } else {
     // 标签在可视区域右侧
     translateX.value = -(
       tabItemElOffsetLeft -
       (scrollbarDomWidth - tabNavPadding - tabItemOffsetWidth)
-    );
+    )
   }
-};
+}
 
 const handleScroll = (offset: number): void => {
   const scrollbarDomWidth = scrollbarDom.value
     ? scrollbarDom.value?.offsetWidth
-    : 0;
-  const tabDomWidth = tabDom.value ? tabDom.value.offsetWidth : 0;
+    : 0
+  const tabDomWidth = tabDom.value ? tabDom.value.offsetWidth : 0
   if (offset > 0) {
-    translateX.value = Math.min(0, translateX.value + offset);
+    translateX.value = Math.min(0, translateX.value + offset)
   } else {
     if (scrollbarDomWidth < tabDomWidth) {
       if (translateX.value >= -(tabDomWidth - scrollbarDomWidth)) {
         translateX.value = Math.max(
           translateX.value + offset,
           scrollbarDomWidth - tabDomWidth
-        );
+        )
       }
     } else {
-      translateX.value = 0;
+      translateX.value = 0
     }
   }
-};
+}
 
 function dynamicRouteTag(value: string, parentPath: string): void {
   const hasValue = multiTags.value.some(item => {
-    return item.path === value;
-  });
+    return item.path === value
+  })
 
   function concatPath(arr: object[], value: string, parentPath: string) {
     if (!hasValue) {
       arr.forEach((arrItem: any) => {
-        const pathConcat = parentPath + arrItem.path;
+        const pathConcat = parentPath + arrItem.path
         if (arrItem.path === value || pathConcat === value) {
-          useMultiTagsStoreHook().handleTags("push", {
+          useMultiTagsStoreHook().handleTags('push', {
             path: value,
-            parentPath: `/${parentPath.split("/")[1]}`,
+            parentPath: `/${parentPath.split('/')[1]}`,
             meta: arrItem.meta,
             name: arrItem.name
-          });
+          })
         } else {
           if (arrItem.children && arrItem.children.length > 0) {
-            concatPath(arrItem.children, value, parentPath);
+            concatPath(arrItem.children, value, parentPath)
           }
         }
-      });
+      })
     }
   }
-  concatPath(router.options.routes as any, value, parentPath);
+  concatPath(router.options.routes as any, value, parentPath)
 }
 
 /** 刷新路由 */
 function onFresh() {
-  const { fullPath, query } = unref(route);
+  const { fullPath, query } = unref(route)
   router.replace({
-    path: "/redirect" + fullPath,
+    path: '/redirect' + fullPath,
     query: query
-  });
+  })
 }
 
 function deleteDynamicTag(obj: any, current: any, tag?: string) {
   // 存放被删除的缓存路由
-  let delAliveRouteList = [];
+  let delAliveRouteList = []
   const valueIndex: number = multiTags.value.findIndex((item: any) => {
     if (item.query) {
       if (item.path === obj.path) {
-        return item.query === obj.query;
+        return item.query === obj.query
       }
     } else if (item.params) {
       if (item.path === obj.path) {
-        return item.params === obj.params;
+        return item.params === obj.params
       }
     } else {
-      return item.path === obj.path;
+      return item.path === obj.path
     }
-  });
+  })
 
   const spliceRoute = (
     startIndex?: number,
@@ -192,64 +192,64 @@ function deleteDynamicTag(obj: any, current: any, tag?: string) {
     other?: boolean
   ): void => {
     if (other) {
-      useMultiTagsStoreHook().handleTags("equal", [routerArrays[0], obj]);
+      useMultiTagsStoreHook().handleTags('equal', [routerArrays[0], obj])
     } else {
-      delAliveRouteList = useMultiTagsStoreHook().handleTags("splice", "", {
+      delAliveRouteList = useMultiTagsStoreHook().handleTags('splice', '', {
         startIndex,
         length
-      }) as any;
+      }) as any
     }
-    dynamicTagView();
-  };
+    dynamicTagView()
+  }
 
-  if (tag === "other") {
-    spliceRoute(1, 1, true);
-  } else if (tag === "left") {
-    spliceRoute(1, valueIndex - 1);
-  } else if (tag === "right") {
-    spliceRoute(valueIndex + 1, multiTags.value.length);
+  if (tag === 'other') {
+    spliceRoute(1, 1, true)
+  } else if (tag === 'left') {
+    spliceRoute(1, valueIndex - 1)
+  } else if (tag === 'right') {
+    spliceRoute(valueIndex + 1, multiTags.value.length)
   } else {
     // 从当前匹配到的路径中删除
-    spliceRoute(valueIndex, 1);
+    spliceRoute(valueIndex, 1)
   }
-  const newRoute = useMultiTagsStoreHook().handleTags("slice");
+  const newRoute = useMultiTagsStoreHook().handleTags('slice')
   if (current === route.path) {
     // 删除缓存路由
     tag
       ? delAliveRoutes(delAliveRouteList)
-      : handleAliveRoute(route.matched, "delete");
+      : handleAliveRoute(route.matched, 'delete')
     // 如果删除当前激活tag就自动切换到最后一个tag
-    if (tag === "left") return;
+    if (tag === 'left') return
     if (newRoute[0]?.query) {
-      router.push({ name: newRoute[0].name, query: newRoute[0].query });
+      router.push({ name: newRoute[0].name, query: newRoute[0].query })
     } else if (newRoute[0]?.params) {
-      router.push({ name: newRoute[0].name, params: newRoute[0].params });
+      router.push({ name: newRoute[0].name, params: newRoute[0].params })
     } else {
-      router.push({ path: newRoute[0].path });
+      router.push({ path: newRoute[0].path })
     }
   } else {
     // 删除缓存路由
-    tag ? delAliveRoutes(delAliveRouteList) : delAliveRoutes([obj]);
-    if (!multiTags.value.length) return;
-    if (multiTags.value.some(item => item.path === route.path)) return;
+    tag ? delAliveRoutes(delAliveRouteList) : delAliveRoutes([obj])
+    if (!multiTags.value.length) return
+    if (multiTags.value.some(item => item.path === route.path)) return
     if (newRoute[0]?.query) {
-      router.push({ name: newRoute[0].name, query: newRoute[0].query });
+      router.push({ name: newRoute[0].name, query: newRoute[0].query })
     } else if (newRoute[0]?.params) {
-      router.push({ name: newRoute[0].name, params: newRoute[0].params });
+      router.push({ name: newRoute[0].name, params: newRoute[0].params })
     } else {
-      router.push({ path: newRoute[0].path });
+      router.push({ path: newRoute[0].path })
     }
   }
 }
 
 function deleteMenu(item, tag?: string) {
-  deleteDynamicTag(item, item.path, tag);
+  deleteDynamicTag(item, item.path, tag)
 }
 
 function onClickDrop(key, item, selectRoute?: RouteConfigs) {
-  if (item && item.disabled) return;
+  if (item && item.disabled) return
 
-  let selectTagRoute;
+  let selectTagRoute
   if (selectRoute) {
     selectTagRoute = {
       path: selectRoute.path,
@@ -257,93 +257,93 @@ function onClickDrop(key, item, selectRoute?: RouteConfigs) {
       name: selectRoute.name,
       query: selectRoute?.query,
       params: selectRoute?.params
-    };
+    }
   } else {
-    selectTagRoute = { path: route.path, meta: route.meta };
+    selectTagRoute = { path: route.path, meta: route.meta }
   }
 
   // 当前路由信息
   switch (key) {
     case 0:
       // 刷新路由
-      onFresh();
-      break;
+      onFresh()
+      break
     case 1:
       // 关闭当前标签页
-      deleteMenu(selectTagRoute);
-      break;
+      deleteMenu(selectTagRoute)
+      break
     case 2:
       // 关闭左侧标签页
-      deleteMenu(selectTagRoute, "left");
-      break;
+      deleteMenu(selectTagRoute, 'left')
+      break
     case 3:
       // 关闭右侧标签页
-      deleteMenu(selectTagRoute, "right");
-      break;
+      deleteMenu(selectTagRoute, 'right')
+      break
     case 4:
       // 关闭其他标签页
-      deleteMenu(selectTagRoute, "other");
-      break;
+      deleteMenu(selectTagRoute, 'other')
+      break
     case 5:
       // 关闭全部标签页
-      useMultiTagsStoreHook().handleTags("splice", "", {
+      useMultiTagsStoreHook().handleTags('splice', '', {
         startIndex: 1,
         length: multiTags.value.length
-      });
-      router.push("/welcome");
-      break;
+      })
+      router.push('/welcome')
+      break
     case 6:
       // 整体页面全屏
-      toggle();
+      toggle()
       setTimeout(() => {
         if (isFullscreen.value) {
-          tagsViews[6].icon = ExitFullscreen;
-          tagsViews[6].text = $t("buttons.hswholeExitFullScreen");
+          tagsViews[6].icon = ExitFullscreen
+          tagsViews[6].text = $t('buttons.hswholeExitFullScreen')
         } else {
-          tagsViews[6].icon = Fullscreen;
-          tagsViews[6].text = $t("buttons.hswholeFullScreen");
+          tagsViews[6].icon = Fullscreen
+          tagsViews[6].text = $t('buttons.hswholeFullScreen')
         }
-      }, 100);
-      break;
+      }, 100)
+      break
     case 7:
       // 内容区全屏
-      onContentFullScreen();
+      onContentFullScreen()
       setTimeout(() => {
         if (pureSetting.hiddenSideBar) {
-          tagsViews[7].icon = ExitFullscreen;
-          tagsViews[7].text = $t("buttons.hscontentExitFullScreen");
+          tagsViews[7].icon = ExitFullscreen
+          tagsViews[7].text = $t('buttons.hscontentExitFullScreen')
         } else {
-          tagsViews[7].icon = Fullscreen;
-          tagsViews[7].text = $t("buttons.hscontentFullScreen");
+          tagsViews[7].icon = Fullscreen
+          tagsViews[7].text = $t('buttons.hscontentFullScreen')
         }
-      }, 100);
-      break;
+      }, 100)
+      break
   }
   setTimeout(() => {
-    showMenuModel(route.fullPath, route.query);
-  });
+    showMenuModel(route.fullPath, route.query)
+  })
 }
 
 function handleCommand(command: any) {
-  const { key, item } = command;
-  onClickDrop(key, item);
+  const { key, item } = command
+  onClickDrop(key, item)
 }
 
 /** 触发右键中菜单的点击事件 */
 function selectTag(key, item) {
-  onClickDrop(key, item, currentSelect.value);
+  onClickDrop(key, item, currentSelect.value)
 }
 
 function showMenus(value: boolean) {
   Array.of(1, 2, 3, 4, 5).forEach(v => {
-    tagsViews[v].show = value;
-  });
+    tagsViews[v].show = value
+  })
 }
 
 function disabledMenus(value: boolean) {
   Array.of(1, 2, 3, 4, 5).forEach(v => {
-    tagsViews[v].disabled = value;
-  });
+    tagsViews[v].disabled = value
+  })
 }
 
 /** 检查当前右键的菜单两边是否存在别的菜单，如果左侧的菜单是首页，则不显示关闭左侧标签页，如果右侧没有菜单，则不显示关闭右侧标签页 */
@@ -352,19 +352,19 @@ function showMenuModel(
   query: object = {},
   refresh = false
 ) {
-  const allRoute = multiTags.value;
-  const routeLength = multiTags.value.length;
-  let currentIndex = -1;
+  const allRoute = multiTags.value
+  const routeLength = multiTags.value.length
+  let currentIndex = -1
   if (isAllEmpty(query)) {
-    currentIndex = allRoute.findIndex(v => v.path === currentPath);
+    currentIndex = allRoute.findIndex(v => v.path === currentPath)
   } else {
-    currentIndex = allRoute.findIndex(v => isEqual(v.query, query));
+    currentIndex = allRoute.findIndex(v => isEqual(v.query, query))
   }
 
-  showMenus(true);
+  showMenus(true)
 
   if (refresh) {
-    tagsViews[0].show = true;
+    tagsViews[0].show = true
   }
 
   /**
@@ -373,142 +373,142 @@ function showMenuModel(
    */
   if (currentIndex === 1 && routeLength !== 2) {
     // 左侧的菜单是首页，右侧存在别的菜单
-    tagsViews[2].show = false;
+    tagsViews[2].show = false
     Array.of(1, 3, 4, 5).forEach(v => {
-      tagsViews[v].disabled = false;
-    });
-    tagsViews[2].disabled = true;
+      tagsViews[v].disabled = false
+    })
+    tagsViews[2].disabled = true
   } else if (currentIndex === 1 && routeLength === 2) {
-    disabledMenus(false);
+    disabledMenus(false)
     // 左侧的菜单是首页，右侧不存在别的菜单
     Array.of(2, 3, 4).forEach(v => {
-      tagsViews[v].show = false;
-      tagsViews[v].disabled = true;
-    });
+      tagsViews[v].show = false
+      tagsViews[v].disabled = true
+    })
   } else if (routeLength - 1 === currentIndex && currentIndex !== 0) {
     // 当前路由是所有路由中的最后一个
-    tagsViews[3].show = false;
+    tagsViews[3].show = false
     Array.of(1, 2, 4, 5).forEach(v => {
-      tagsViews[v].disabled = false;
-    });
-    tagsViews[3].disabled = true;
-  } else if (currentIndex === 0 || currentPath === "/redirect/welcome") {
+      tagsViews[v].disabled = false
+    })
+    tagsViews[3].disabled = true
+  } else if (currentIndex === 0 || currentPath === '/redirect/welcome') {
     // 当前路由为首页
-    disabledMenus(true);
+    disabledMenus(true)
   } else {
-    disabledMenus(false);
+    disabledMenus(false)
   }
 }
 
 function openMenu(tag, e) {
-  closeMenu();
-  if (tag.path === "/welcome") {
+  closeMenu()
+  if (tag.path === '/welcome') {
     // 右键菜单为首页，只显示刷新
-    showMenus(false);
-    tagsViews[0].show = true;
+    showMenus(false)
+    tagsViews[0].show = true
   } else if (route.path !== tag.path && route.name !== tag.name) {
     // 右键菜单不匹配当前路由，隐藏刷新
-    tagsViews[0].show = false;
-    showMenuModel(tag.path, tag.query);
+    tagsViews[0].show = false
+    showMenuModel(tag.path, tag.query)
   } else if (
     // eslint-disable-next-line no-dupe-else-if
     multiTags.value.length === 2 &&
     route.path !== tag.path
   ) {
-    showMenus(true);
+    showMenus(true)
     // 只有两个标签时不显示关闭其他标签页
-    tagsViews[4].show = false;
+    tagsViews[4].show = false
   } else if (route.path === tag.path) {
     // 右键当前激活的菜单
-    showMenuModel(tag.path, tag.query, true);
+    showMenuModel(tag.path, tag.query, true)
   }
 
-  currentSelect.value = tag;
-  const menuMinWidth = 105;
-  const offsetLeft = unref(containerDom).getBoundingClientRect().left;
-  const offsetWidth = unref(containerDom).offsetWidth;
-  const maxLeft = offsetWidth - menuMinWidth;
-  const left = e.clientX - offsetLeft + 5;
+  currentSelect.value = tag
+  const menuMinWidth = 105
+  const offsetLeft = unref(containerDom).getBoundingClientRect().left
+  const offsetWidth = unref(containerDom).offsetWidth
+  const maxLeft = offsetWidth - menuMinWidth
+  const left = e.clientX - offsetLeft + 5
   if (left > maxLeft) {
-    buttonLeft.value = maxLeft;
+    buttonLeft.value = maxLeft
   } else {
-    buttonLeft.value = left;
+    buttonLeft.value = left
   }
   useSettingStoreHook().hiddenSideBar
     ? (buttonTop.value = e.clientY)
-    : (buttonTop.value = e.clientY - 40);
+    : (buttonTop.value = e.clientY - 40)
   nextTick(() => {
-    visible.value = true;
-  });
+    visible.value = true
+  })
 }
 
 /** 触发tags标签切换 */
 function tagOnClick(item) {
-  const { name, path } = item;
+  const { name, path } = item
   if (name) {
     if (item.query) {
       router.push({
         name,
         query: item.query
-      });
+      })
     } else if (item.params) {
       router.push({
         name,
         params: item.params
-      });
+      })
     } else {
-      router.push({ name });
+      router.push({ name })
     }
   } else {
-    router.push({ path });
+    router.push({ path })
   }
   // showMenuModel(item?.path, item?.query);
 }
 
 onBeforeMount(() => {
-  if (!instance) return;
+  if (!instance) return
 
   // 根据当前路由初始化操作标签页的禁用状态
-  showMenuModel(route.fullPath);
+  showMenuModel(route.fullPath)
 
   // 触发隐藏标签页
-  emitter.on("tagViewsChange", (key: any) => {
-    if (unref(showTags as any) === key) return;
-    (showTags as any).value = key;
-  });
+  emitter.on('tagViewsChange', (key: any) => {
+    if (unref(showTags as any) === key) return
+    ;(showTags as any).value = key
+  })
 
   // 改变标签风格
-  emitter.on("tagViewsShowModel", key => {
-    showModel.value = key;
-  });
+  emitter.on('tagViewsShowModel', key => {
+    showModel.value = key
+  })
 
   //  接收侧边栏切换传递过来的参数
-  emitter.on("changLayoutRoute", ({ indexPath, parentPath }) => {
-    dynamicRouteTag(indexPath, parentPath);
+  emitter.on('changLayoutRoute', ({ indexPath, parentPath }) => {
+    dynamicRouteTag(indexPath, parentPath)
     setTimeout(() => {
-      showMenuModel(indexPath);
-    });
-  });
-});
+      showMenuModel(indexPath)
+    })
+  })
+})
 
 watch([route], () => {
-  activeIndex.value = -1;
-  dynamicTagView();
-});
+  activeIndex.value = -1
+  dynamicTagView()
+})
 
 watch(isFullscreen, () => {
-  tagsViews[6].icon = Fullscreen;
-  tagsViews[6].text = $t("buttons.hswholeFullScreen");
-});
+  tagsViews[6].icon = Fullscreen
+  tagsViews[6].text = $t('buttons.hswholeFullScreen')
+})
 
 onMounted(() => {
   useResizeObserver(
     scrollbarDom,
     useDebounceFn(() => {
-      dynamicTagView();
+      dynamicTagView()
     }, 200)
-  );
-});
+  )
+})
 </script>
 
 <template>
@@ -609,5 +609,5 @@ onMounted(() => {
 </template>
 
 <style lang="scss" scoped>
-@import "./index.scss";
+@import './index.scss';
 </style>

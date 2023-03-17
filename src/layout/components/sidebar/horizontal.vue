@@ -1,20 +1,20 @@
 <script setup lang="ts">
-import Search from "../search/index.vue";
-import Notice from "../notice/index.vue";
-import { ref, watch, nextTick } from "vue";
-import SidebarItem from "./sidebarItem.vue";
-import { useNav } from "@/layout/hooks/useNav";
-import { useTranslationLang } from "../../hooks/useTranslationLang";
-import { usePermissionStoreHook } from "@/store/modules/permission";
-import globalization from "@/assets/svg/globalization.svg?component";
-import LogoutCircleRLine from "@iconify-icons/ri/logout-circle-r-line";
-import Setting from "@iconify-icons/ri/settings-3-line";
-import Check from "@iconify-icons/ep/check";
+import Search from '../search/index.vue'
+import Notice from '../notice/index.vue'
+import { ref, watch, nextTick } from 'vue'
+import SidebarItem from './sidebarItem.vue'
+import { useNav } from '@/layout/hooks/useNav'
+import { useTranslationLang } from '../../hooks/useTranslationLang'
+import { usePermissionStoreHook } from '@/store/modules/permission'
+import globalization from '@/assets/svg/globalization.svg?component'
+import LogoutCircleRLine from '@iconify-icons/ri/logout-circle-r-line'
+import Setting from '@iconify-icons/ri/settings-3-line'
+import Check from '@iconify-icons/ep/check'
 
-const menuRef = ref();
+const menuRef = ref()
 
 const { t, route, locale, translationCh, translationEn } =
-  useTranslationLang(menuRef);
+  useTranslationLang(menuRef)
 const {
   title,
   routers,
@@ -26,18 +26,18 @@ const {
   avatarsStyle,
   getDropdownItemStyle,
   getDropdownItemClass
-} = useNav();
+} = useNav()
 
 nextTick(() => {
-  menuRef.value?.handleResize();
-});
+  menuRef.value?.handleResize()
+})
 
 watch(
   () => route.path,
   () => {
-    menuSelect(route.path, routers);
+    menuSelect(route.path, routers)
   }
-);
+)
 </script>
 
 <template>
@@ -115,7 +115,7 @@ watch(
                 :icon="LogoutCircleRLine"
                 style="margin: 5px"
               />
-              {{ t("buttons.hsLoginOut") }}
+              {{ t('buttons.hsLoginOut') }}
             </el-dropdown-item>
           </el-dropdown-menu>
         </template>

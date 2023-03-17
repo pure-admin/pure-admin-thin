@@ -1,61 +1,61 @@
 <script setup lang="ts">
-import { computed } from "vue";
-import { useI18n } from "vue-i18n";
-import { useEpThemeStoreHook } from "@/store/modules/epTheme";
-import { useRenderIcon } from "@/components/ReIcon/src/hooks";
-import enterOutlined from "@/assets/svg/enter_outlined.svg?component";
-import Bookmark2Line from "@iconify-icons/ri/bookmark-2-line";
+import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
+import { useEpThemeStoreHook } from '@/store/modules/epTheme'
+import { useRenderIcon } from '@/components/ReIcon/src/hooks'
+import enterOutlined from '@/assets/svg/enter_outlined.svg?component'
+import Bookmark2Line from '@iconify-icons/ri/bookmark-2-line'
 
-const { t } = useI18n();
+const { t } = useI18n()
 
 interface optionsItem {
-  path: string;
+  path: string
   meta?: {
-    icon?: string;
-    title?: string;
-  };
+    icon?: string
+    title?: string
+  }
 }
 
 interface Props {
-  value: string;
-  options: Array<optionsItem>;
+  value: string
+  options: Array<optionsItem>
 }
 
 interface Emits {
-  (e: "update:value", val: string): void;
-  (e: "enter"): void;
+  (e: 'update:value', val: string): void
+  (e: 'enter'): void
 }
 
-const props = withDefaults(defineProps<Props>(), {});
-const emit = defineEmits<Emits>();
+const props = withDefaults(defineProps<Props>(), {})
+const emit = defineEmits<Emits>()
 
 const itemStyle = computed(() => {
   return item => {
     return {
       background:
-        item?.path === active.value ? useEpThemeStoreHook().epThemeColor : "",
-      color: item.path === active.value ? "#fff" : "",
-      fontSize: item.path === active.value ? "16px" : "14px"
-    };
-  };
-});
+        item?.path === active.value ? useEpThemeStoreHook().epThemeColor : '',
+      color: item.path === active.value ? '#fff' : '',
+      fontSize: item.path === active.value ? '16px' : '14px'
+    }
+  }
+})
 
 const active = computed({
   get() {
-    return props.value;
+    return props.value
   },
   set(val: string) {
-    emit("update:value", val);
+    emit('update:value', val)
   }
-});
+})
 
 /** 鼠标移入 */
 async function handleMouse(item) {
-  active.value = item.path;
+  active.value = item.path
 }
 
 function handleTo() {
-  emit("enter");
+  emit('enter')
 }
 </script>
 

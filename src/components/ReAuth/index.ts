@@ -1,5 +1,5 @@
-import auth from "./src/auth";
+import auth from './src/auth'
 
-const Auth = auth;
+const Auth = auth
 
-export { Auth };
+export { Auth }

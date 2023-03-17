@@ -1,19 +1,19 @@
 <script setup lang="ts">
-import path from "path";
-import { getConfig } from "@/config";
-import extraIcon from "./extraIcon.vue";
-import { childrenType } from "../../types";
-import { useNav } from "@/layout/hooks/useNav";
-import { transformI18n } from "@/plugins/i18n";
-import { useRenderIcon } from "@/components/ReIcon/src/hooks";
-import { ref, toRaw, PropType, nextTick, computed, CSSProperties } from "vue";
+import path from 'path'
+import { getConfig } from '@/config'
+import extraIcon from './extraIcon.vue'
+import { childrenType } from '../../types'
+import { useNav } from '@/layout/hooks/useNav'
+import { transformI18n } from '@/plugins/i18n'
+import { useRenderIcon } from '@/components/ReIcon/src/hooks'
+import { ref, toRaw, PropType, nextTick, computed, CSSProperties } from 'vue'
 
-import ArrowUp from "@iconify-icons/ep/arrow-up-bold";
-import EpArrowDown from "@iconify-icons/ep/arrow-down-bold";
-import ArrowLeft from "@iconify-icons/ep/arrow-left-bold";
-import ArrowRight from "@iconify-icons/ep/arrow-right-bold";
+import ArrowUp from '@iconify-icons/ep/arrow-up-bold'
+import EpArrowDown from '@iconify-icons/ep/arrow-down-bold'
+import ArrowLeft from '@iconify-icons/ep/arrow-left-bold'
+import ArrowRight from '@iconify-icons/ep/arrow-right-bold'
 
-const { layout, isCollapse, tooltipEffect, getDivStyle } = useNav();
+const { layout, isCollapse, tooltipEffect, getDivStyle } = useNav()
 
 const props = defineProps({
   item: {
@@ -25,102 +25,102 @@ const props = defineProps({
   },
   basePath: {
     type: String,
-    default: ""
+    default: ''
   }
-});
+})
 
 const getSpanStyle = computed((): CSSProperties => {
   return {
-    width: "100%",
-    textAlign: "center"
-  };
-});
+    width: '100%',
+    textAlign: 'center'
+  }
+})
 
 const getNoDropdownStyle = computed((): CSSProperties => {
   return {
-    display: "flex",
-    alignItems: "center"
-  };
-});
+    display: 'flex',
+    alignItems: 'center'
+  }
+})
 
 const getMenuTextStyle = computed(() => {
   return {
-    overflow: "hidden",
-    textOverflow: "ellipsis",
-    outline: "none"
-  };
-});
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    outline: 'none'
+  }
+})
 
 const getsubMenuIconStyle = computed((): CSSProperties => {
   return {
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
     margin:
-      layout.value === "horizontal"
-        ? "0 5px 0 0"
+      layout.value === 'horizontal'
+        ? '0 5px 0 0'
         : isCollapse.value
-        ? "0 auto"
-        : "0 5px 0 0"
-  };
-});
+        ? '0 auto'
+        : '0 5px 0 0'
+  }
+})
 
 const getSubTextStyle = computed((): CSSProperties => {
   if (!isCollapse.value) {
     return {
-      width: "210px",
-      display: "inline-block",
-      overflow: "hidden",
-      textOverflow: "ellipsis"
-    };
+      width: '210px',
+      display: 'inline-block',
+      overflow: 'hidden',
+      textOverflow: 'ellipsis'
+    }
   } else {
     return {
-      width: ""
-    };
+      width: ''
+    }
   }
-});
+})
 
 const getSubMenuDivStyle = computed((): any => {
   return item => {
     return !isCollapse.value
       ? {
-          width: "100%",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          overflow: "hidden"
+          width: '100%',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          overflow: 'hidden'
         }
       : {
-          width: "100%",
+          width: '100%',
           textAlign:
             item?.parentId === null
-              ? "center"
-              : layout.value === "mix" && item?.pathList?.length === 2
-              ? "center"
-              : ""
-        };
-  };
-});
+              ? 'center'
+              : layout.value === 'mix' && item?.pathList?.length === 2
+              ? 'center'
+              : ''
+        }
+  }
+})
 
 const expandCloseIcon = computed(() => {
-  if (!getConfig()?.MenuArrowIconNoTransition) return "";
+  if (!getConfig()?.MenuArrowIconNoTransition) return ''
   return {
-    "expand-close-icon": useRenderIcon(EpArrowDown),
-    "expand-open-icon": useRenderIcon(ArrowUp),
-    "collapse-close-icon": useRenderIcon(ArrowRight),
-    "collapse-open-icon": useRenderIcon(ArrowLeft)
-  };
-});
+    'expand-close-icon': useRenderIcon(EpArrowDown),
+    'expand-open-icon': useRenderIcon(ArrowUp),
+    'collapse-close-icon': useRenderIcon(ArrowRight),
+    'collapse-open-icon': useRenderIcon(ArrowLeft)
+  }
+})
 
-const onlyOneChild: childrenType = ref(null);
+const onlyOneChild: childrenType = ref(null)
 // 存放菜单是否存在showTooltip属性标识
-const hoverMenuMap = new WeakMap();
+const hoverMenuMap = new WeakMap()
 // 存储菜单文本dom元素
-const menuTextRef = ref(null);
+const menuTextRef = ref(null)
 
 function hoverMenu(key) {
   // 如果当前菜单showTooltip属性已存在，退出计算
-  if (hoverMenuMap.get(key)) return;
+  if (hoverMenuMap.get(key)) return
 
   nextTick(() => {
     // 如果文本内容的整体宽度大于其可视宽度，则文本溢出
@@ -130,23 +130,23 @@ function hoverMenu(key) {
         })
       : Object.assign(key, {
           showTooltip: false
-        });
-    hoverMenuMap.set(key, true);
-  });
+        })
+    hoverMenuMap.set(key, true)
+  })
 }
 
 // 左侧菜单折叠后，当菜单没有图标时只显示第一个文字并加上省略号
 function overflowSlice(text, item?: any) {
   const newText =
-    (text?.length > 1 ? text.toString().slice(0, 1) : text) + "...";
+    (text?.length > 1 ? text.toString().slice(0, 1) : text) + '...'
   if (item && !(isCollapse.value && item?.parentId === null)) {
-    return layout.value === "mix" &&
+    return layout.value === 'mix' &&
       item?.pathList?.length === 2 &&
       isCollapse.value
       ? newText
-      : text;
+      : text
   }
-  return newText;
+  return newText
 }
 
 function hasOneShowingChild(
@@ -154,32 +154,32 @@ function hasOneShowingChild(
   parent: childrenType
 ) {
   const showingChildren = children.filter((item: any) => {
-    onlyOneChild.value = item;
-    return true;
-  });
+    onlyOneChild.value = item
+    return true
+  })
 
   if (showingChildren[0]?.meta?.showParent) {
-    return false;
+    return false
   }
 
   if (showingChildren.length === 1) {
-    return true;
+    return true
   }
 
   if (showingChildren.length === 0) {
-    onlyOneChild.value = { ...parent, path: "", noShowingChildren: true };
-    return true;
+    onlyOneChild.value = { ...parent, path: '', noShowingChildren: true }
+    return true
   }
-  return false;
+  return false
 }
 
 function resolvePath(routePath) {
-  const httpReg = /^http(s?):\/\//;
+  const httpReg = /^http(s?):\/\//
   if (httpReg.test(routePath) || httpReg.test(props.basePath)) {
-    return routePath || props.basePath;
+    return routePath || props.basePath
   } else {
     // 使用path.posix.resolve替代path.resolve 避免windows环境下使用electron出现盘符问题
-    return path.posix.resolve(props.basePath, routePath);
+    return path.posix.resolve(props.basePath, routePath)
   }
 }
 </script>

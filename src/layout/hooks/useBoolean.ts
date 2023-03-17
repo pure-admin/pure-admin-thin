@@ -1,19 +1,19 @@
-import { ref } from "vue";
+import { ref } from 'vue'
 
 export function useBoolean(initValue = false) {
-  const bool = ref(initValue);
+  const bool = ref(initValue)
 
   function setBool(value: boolean) {
-    bool.value = value;
+    bool.value = value
   }
   function setTrue() {
-    setBool(true);
+    setBool(true)
   }
   function setFalse() {
-    setBool(false);
+    setBool(false)
   }
   function toggle() {
-    setBool(!bool.value);
+    setBool(!bool.value)
   }
 
   return {
@@ -22,5 +22,5 @@ export function useBoolean(initValue = false) {
     setTrue,
     setFalse,
     toggle
-  };
+  }
 }
