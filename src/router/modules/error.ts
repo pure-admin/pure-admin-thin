@@ -7,7 +7,7 @@ export default {
     icon: 'signalWifiErrorLine',
     title: $t('menus.hsabnormal'),
     // showLink: false,
-    rank: 9
+    rank: 98
   },
   children: [
     {

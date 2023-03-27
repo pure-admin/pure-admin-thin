@@ -36,6 +36,8 @@ menus:
   gameData: Game Data
   clubData: Club Data
   searchClub: Search Club
+  financeData: "Finance Data"
+  diamondData: "Diamond Data"
   permission: Permission Manage
   permissionPage: Page Permission
   permissionButton: Button Permission

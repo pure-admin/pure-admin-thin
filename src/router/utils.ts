@@ -27,7 +27,10 @@ const IFrame = () => import('@/layout/frameView.vue')
 const modulesRoutes = import.meta.glob('/src/views/**/*.{vue,tsx}')
 
 // 动态路由
-import { getAsyncRoutes } from '@/api/routes'
+import { getAsyncRoutes, getAsyncPath } from '@/api/routes'
+
+// 本地fake的动态路由
+import localFullRouter from './localRouter'
 
 function handRank(routeInfo: any) {
   const { name, path, parentId, meta } = routeInfo
@@ -204,7 +207,14 @@ function initRouter() {
       })
     } else {
       return new Promise(resolve => {
-        getAsyncRoutes().then(({ data }) => {
+        getAsyncRoutes().then(async ({ data }) => {
+          console.log(2)
+          data = [...localFullRouter, ...data]
+          // TODO：拆分接口返回的 page 和 btn 权限
+          data = filterRoutes({
+            rolesArr: await getAsyncPath().page,
+            routes: data
+          })
           handleAsyncRoutes(cloneDeep(data))
           storageSession().setItem(key, data)
           resolve(router)
@@ -213,12 +223,32 @@ function initRouter() {
     }
   } else {
     return new Promise(resolve => {
-      getAsyncRoutes().then(({ data }) => {
+      getAsyncRoutes().then(async ({ data }) => {
+        console.log(3, data)
+        const roleArr = await getAsyncPath()
+        data = [...localFullRouter, ...data]
+        data = filterRoutes({ rolesArr: roleArr.data.page, routes: data })
+        console.log('data3', data)
         handleAsyncRoutes(cloneDeep(data))
         resolve(router)
       })
     })
   }
+}
+
+function filterRoutes(params) {
+  const { routes, rolesArr } = params
+  console.log({ routes, rolesArr })
+  const res = []
+  routes.forEach(route => {
+    if (rolesArr.includes(route.path)) {
+      res.push(route)
+    }
+    if (route.children) {
+      route.children = filterRoutes({ routes: route.children, rolesArr })
+    }
+  })
+  return res
 }
 
 /**

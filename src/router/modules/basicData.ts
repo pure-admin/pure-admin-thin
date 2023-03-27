@@ -19,6 +19,15 @@ export default {
       }
     },
     {
+      path: '/basic/liveData2',
+      name: 'LiveData2',
+      component: () => import('@/views/basicData/LiveData.vue'),
+      meta: {
+        title: '测试2',
+        roles: ['admin1']
+      }
+    },
+    {
       path: '/basic/userData',
       name: 'UserData',
       component: () => import('@/views/basicData/queryUser/index.vue'),

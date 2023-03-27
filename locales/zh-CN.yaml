@@ -36,6 +36,8 @@ menus:
   gameData: "牌局数据"
   clubData: "俱乐部数据"
   searchClub: "搜索俱乐部"
+  financeData: "财务数据"
+  diamondData: "钻石数据"
   permission: 权限管理
   permissionPage: 页面权限
   permissionButton: 按钮权限

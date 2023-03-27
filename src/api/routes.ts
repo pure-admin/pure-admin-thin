@@ -8,3 +8,7 @@ type Result = {
 export const getAsyncRoutes = () => {
   return http.request<Result>('get', '/getAsyncRoutes')
 }
+
+export const getAsyncPath = () => {
+  return http.request<Result>('get', '/getAsyncPath')
+}
