@@ -3,24 +3,81 @@ import Axios, {
   AxiosRequestConfig,
   CustomParamsSerializer
 } from 'axios'
+import Qs from 'qs'
 import {
   PureHttpError,
   RequestMethods,
   PureHttpResponse,
   PureHttpRequestConfig
 } from './types.d'
-import { stringify } from 'qs'
+
 import NProgress from '../progress'
 import { getToken, formatToken } from '@/utils/auth'
 import { useUserStoreHook } from '@/store/modules/user'
 
+function urlEncodeString(data) {
+  let str = data
+  if (
+    data.indexOf('#') != -1 ||
+    data.indexOf('+') != -1 ||
+    data.indexOf('/') != -1 ||
+    data.indexOf('?') != -1 ||
+    data.indexOf('%') != -1 ||
+    data.indexOf('&') != -1 ||
+    data.indexOf('=') != -1
+  ) {
+    str = data.replace(/([\#|\+|\/|\?|\%|\#|\&|\=])/g, $1 => {
+      return encodeURIComponent($1)
+    })
+  }
+  return str
+}
+function stringify(data) {
+  let ret = ''
+  for (const it in data) {
+    ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+  }
+  ret = ret.substring(0, ret.lastIndexOf('&'))
+  return ret
+}
+
 // 相关配置请参考：www.axios-js.com/zh-cn/docs/#axios-request-config-1
 const defaultConfig: AxiosRequestConfig = {
+  transformRequest: [
+    function (data) {
+      // 对 data 进行任意转换处理
+      // data = http.getPostData(data)
+      data = {
+        sig: '681d66eda1b3df8b7b6641e4864452d7',
+        accesstoken: '',
+        cmd_id: 0,
+        extend: {
+          net: 'wifi',
+          device: 'huaweiP10',
+          macid: '12bb540d5f56add5c7a176c36b339ed7',
+          tz_name: 'Asia%2FShanghai',
+          tz_delta: 'GMT%2B8'
+        },
+        request: { method: 'sysversion%23getsysversion' },
+        public: {
+          channel: 'POKIO_H5_NORMAL',
+          version: 1311,
+          packid: 200,
+          lang: 'tw'
+        }
+      }
+      data = { postdata: urlEncodeString(JSON.stringify(data)) }
+      // data = { postdata: JSON.stringify(data) }
+
+      return Qs.stringify(data)
+      // return stringify(data)
+    }
+  ],
   // 请求超时时间
   timeout: 10000,
   headers: {
     Accept: 'application/json, text/plain, */*',
-    'Content-Type': 'application/json',
+    // 'Content-Type': 'application/json',
     'X-Requested-With': 'XMLHttpRequest'
   },
   // 数组格式参数序列化（https://github.com/axios/axios/issues/5142）

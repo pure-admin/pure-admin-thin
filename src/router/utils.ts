@@ -27,7 +27,58 @@ const IFrame = () => import('@/layout/frameView.vue')
 const modulesRoutes = import.meta.glob('/src/views/**/*.{vue,tsx}')
 
 // 动态路由
-import { getAsyncRoutes, getAsyncPath } from '@/api/routes'
+// import { getAsyncRoutes, getAsyncPath } from '@/api/routes'
+
+// start 只使用静态路由
+const permissionRouter = {
+  path: '/permission',
+  meta: {
+    title: 'menus.permission',
+    icon: 'informationLine',
+    rank: 99
+  },
+  children: [
+    {
+      path: '/permission/page/index',
+      name: 'PermissionPage',
+      meta: {
+        title: 'menus.permissionPage',
+        roles: ['admin', 'common']
+      }
+    },
+    {
+      path: '/permission/button/index',
+      name: 'PermissionButton',
+      meta: {
+        title: 'menus.permissionButton',
+        roles: ['admin', 'common'],
+        auths: ['btn_add', 'btn_edit', 'btn_delete']
+      }
+    }
+  ]
+}
+const permissionPath = {
+  page: [
+    '/permission',
+    '/permission/page/index',
+    '/permission/button/index',
+
+    '/finance',
+    '/finance/diamondData'
+  ],
+  btn: ['btn-edit', 'edit-create']
+}
+function getAsyncRoutes() {
+  return new Promise(resolve => {
+    resolve({ data: [permissionRouter] })
+  })
+}
+function getAsyncPath() {
+  return new Promise(resolve => {
+    resolve({ data: permissionPath })
+  })
+}
+// end 只使用静态路由
 
 // 本地fake的动态路由
 import localFullRouter from './localRouter'
@@ -390,6 +441,10 @@ function hasAuth(value: string | Array<string>): boolean {
     : isIncludeAllChildren(value, metaAuths)
   return isAuths ? true : false
 }
+export const baseUrlApi = (url: string) =>
+  process.env.NODE_ENV === 'development'
+    ? `/api/${url}`
+    : `http://192.168.100.87:8000/${url}`
 
 export {
   hasAuth,

@@ -23,6 +23,11 @@ import Lock from '@iconify-icons/ri/lock-fill'
 import Check from '@iconify-icons/ep/check'
 import User from '@iconify-icons/ri/user-3-fill'
 
+// 只要静态路由
+import { setToken } from '@/utils/auth'
+import { addPathMatch } from '@/router/utils'
+import { usePermissionStoreHook } from '@/store/modules/permission'
+
 defineOptions({
   name: 'Login'
 })
@@ -44,22 +49,43 @@ const ruleForm = reactive({
   password: 'admin123'
 })
 
+// const onLogin = async (formEl: FormInstance | undefined) => {
+//   loading.value = true
+//   if (!formEl) return
+//   await formEl.validate((valid, fields) => {
+//     if (valid) {
+//       useUserStoreHook()
+//         .loginByUsername({ username: ruleForm.username, password: 'admin123' })
+//         .then(res => {
+//           if (res.success) {
+//             // 获取后端路由
+//             initRouter().then(() => {
+//               router.push('/')
+//               message('登录成功', { type: 'success' })
+//             })
+//           }
+//         })
+//     } else {
+//       loading.value = false
+//       return fields
+//     }
+//   })
+// }
 const onLogin = async (formEl: FormInstance | undefined) => {
   loading.value = true
   if (!formEl) return
   await formEl.validate((valid, fields) => {
     if (valid) {
-      useUserStoreHook()
-        .loginByUsername({ username: ruleForm.username, password: 'admin123' })
-        .then(res => {
-          if (res.success) {
-            // 获取后端路由
-            initRouter().then(() => {
-              router.push('/')
-              message('登录成功', { type: 'success' })
-            })
-          }
-        })
+      // 全部采取静态路由模式
+      usePermissionStoreHook().handleWholeMenus([])
+      addPathMatch()
+      setToken({
+        username: 'admin',
+        roles: ['admin'],
+        accessToken: 'eyJhbGciOiJIUzUxMiJ9.admin'
+      } as any)
+      router.push('/')
+      message('登录成功', { type: 'success' })
     } else {
       loading.value = false
       return fields
