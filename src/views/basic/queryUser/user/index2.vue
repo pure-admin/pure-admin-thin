@@ -1,5 +1,6 @@
 <template>
   <el-card>
+    <!-- params 传参的形式，面包屑导航有点问题，先不管，暂时使用 query 形式传参 -->
     <div>用户信息 列表页面</div>
     <div>{{ id }} - 详情页内容在此（params传参）</div>
     <el-tabs v-model="activeName" type="border-card">
@@ -9,7 +10,7 @@
         :name="tabsMap[tab].name"
         :label="tabsMap[tab].label"
       />
-      <component :is="tabsMap[activeName].component" :uid="id" />
+      <!-- <component :is="tabsMap[activeName].component" :uid="id" /> -->
     </el-tabs>
   </el-card>
 </template>
@@ -31,8 +32,8 @@ defineOptions({
 
 const { initToDetail, id } = useDetail()
 
-// initToDetail('params')
-initToDetail('query')
+initToDetail('params')
+// initToDetail('query')
 
 const activeName = ref('basicInfo')
 

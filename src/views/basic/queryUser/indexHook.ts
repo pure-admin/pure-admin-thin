@@ -72,6 +72,8 @@ export function useUser() {
   function onSearchHistory() {
     console.log('onSearchHistory1', form.dateRange)
     console.log('onSearchHistory2', form.dateRange[0])
+    loading.value = false
+
     getHistoricalData({
       start_date: form.dateRange[0],
       end_date: form.dateRange[1]

@@ -15,7 +15,7 @@ export function useDetail() {
       // 保存信息到标签页
       useMultiTagsStoreHook().handleTags('push', {
         path: `/basic/queryUser/users/`,
-        name: 'UserInfo',
+        name: 'UserInformation',
         query: { id: String(index) },
         meta: {
           title: {
@@ -27,11 +27,11 @@ export function useDetail() {
         }
       })
       // 路由跳转
-      router.push({ name: 'TabQueryDetail', query: { id: String(index) } })
+      router.push({ name: 'UserInformation', query: { id: String(index) } })
     } else {
       useMultiTagsStoreHook().handleTags('push', {
-        path: `/basic/queryUser/users/:id`,
-        name: 'UserInfo',
+        path: `/basic/queryUser/users-params/:id`,
+        name: 'UserInformation2',
         params: { id: String(index) },
         meta: {
           title: {
@@ -40,7 +40,7 @@ export function useDetail() {
           }
         }
       })
-      router.push({ name: 'UserInfo', params: { id: String(index) } })
+      router.push({ name: 'UserInformation2', params: { id: String(index) } })
     }
   }
 

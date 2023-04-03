@@ -12,6 +12,7 @@ defineOptions({
 })
 
 const { toDetail, router } = useDetail()
+console.log('router:', router)
 
 const formRef = ref()
 const { form, historicalData, historicalColumns, loading, onSearchUser } =
@@ -25,73 +26,80 @@ const { form, historicalData, historicalColumns, loading, onSearchUser } =
         <span class="font-medium"> 搜索用户 </span>
       </div>
     </template>
-    <div>
-      <el-form
-        ref="formRef"
-        :inline="true"
-        :model="form"
-        class="bg-bg_color w-[99/100]"
-      >
-        <el-form-item prop="username">
-          <el-input
-            v-model="form.username"
-            placeholder="用户名"
-            clearable
-            class="!w-[160px]"
-          />
-        </el-form-item>
-        <el-form-item prop="mobile">
-          <el-input
-            v-model="form.mobile"
-            placeholder="手机号码"
-            clearable
-            class="!w-[160px]"
-          />
-        </el-form-item>
-        <el-form-item prop="email">
-          <el-input
-            v-model="form.email"
-            placeholder="邮箱"
-            clearable
-            class="!w-[200px]"
-          />
-        </el-form-item>
-        <el-form-item prop="dateRange">
-          <el-date-picker
-            v-model="form.dateRange"
-            type="daterange"
-            range-separator="To"
-            start-placeholder="Start date"
-            end-placeholder="End date"
-            format="YYYY/MM/DD"
-            value-format="YYYY-MM-DD"
-          />
-        </el-form-item>
-        <el-form-item>
-          <el-button
-            type="primary"
-            :icon="useRenderIcon(Search)"
-            :loading="loading"
-            @click="onSearchUser"
-          >
-            搜索
-          </el-button>
-        </el-form-item>
-      </el-form>
-    </div>
+
+    <el-form
+      ref="formRef"
+      :inline="true"
+      :model="form"
+      class="bg-bg_color w-[99/100]"
+    >
+      <el-form-item prop="username">
+        <el-input
+          v-model="form.username"
+          placeholder="用户名"
+          clearable
+          class="!w-[160px]"
+        />
+      </el-form-item>
+      <el-form-item prop="mobile">
+        <el-input
+          v-model="form.mobile"
+          placeholder="手机号码"
+          clearable
+          class="!w-[160px]"
+        />
+      </el-form-item>
+      <el-form-item prop="email">
+        <el-input
+          v-model="form.email"
+          placeholder="邮箱"
+          clearable
+          class="!w-[200px]"
+        />
+      </el-form-item>
+      <el-form-item prop="dateRange">
+        <el-date-picker
+          v-model="form.dateRange"
+          type="daterange"
+          range-separator="To"
+          start-placeholder="Start date"
+          end-placeholder="End date"
+          format="YYYY/MM/DD"
+          value-format="YYYY-MM-DD"
+        />
+      </el-form-item>
+      <el-form-item>
+        <el-button
+          type="primary"
+          :icon="useRenderIcon(Search)"
+          :loading="loading"
+          @click="onSearchUser"
+        >
+          搜索
+        </el-button>
+      </el-form-item>
+    </el-form>
+
     <pure-table :data="historicalData" :columns="historicalColumns" border />
-    <!-- <el-button>
-      <router-link :to="{ name: 'UserInfo', params: { id: 12318 } }"
-        >User</router-link
-      >
-    </el-button> -->
-    <div class="flex flex-wrap items-center">
+
+    <!-- <div class="flex flex-wrap items-center">
       <p>params传参模式：</p>
       <el-button
         class="m-2"
         v-for="index in 6"
         :key="index"
         @click="toDetail(index, 'params')"
+      >
+        打开{{ index }}详情页
+      </el-button>
+    </div> -->
+    <div class="flex flex-wrap items-center">
+      <p>query传参模式：</p>
+      <el-button
+        class="m-2"
+        v-for="index in 6"
+        :key="index"
+        @click="toDetail(index, 'query')"
       >
         打开{{ index }}详情页
       </el-button>

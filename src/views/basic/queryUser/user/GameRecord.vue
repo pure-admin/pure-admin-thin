@@ -41,11 +41,7 @@
         </el-form-item>
       </el-form>
 
-      <el-table :data="tableData" stripe border style="width: 100%">
-        <el-table-column prop="date" label="Date" width="180" />
-        <el-table-column prop="name" label="Name" width="180" />
-        <el-table-column prop="address" label="Address" />
-      </el-table>
+      <pure-table :data="tableData" :columns="tableRecordColumn" border />
     </el-tab-pane>
 
     <el-tab-pane label="手牌历史" name="second">
@@ -101,26 +97,56 @@ const handleClick = (tab: TabsPaneContext, event: Event) => {
   console.log(tab, event)
 }
 
+const tableRecordColumn: TableColumnList = [
+  {
+    label: '时间',
+    prop: 'date'
+  },
+  {
+    label: '级别/玩法',
+    prop: 'club_name'
+  },
+  {
+    label: '牌局名称',
+    prop: 'club_integral'
+  },
+  {
+    label: '创建者',
+    prop: 'club_integral'
+  },
+  {
+    label: '牌局ID',
+    prop: 'club_integral'
+  },
+  {
+    label: '战绩',
+    prop: 'club_integral'
+  },
+  {
+    label: '服务费贡献',
+    prop: 'club_integral'
+  },
+  {
+    label: '保险贡献',
+    prop: 'club_integral'
+  }
+]
+
 const tableData = [
   {
+    club_name: 'Tom-club',
     date: '2016-05-03',
-    name: 'Tom',
-    address: 'No. 189, Grove St, Los Angeles'
+    club_integral: '299'
   },
   {
-    date: '2016-05-02',
-    name: 'Tom',
-    address: 'No. 189, Grove St, Los Angeles'
+    club_name: 'Tom-club',
+    date: '2016-05-03',
+    club_integral: '299'
   },
   {
-    date: '2016-05-04',
-    name: 'Tom',
-    address: 'No. 189, Grove St, Los Angeles'
-  },
-  {
-    date: '2016-05-01',
-    name: 'Tom',
-    address: 'No. 189, Grove St, Los Angeles'
+    club_name: 'Tom-club',
+    date: '2016-05-03',
+    club_integral: '299'
   }
 ]
 

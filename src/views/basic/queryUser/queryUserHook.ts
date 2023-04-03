@@ -10,7 +10,7 @@ export function useUser() {
     },
     {
       label: '所属俱乐部',
-      prop: 'club_name'
+      prop: 'first_joined_club'
     },
     {
       label: '注册渠道',
@@ -18,7 +18,7 @@ export function useUser() {
     },
     {
       label: '绑定手机/邮箱',
-      prop: 'mobile'
+      prop: 'user_email/user_phone'
     },
     {
       label: '注册IP及归属地',
@@ -26,11 +26,11 @@ export function useUser() {
     },
     {
       label: '最后登录',
-      prop: 'last_login_date'
+      prop: 'enter_time'
     },
     {
       label: '最后登录IP及归属地',
-      prop: 'last_area'
+      prop: 'login_ip'
     }
   ]
 
@@ -47,10 +47,14 @@ export function useUser() {
   function onSearchUser() {
     console.log(form.dateRange)
     console.log(form.dateRange[0])
-    getUserData({ date: form }).then(res => {
-      historicalData.value = res.data
-      loading.value = false
-    })
+    getUserData({ date: form })
+      .then(res => {
+        historicalData.value = res.data.list
+        loading.value = false
+      })
+      .catch(() => {
+        loading.value = false
+      })
   }
 
   // const resetHistoryForm = formEl => {

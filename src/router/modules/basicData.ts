@@ -31,29 +31,69 @@ export default {
     {
       path: '/basic/queryUser',
       name: 'QueryUser',
-      component: () => import('@/views/basic/queryUser/queryUser.vue'),
+      redirect: '/basic/queryUser/index',
+      // component: () => import('@/views/basic/queryUser/components/empty.vue'),
       meta: {
-        title: $t('menus.searchUser')
-      }
+        // title: $t('menus.searchUser'),
+        title: '搜索用户1'
+      },
+      children: [
+        {
+          path: '/basic/queryUser/index',
+          name: 'QueryUser',
+          component: () => import('@/views/basic/queryUser/queryUser.vue'),
+          meta: {
+            // title: $t('menus.searchUser')
+            title: '搜索用户2'
+          }
+        },
+        {
+          path: '/basic/queryUser/users/',
+          name: 'UserInformation',
+          component: () => import('@/views/basic/queryUser/user/index.vue'),
+          meta: {
+            title: '用户信息q',
+            showLink: false
+          }
+        },
+        {
+          path: '/basic/queryUser/users-params/:id',
+          name: 'UserInformation2',
+          component: () => import('@/views/basic/queryUser/user/index2.vue'),
+          meta: {
+            title: '用户信息p',
+            showLink: false
+          }
+        },
+        {
+          path: '/basic/queryUser/users/:id/basicInfo',
+          name: 'UserBasicInfo',
+          component: () => import('@/views/basic/queryUser/user/basicInfo.vue'),
+          meta: {
+            title: '基础信息',
+            showLink: false
+          }
+        }
+      ]
     },
-    {
-      path: '/basic/queryUser/users/:id',
-      name: 'UserInfo',
-      component: () => import('@/views/basic/queryUser/user/index.vue'),
-      meta: {
-        title: '用户信息',
-        showLink: false
-      }
-    },
-    {
-      path: '/basic/queryUser/users/:id/basicInfo',
-      name: 'UserBasicInfo',
-      component: () => import('@/views/basic/queryUser/user/basicInfo.vue'),
-      meta: {
-        title: '基础信息',
-        showLink: false
-      }
-    },
+    // {
+    //   path: '/basic/queryUser/users/:id',
+    //   name: 'UserInfo',
+    //   component: () => import('@/views/basic/queryUser/user/index.vue'),
+    //   meta: {
+    //     title: '用户信息',
+    //     showLink: false
+    //   }
+    // },
+    // {
+    //   path: '/basic/queryUser/users/:id/basicInfo',
+    //   name: 'UserBasicInfo',
+    //   component: () => import('@/views/basic/queryUser/user/basicInfo.vue'),
+    //   meta: {
+    //     title: '基础信息',
+    //     showLink: false
+    //   }
+    // },
     {
       path: '/basic/gameData',
       name: 'GameData',

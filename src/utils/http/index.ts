@@ -58,7 +58,7 @@ const defaultConfig: AxiosRequestConfig = {
           tz_name: 'Asia%2FShanghai',
           tz_delta: 'GMT%2B8'
         },
-        request: { method: 'sysversion%23getsysversion' },
+        request: { method: 'sysversion%23getsysversion', ...data },
         public: {
           channel: 'POKIO_H5_NORMAL',
           version: 1311,
