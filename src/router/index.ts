@@ -137,7 +137,7 @@ router.beforeEach((to: toRouteType, _from, next) => {
       if (
         usePermissionStoreHook().wholeMenus.length === 0 &&
         to.path !== "/login"
-      )
+      ) {
         initRouter().then((router: Router) => {
           if (!useMultiTagsStoreHook().getMultiTagsCache) {
             const { path } = to;
@@ -156,6 +156,7 @@ router.beforeEach((to: toRouteType, _from, next) => {
           }
           router.push(to.fullPath);
         });
+      }
       toCorrectRoute();
     }
   } else {
