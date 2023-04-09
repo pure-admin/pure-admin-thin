@@ -15,8 +15,17 @@ const { toDetail, router } = useDetail()
 console.log('router:', router)
 
 const formRef = ref()
-const { form, historicalData, historicalColumns, loading, onSearchUser } =
-  useUser()
+const {
+  form,
+  historicalData,
+  historicalColumns,
+  loading,
+  pagination_pure,
+  onSearchUser,
+  handleSizeChange,
+  handleCurrentChange
+  // handleClick
+} = useUser()
 </script>
 
 <template>
@@ -35,7 +44,7 @@ const { form, historicalData, historicalColumns, loading, onSearchUser } =
     >
       <el-form-item prop="username">
         <el-input
-          v-model="form.username"
+          v-model="form.user_name"
           placeholder="用户名"
           clearable
           class="!w-[160px]"
@@ -43,7 +52,7 @@ const { form, historicalData, historicalColumns, loading, onSearchUser } =
       </el-form-item>
       <el-form-item prop="mobile">
         <el-input
-          v-model="form.mobile"
+          v-model="form.user_phone"
           placeholder="手机号码"
           clearable
           class="!w-[160px]"
@@ -51,7 +60,7 @@ const { form, historicalData, historicalColumns, loading, onSearchUser } =
       </el-form-item>
       <el-form-item prop="email">
         <el-input
-          v-model="form.email"
+          v-model="form.user_email"
           placeholder="邮箱"
           clearable
           class="!w-[200px]"
@@ -65,7 +74,7 @@ const { form, historicalData, historicalColumns, loading, onSearchUser } =
           start-placeholder="Start date"
           end-placeholder="End date"
           format="YYYY/MM/DD"
-          value-format="YYYY-MM-DD"
+          value-format="x"
         />
       </el-form-item>
       <el-form-item>
@@ -80,29 +89,25 @@ const { form, historicalData, historicalColumns, loading, onSearchUser } =
       </el-form-item>
     </el-form>
 
-    <pure-table :data="historicalData" :columns="historicalColumns" border />
-
-    <!-- <div class="flex flex-wrap items-center">
-      <p>params传参模式：</p>
-      <el-button
-        class="m-2"
-        v-for="index in 6"
-        :key="index"
-        @click="toDetail(index, 'params')"
-      >
-        打开{{ index }}详情页
-      </el-button>
-    </div> -->
-    <div class="flex flex-wrap items-center">
-      <p>query传参模式：</p>
-      <el-button
-        class="m-2"
-        v-for="index in 6"
-        :key="index"
-        @click="toDetail(index, 'query')"
-      >
-        打开{{ index }}详情页
-      </el-button>
-    </div>
+    <pure-table
+      :data="historicalData"
+      :columns="historicalColumns"
+      :loading="loading"
+      :pagination="pagination_pure"
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+      border
+    >
+      <template #operation="{ row }">
+        <el-button
+          link
+          type="primary"
+          size="small"
+          @click="toDetail(row.uid, 'query')"
+        >
+          {{ row.uid }}
+        </el-button>
+      </template>
+    </pure-table>
   </el-card>
 </template>

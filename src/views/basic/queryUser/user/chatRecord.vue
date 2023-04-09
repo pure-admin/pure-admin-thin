@@ -22,7 +22,7 @@
         type="primary"
         :icon="useRenderIcon(Search)"
         :loading="loading"
-        @click="onSearchUser"
+        @click="onSearch"
       >
         搜索
       </el-button>
@@ -32,25 +32,23 @@
         type="primary"
         :icon="useRenderIcon(Search)"
         :loading="loading"
-        @click="onSearchUser"
+        @click="onSearch"
       >
         导出
       </el-button>
     </el-form-item>
   </el-form>
 
-  <el-table :data="tableData" stripe border style="width: 100%">
-    <el-table-column prop="date" label="Date" width="180" />
-    <el-table-column prop="name" label="Name" width="180" />
-    <el-table-column prop="address" label="Address" />
-  </el-table>
+  <pure-table :data="chatTableData" :columns="columns" border stripe />
 </template>
 
 <script setup lang="ts">
 import { useRenderIcon } from '@/components/ReIcon/src/hooks'
 import Search from '@iconify-icons/ep/search'
 import { useRoute } from 'vue-router'
-import { ref, onMounted } from 'vue'
+
+import { useChatLog } from './userHook'
+// import { chatTableData } from './data'
 
 defineOptions({
   // name 作为一种规范最好必须写上并且和路由的name保持一致
@@ -63,46 +61,7 @@ const route = useRoute()
 // const router = useRouter()
 const id = route.query?.id ? route.query?.id : route.params?.id
 
-// page detail data
-const form = {
-  dateRange: ''
-}
-const loading = ref(true)
-const tableData = [
-  {
-    date: '2016-05-03',
-    name: 'Tom',
-    address: 'No. 189, Grove St, Los Angeles'
-  },
-  {
-    date: '2016-05-02',
-    name: 'Tom',
-    address: 'No. 189, Grove St, Los Angeles'
-  },
-  {
-    date: '2016-05-04',
-    name: 'Tom',
-    address: 'No. 189, Grove St, Los Angeles'
-  },
-  {
-    date: '2016-05-01',
-    name: 'Tom',
-    address: 'No. 189, Grove St, Los Angeles'
-  }
-]
-
-function onSearchUser() {
-  console.log(form.dateRange)
-  console.log(form.dateRange[0])
-  loading.value = false
-  // getUserData({ date: form }).then(res => {
-  //   historicalData.value = res.data
-  //   loading.value = false
-  // })
-}
-onMounted(() => {
-  onSearchUser()
-})
+const { columns, form, loading, chatTableData, onSearch } = useChatLog()
 </script>
 
 <style scoped></style>

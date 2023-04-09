@@ -19,8 +19,8 @@ export function useDetail() {
         query: { id: String(index) },
         meta: {
           title: {
-            zh: `No.${index} - 详情信息`,
-            en: `No.${index} - DetailInfo`
+            zh: `${index} - 详情信息`,
+            en: `${index} - DetailInfo`
           },
           // 最大打开标签数
           dynamicLevel: 3

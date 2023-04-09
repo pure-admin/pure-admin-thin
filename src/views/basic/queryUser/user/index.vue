@@ -1,7 +1,5 @@
 <template>
   <el-card>
-    <div>用户信息 列表页面</div>
-    <div>{{ id }} - 详情页内容在此（params传参）</div>
     <el-tabs v-model="activeName" type="border-card">
       <el-tab-pane
         v-for="(_, tab) in tabsMap"

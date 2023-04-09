@@ -64,16 +64,16 @@ export default {
             title: '用户信息p',
             showLink: false
           }
-        },
-        {
-          path: '/basic/queryUser/users/:id/basicInfo',
-          name: 'UserBasicInfo',
-          component: () => import('@/views/basic/queryUser/user/basicInfo.vue'),
-          meta: {
-            title: '基础信息',
-            showLink: false
-          }
         }
+        // {
+        //   path: '/basic/queryUser/users/:id/basicInfo',
+        //   name: 'UserBasicInfo',
+        //   component: () => import('@/views/basic/queryUser/user/basicInfo.vue'),
+        //   meta: {
+        //     title: '基础信息',
+        //     showLink: false
+        //   }
+        // }
       ]
     },
     // {
@@ -88,7 +88,7 @@ export default {
     // {
     //   path: '/basic/queryUser/users/:id/basicInfo',
     //   name: 'UserBasicInfo',
-    //   component: () => import('@/views/basic/queryUser/user/basicInfo.vue'),
+    //   component: () => import('@/views/basic/queryUser/user/BasicInfo.vue'),
     //   meta: {
     //     title: '基础信息',
     //     showLink: false
@@ -97,7 +97,7 @@ export default {
     {
       path: '/basic/gameData',
       name: 'GameData',
-      component: () => import('@/views/basic/GameData.vue'),
+      component: () => import('@/views/basic/gameData.vue'),
       meta: {
         title: $t('menus.gameData')
       }

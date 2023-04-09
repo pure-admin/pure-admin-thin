@@ -1,9 +1,15 @@
-import { ref, reactive, onMounted } from 'vue'
+import { ref, reactive, computed, nextTick, onMounted } from 'vue'
+import dayjs from 'dayjs'
 
 import { getUserData } from '@/api/basic'
 
 export function useUser() {
   const historicalColumns: TableColumnList = [
+    {
+      label: 'UID',
+      prop: 'uid',
+      slot: 'operation'
+    },
     {
       label: '用户名',
       prop: 'user_name'
@@ -26,7 +32,9 @@ export function useUser() {
     },
     {
       label: '最后登录',
-      prop: 'enter_time'
+      prop: 'enter_time',
+      formatter: ({ enter_time }) =>
+        dayjs(enter_time * 1000).format('YYYY-MM-DD HH:MM:ss')
     },
     {
       label: '最后登录IP及归属地',
@@ -35,27 +43,74 @@ export function useUser() {
   ]
 
   const form = reactive({
-    username: '',
-    mobile: '',
-    email: '',
+    user_name: '',
+    user_phone: '',
+    user_email: '',
     dateRange: ''
   })
 
   const historicalData = ref([])
   const loading = ref(true)
 
+  const pagination_pure = reactive({
+    currentPage: 1,
+    pageSize: 10,
+    total: 0,
+    background: true
+  })
+
+  const pagination = computed(() => {
+    return {
+      page: pagination_pure.currentPage,
+      per_page: pagination_pure.pageSize
+    }
+  })
+
   function onSearchUser() {
-    console.log(form.dateRange)
-    console.log(form.dateRange[0])
-    getUserData({ date: form })
+    loading.value = true
+    console.log('form.dateRange:', form.dateRange)
+    console.log('pagination', pagination)
+    const start_time = form.dateRange ? Number(form?.dateRange[0]) / 1000 : ''
+    const end_time = form.dateRange ? Number(form?.dateRange[1]) / 1000 : ''
+    getUserData({
+      ...form,
+      per_page: pagination_pure.pageSize,
+      page: pagination_pure.currentPage,
+      start_time,
+      end_time
+    })
       .then(res => {
         historicalData.value = res.data.list
         loading.value = false
+        pagination_pure.total = res.data.count
       })
       .catch(() => {
         loading.value = false
       })
   }
+
+  function handleSizeChange(val: number) {
+    console.log(`${val} items per page`)
+    nextTick(() => {
+      onSearchUser()
+    })
+  }
+
+  function handleCurrentChange(val: number) {
+    console.log(`current page: ${val}`)
+    console.log({ val })
+    nextTick(() => {
+      onSearchUser()
+    })
+  }
+
+  // function handleClick(row) {
+  //   console.log(
+  //     '%crow===>>>: ',
+  //     'color: MidnightBlue; background: Aquamarine; font-size: 20px;',
+  //     row
+  //   )
+  // }
 
   // const resetHistoryForm = formEl => {
   //   if (!formEl) return
@@ -72,7 +127,11 @@ export function useUser() {
     historicalData,
     historicalColumns,
     loading,
-    onSearchUser
+    pagination_pure,
+    onSearchUser,
+    handleSizeChange,
+    handleCurrentChange
+    // handleClick
     // resetHistoryForm
   }
 }

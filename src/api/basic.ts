@@ -44,6 +44,7 @@ interface IHistoricalData {
 export type HistoricalData = {
   count: number
   data: {
+    count: number
     list: Array<IHistoricalData>
   }
 }
@@ -73,118 +74,60 @@ export const getHistoricalData = (data?: object) => {
 
 /** 搜索用户 */
 export const getUserData = (data?: object) => {
+  console.log('getUserData:', data)
   return http.request<HistoricalData>('post', baseUrlApi('/cms/user/list'), {
     data
   })
 }
 
-// export type IGameInfo = {
-//   uid?: string
-//   play: string //总玩牌局数
-//   totalhands: string //总手数
-//   r_in: string //入池率
-//   r_win: string //入池胜率
-//   r_fc: string //翻牌前
-//   r_ds: string //3bet率
-//   r_jin: string //激进度
-//   r_sd: string //摊牌率
-//   r_100hands: string //百手盈利
-//   totalwin: string //总盈利
-// }
-export interface IGameInfo {
-  uid: number
-  cb: string
-  rDs: string
-  rD3b: string
-  rFbt: number
-  rFc: string
-  rRuwin: string
-  rSd: string
-  rSf: string
-  r100hands: number
-  rSdw: string
-  rRuTimes: number
-  '3b': string
-  play: number
-  rCh: string
-  rJin: string
-  totalwin: string
-  rRu: string
-  totalbuyin: number
-  utime: string
-  bmaxlose: number
-  hmaxwin: number
-  rWin: string
-  maxcard: string
-  bmaxwin: number
-  totalhands: number
-  rIn: string
-}
-
-export interface GameInfo {
-  ploFive: IGameInfo
-  ploSix: IGameInfo
-  omaha: IGameInfo
-  texas: IGameInfo
-}
-
-export type IUserInfo = {
-  data: {
-    base_info: {}
-    game_info: GameInfo
-    join_club_list?: any[]
-    create_club_list?: any[]
-  }
-}
-export interface BaseInfo {
-  lastName: string
-  uid: number
-  registerChannel: string
-  user_phone: string
-  street: string
-  postalCode: string
-  enterCount: number
-  gbgCheck: string
-  isHideFlag: number
-  city: string
-  firstName: string
-  houseNumber: string
-  enterTime: number
-  playTime: number
-  user_name: string
-  channel: string
-  scrapAmount: number
-  diamond: number
-  regTime: number
-  birthday: number
-  remarks: string
-  nationality: string
-  usersig: string
-  nickname: string
-  createGroupLimit: number
-  icon: string
-  regIp: string
-  identityCard: string
-  country: string
-  gender: number
-  userCategory: number
-  user_email: string
-}
-
-type Result = {
-  code: number
-  data?: {
-    /** 列表数据 */
-    base_info: BaseInfo
-    create_club_list: Array<any>
-    join_club_list: Array<any>
-    game_info: GameInfo
-  }
-}
 /** 搜索用户 基本信息 */
 export const getUserInfo = (data?: object) => {
-  console.log('_', data)
-  return http.request<Result>('post', baseUrlApi('/cms/user/info'), {
+  console.log('getUserInfo_', data)
+  return http.request<any>('post', baseUrlApi('/cms/user/info'), {
+    data
+  })
+}
+
+/** 搜索用户 - 游戏记录>牌局记录 */
+export const getGameRecord = (data?: object) => {
+  console.log('getGameRecord', data)
+  return http.request<any>('post', baseUrlApi('/cms/user/game_history'), {
+    data
+  })
+}
+
+/** 搜索用户 - 游戏记录>手牌历史 */
+export const getGameHandsRecord = (data?: object) => {
+  console.log('getGameHandsRecord', data)
+
+  return http.request<any>('post', baseUrlApi('/cms/user/hands_history'), {
+    data
+  })
+}
+
+/** 搜索用户 - 游戏记录>钻石记录 */
+export const getDiamondLog = (data?: object) => {
+  console.log('getGameHandsRecord', data)
+
+  return http.request<any>('post', baseUrlApi('/cms/user/diamond_logs'), {
+    data
+  })
+}
+
+/** 搜索用户 - 游戏记录>登录记录 */
+export const getLoginLog = (data?: object) => {
+  console.log('getGameHandsRecord', data)
+
+  return http.request<any>('post', baseUrlApi('/cms/user/login_logs'), {
+    data
+  })
+}
+
+/** 搜索用户 - 游戏记录>聊天记录 */
+export const getChatLog = (data?: object) => {
+  console.log('getGameHandsRecord', data)
+
+  return http.request<any>('post', baseUrlApi('/cms/user/chat_logs'), {
     data
   })
 }
