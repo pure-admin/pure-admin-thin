@@ -40,6 +40,34 @@
 
 [点击去加入](https://yiming_chang.gitee.io/pure-admin-doc/pages/support/#qq-%E4%BA%A4%E6%B5%81%E7%BE%A4)
 
+## 开发环境
+
+node 版本应不小于 16 ，pnpm 版本应不小于 6  
+如果您还没安装 pnpm，请执行下面命令进行安装（mac 用户遇到安装报错请在命令前加上 sudo） 如果是 windows 用户 用使用管理员 power shell 来执行
+
+```
+npm install -g pnpm
+```
+
+安装依赖
+
+```
+pnpm install
+```
+
+启动平台
+
+```
+pnpm dev
+```
+
+不管是什么源，我们都可以不用管，直接执行下面命令即可
+
+npm config set registry https://registry.npmmirror.com
+
+上面的命令是将本地的源换成国内源 npmmirror
+(opens new window)，经过几轮测试，发现它的下载速度快且同步率高，同步频率 10 分钟一次，如果您之前的源是这个 http://registry.npm.taobao.org ，那您必须换成 npmmirror 啦，因为原淘宝 npm 域名即将停止解析
+
 ## 用法
 
 ### 安装依赖
