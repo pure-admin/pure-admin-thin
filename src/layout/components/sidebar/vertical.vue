@@ -6,14 +6,16 @@ import SidebarItem from "./sidebarItem.vue";
 import leftCollapse from "./leftCollapse.vue";
 import { useNav } from "@/layout/hooks/useNav";
 import { storageLocal } from "@pureadmin/utils";
+import { responsiveStorageNameSpace } from "@/config";
 import { ref, computed, watch, onBeforeMount } from "vue";
 import { findRouteByPath, getParentPaths } from "@/router/utils";
 import { usePermissionStoreHook } from "@/store/modules/permission";
 
 const route = useRoute();
 const showLogo = ref(
-  storageLocal().getItem<StorageConfigs>("responsive-configure")?.showLogo ??
-    true
+  storageLocal().getItem<StorageConfigs>(
+    `${responsiveStorageNameSpace()}configure`
+  )?.showLogo ?? true
 );
 
 const { routers, device, pureApp, isCollapse, menuSelect, toggleSideBar } =
@@ -27,7 +29,12 @@ const menuData = computed(() => {
     : usePermissionStoreHook().wholeMenus;
 });
 
+const loading = computed(() =>
+  pureApp.layout === "mix" ? false : menuData.value.length === 0 ? true : false
+);
+
 function getSubMenuData(path: string) {
+  subMenuData.value = [];
   // path的上级路由组成的数组
   const parentPathArr = getParentPaths(
     path,
@@ -53,6 +60,7 @@ onBeforeMount(() => {
 watch(
   () => [route.path, usePermissionStoreHook().wholeMenus],
   () => {
+    if (route.path.includes("/redirect")) return;
     getSubMenuData(route.path);
     menuSelect(route.path, routers);
   }
@@ -61,7 +69,7 @@ watch(
 
 <template>
   <div
-    v-loading="menuData.length === 0"
+    v-loading="loading"
     :class="['sidebar-container', showLogo ? 'has-logo' : '']"
   >
     <Logo v-if="showLogo" :collapse="isCollapse" />

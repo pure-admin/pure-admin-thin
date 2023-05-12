@@ -2,10 +2,10 @@
 import { App } from "vue";
 import Storage from "responsive-storage";
 import { routerArrays } from "@/layout/types";
-
-const nameSpace = "responsive-";
+import { responsiveStorageNameSpace } from "@/config";
 
 export const injectResponsiveStorage = (app: App, config: ServerConfigs) => {
+  const nameSpace = responsiveStorageNameSpace();
   const configObj = Object.assign(
     {
       // layout模式以及主题
@@ -27,7 +27,7 @@ export const injectResponsiveStorage = (app: App, config: ServerConfigs) => {
     },
     config.MultiTagsCache
       ? {
-          // 默认显示首页tag
+          // 默认显示顶级菜单tag
           tags: Storage.getData("tags", nameSpace) ?? routerArrays
         }
       : {}

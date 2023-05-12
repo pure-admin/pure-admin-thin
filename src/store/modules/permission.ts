@@ -2,6 +2,8 @@ import { defineStore } from "pinia";
 import { store } from "@/store";
 import { cacheType } from "./types";
 import { constantMenus } from "@/router";
+import { getKeyList } from "@pureadmin/utils";
+import { useMultiTagsStoreHook } from "./multiTags";
 import { ascending, filterTree, filterNoPermissionTree } from "@/router/utils";
 
 export const usePermissionStore = defineStore({
@@ -22,17 +24,32 @@ export const usePermissionStore = defineStore({
       );
     },
     cacheOperate({ mode, name }: cacheType) {
+      const delIndex = this.cachePageList.findIndex(v => v === name);
       switch (mode) {
+        case "refresh":
+          this.cachePageList = this.cachePageList.filter(v => v !== name);
+          break;
         case "add":
           this.cachePageList.push(name);
-          this.cachePageList = [...new Set(this.cachePageList)];
           break;
         case "delete":
-          // eslint-disable-next-line no-case-declarations
-          const delIndex = this.cachePageList.findIndex(v => v === name);
           delIndex !== -1 && this.cachePageList.splice(delIndex, 1);
           break;
       }
+      /** 监听缓存页面是否存在于标签页，不存在则删除 */
+      (() => {
+        let cacheLength = this.cachePageList.length;
+        const nameList = getKeyList(useMultiTagsStoreHook().multiTags, "name");
+        while (cacheLength > 0) {
+          nameList.findIndex(v => v === this.cachePageList[cacheLength - 1]) ===
+            -1 &&
+            this.cachePageList.splice(
+              this.cachePageList.indexOf(this.cachePageList[cacheLength - 1]),
+              1
+            );
+          cacheLength--;
+        }
+      })();
     },
     /** 清空缓存页面 */
     clearAllCachePage() {
