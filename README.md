@@ -64,4 +64,4 @@ pnpm remove 包名
 
 原则上不收取任何费用及版权，可以放心使用，不过如需二次开源（比如用此平台二次开发并开源）请联系作者获取许可！
 
-[MIT © xiaoxian521-2023](./LICENSE)
+[MIT © 2020-present, pure-admin](./LICENSE)
