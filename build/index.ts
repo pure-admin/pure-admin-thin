@@ -1,7 +1,7 @@
 /** 处理环境变量 */
-const warpperEnv = (envConf: Recordable): ViteEnv => {
+const wrapperEnv = (envConfigs: Recordable): ViteEnv => {
   /** 此处为默认值 */
-  const ret: ViteEnv = {
+  const defaultEnvConfigs: ViteEnv = {
     VITE_PORT: 8848,
     VITE_PUBLIC_PATH: "",
     VITE_ROUTER_HISTORY: "",
@@ -10,22 +10,27 @@ const warpperEnv = (envConf: Recordable): ViteEnv => {
     VITE_COMPRESSION: "none"
   };
 
-  for (const envName of Object.keys(envConf)) {
-    let realName = envConf[envName].replace(/\\n/g, "\n");
-    realName =
-      realName === "true" ? true : realName === "false" ? false : realName;
+  for (const configName of Object.keys(envConfigs)) {
+    let realConfigValue = envConfigs[configName].replace(/\\n/g, "\n");
+    realConfigValue =
+      realConfigValue === "true"
+        ? true
+        : realConfigValue === "false"
+        ? false
+        : realConfigValue;
 
-    if (envName === "VITE_PORT") {
-      realName = Number(realName);
+    if (configName === "VITE_PORT") {
+      realConfigValue = Number(realConfigValue);
     }
-    ret[envName] = realName;
-    if (typeof realName === "string") {
-      process.env[envName] = realName;
-    } else if (typeof realName === "object") {
-      process.env[envName] = JSON.stringify(realName);
+
+    defaultEnvConfigs[configName] = realConfigValue;
+    if (typeof realConfigValue === "string") {
+      process.env[configName] = realConfigValue;
+    } else if (typeof realConfigValue === "object") {
+      process.env[configName] = JSON.stringify(realConfigValue);
     }
   }
-  return ret;
+  return defaultEnvConfigs;
 };
 
-export { warpperEnv };
+export { wrapperEnv };
