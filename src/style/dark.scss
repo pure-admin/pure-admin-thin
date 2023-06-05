@@ -79,6 +79,10 @@ html.dark {
       &:hover {
         color: rgb(255 255 255 / 85%) !important;
         background-color: rgb(255 255 255 / 12%);
+
+        .pure-dialog-svg {
+          color: rgb(255 255 255 / 85%) !important;
+        }
       }
     }
   }
@@ -101,6 +105,37 @@ html.dark {
         color: rgb(255 255 255 / 85%);
         background-color: rgb(255 255 255 / 12%);
       }
+    }
+  }
+
+  /* 自定义菜单搜索样式 */
+  .pure-search-dialog {
+    .el-dialog__footer {
+      box-shadow: 0 -1px 0 0 #555a64, 0 -3px 6px 0 rgb(69 98 155 / 12%);
+    }
+
+    .search-footer {
+      .search-footer-item {
+        color: rgb(235 235 235 / 60%);
+
+        .icon {
+          box-shadow: none;
+        }
+      }
+    }
+  }
+
+  /* ReSegmented 组件 */
+  .pure-segmented {
+    color: rgb(255 255 255 / 65%);
+    background-color: #000;
+
+    .pure-segmented-item-selected {
+      background-color: #1f1f1f;
+    }
+
+    .pure-segmented-item-disabled {
+      color: rgb(255 255 255 / 25%);
     }
   }
 }

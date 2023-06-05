@@ -2,6 +2,7 @@ import { storeToRefs } from "pinia";
 import { getConfig } from "@/config";
 import { emitter } from "@/utils/mitt";
 import { routeMetaType } from "../types";
+import userAvatar from "@/assets/user.jpg";
 import { getTopMenu } from "@/router/utils";
 import { useGlobal } from "@pureadmin/utils";
 import { computed, CSSProperties } from "vue";
@@ -70,7 +71,7 @@ export function useNav() {
   }
 
   function backTopMenu() {
-    router.push(getTopMenu().path);
+    router.push(getTopMenu()?.path);
   }
 
   function onPanel() {
@@ -150,6 +151,7 @@ export function useNav() {
     isCollapse,
     pureApp,
     username,
+    userAvatar,
     avatarsStyle,
     tooltipEffect
   };
