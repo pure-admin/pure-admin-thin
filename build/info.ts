@@ -21,8 +21,8 @@ export function viteBuildInfo(): Plugin {
         bold(
           green(
             `👏欢迎使用${blue(
-              "[vue-pure-admin]"
-            )}，如果您感觉不错，记得点击后面链接给个star哦💖 https://github.com/pure-admin/vue-pure-admin`
+              "[Agileboot全栈项目]"
+            )}，如果您感觉不错，记得点击后面链接给个star哦💖 https://github.com/valarchie/agileboot-back-end`
           )
         )
       );

@@ -1,6 +1,6 @@
 {
-  "name": "pure-admin-thin",
-  "version": "4.3.0",
+  "name": "agileboot-front-end-pure",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "dev": "NODE_OPTIONS=--max-old-space-size=4096 vite",
@@ -130,7 +130,7 @@
       "stable": "*"
     }
   },
-  "repository": "git@github.com:pure-admin/pure-admin-thin.git",
-  "author": "xiaoxian521",
+  "repository": "git@github.com:valarchie/agileboot-front-end-pure.git",
+  "author": "valarchie",
   "license": "MIT"
 }
