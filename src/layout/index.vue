@@ -8,7 +8,15 @@ import { useLayout } from "./hooks/useLayout";
 import { useAppStoreHook } from "@/store/modules/app";
 import { useSettingStoreHook } from "@/store/modules/settings";
 import { deviceDetection, useDark, useGlobal } from "@pureadmin/utils";
-import { h, reactive, computed, onMounted, defineComponent } from "vue";
+import { useDataThemeChange } from "@/layout/hooks/useDataThemeChange";
+import {
+  h,
+  reactive,
+  computed,
+  onMounted,
+  onBeforeMount,
+  defineComponent
+} from "vue";
 
 import navbar from "./components/navbar.vue";
 import tag from "./components/tag/index.vue";
@@ -88,11 +96,12 @@ emitter.on("resize", ({ detail }) => {
       toggle("desktop", false);
       isAutoCloseSidebar = false;
     }
-  } else if (width > 990) {
-    if (!set.sidebar.isClickCollapse) {
-      toggle("desktop", true);
-      isAutoCloseSidebar = true;
-    }
+  } else if (width > 990 && !set.sidebar.isClickCollapse) {
+    toggle("desktop", true);
+    isAutoCloseSidebar = true;
+  } else {
+    toggle("desktop", false);
+    isAutoCloseSidebar = false;
   }
 });
 
@@ -100,6 +109,10 @@ onMounted(() => {
   if (isMobile) {
     toggle("mobile", false);
   }
+});
+
+onBeforeMount(() => {
+  useDataThemeChange().dataThemeChange();
 });
 
 const layoutHeader = defineComponent({
