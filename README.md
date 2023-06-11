@@ -10,21 +10,20 @@
 
 ## 版本选择
 
-当前是非国际化版本哦，如果您需要国际化版本 [请点击](https://github.com/pure-admin/pure-admin-thin/tree/i18n)
+当前是非国际化版本，如果您需要国际化版本 [请点击](https://github.com/pure-admin/pure-admin-thin/tree/i18n)
 
 ## 配套视频
 
 - [点我查看教程](https://www.bilibili.com/video/BV1kg411v7QT)
 - [点我查看 UI 设计](https://www.bilibili.com/video/BV17g411T7rq)
 
-## 配套文档
+## 配套保姆级文档
 
-- [点我查看国内文档站](https://yiming_chang.gitee.io/pure-admin-doc)
-- [点我查看国外文档站](https://pure-admin.github.io/pure-admin-doc)
+- [查看文档](https://yiming_chang.gitee.io/pure-admin-doc)
 
 ## 预览
 
-- [点我查看预览站](https://pure-admin-thin.netlify.app/#/login)
+- [查看预览](https://pure-admin-thin.netlify.app/#/login)
 
 ## 维护者
 
@@ -86,10 +85,10 @@ pnpm remove 包名
 
 ## ⚠️ 注意
 
-- 精简版不接受任何 `issues` 和 `pr`，如果有问题请到完整版 [issues](https://github.com/pure-admin/vue-pure-admin/issues/new/choose) 去提，谢谢！！！
+- 精简版不接受任何 `issues` 和 `pr`，如果有问题请到完整版 [issues](https://github.com/pure-admin/vue-pure-admin/issues/new/choose) 去提，谢谢！
 
 ## 许可证
 
-原则上不收取任何费用及版权，可以放心使用，不过如需二次开源（比如用此平台二次开发并开源）请联系作者获取许可！
+原则上不收取任何费用及版权，可商用，不过如需二次开源（比如用此平台二次开发并开源，要求前端代码必须开源免费）请联系作者获取许可！（免费，走个记录而已）
 
 [MIT © 2020-present, pure-admin](./LICENSE)

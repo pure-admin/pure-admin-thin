@@ -15,39 +15,22 @@ The simplified version is based on the shelf extracted from [vue-pure-admin](htt
 
 ## Docs
 
-- [Click me to view the domestic documentation site](https://yiming_chang.gitee.io/pure-admin-doc)
-- [Click me to view foreign document site](https://pure-admin.github.io/pure-admin-doc)
+- [documentation site](https://yiming_chang.gitee.io/pure-admin-doc)
 
 ## Preview
 
 - [Click me to view the preview station](https://pure-admin-thin.netlify.app/#/login)
 
-## Usage
+## Maintainer
 
-### Installation dependencies
-
-pnpm install
-
-### Install a package
-
-pnpm add packageName
-
-### Uninstall a package
-
-pnpm remove packageName
-
-I think you should fork the project first to develop, so that you can pull the update synchronously when I update! ! !
-
-## Supporting video tutorial
-
-bilibili: https://www.bilibili.com/video/BV1534y1S7HV/
+[xiaoxian521](https://github.com/xiaoxian521)
 
 ## ⚠️ Attention
 
-- The Lite version does not accept any issues and prs. If you have any questions, please go to the full version https://github.com/pure-admin/vue-pure-admin/issues/new/choose to mention, thank you! ! !
+- The Lite version does not accept any issues and prs. If you have any questions, please go to the full version [issues](https://github.com/pure-admin/vue-pure-admin/issues/new/choose) to mention, thank you!
 
 ## License
 
-In principle, no fees and copyrights are charged, and you can use it with confidence, but if you need secondary open source, please contact the author for permission!
+In principle, no fees and copyrights are charged, and it is commercially available, but if you need secondary open source (such as using this platform for secondary development and open source, the front-end code must be open source and free), please contact the author for permission! (Free, just take a record)
 
 [MIT © 2020-present, pure-admin](./LICENSE)
