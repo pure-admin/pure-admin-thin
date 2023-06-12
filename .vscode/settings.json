@@ -27,5 +27,6 @@
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": true
   },
-  "iconify.excludes": ["el"]
+  "iconify.excludes": ["el"],
+  "cSpell.words": ["iconify", "Qrcode"]
 }
