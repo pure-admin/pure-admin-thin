@@ -31,8 +31,8 @@
   "dependencies": {
     "@pureadmin/descriptions": "^1.1.1",
     "@pureadmin/table": "^2.3.2",
-    "@pureadmin/utils": "^1.9.4",
-    "@vueuse/core": "^10.1.2",
+    "@pureadmin/utils": "^1.9.6",
+    "@vueuse/core": "^10.2.0",
     "@vueuse/motion": "^2.0.0",
     "animate.css": "^4.1.1",
     "axios": "^1.4.0",
@@ -44,13 +44,13 @@
     "mockjs": "^1.1.0",
     "nprogress": "^0.2.0",
     "path": "^0.12.7",
-    "pinia": "^2.1.3",
+    "pinia": "^2.1.4",
     "qs": "^6.11.2",
     "responsive-storage": "^2.2.0",
     "sortablejs": "^1.15.0",
     "vue": "^3.3.4",
     "vue-router": "^4.2.2",
-    "vue-types": "^5.0.3"
+    "vue-types": "^5.0.4"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.6.5",
@@ -74,9 +74,9 @@
     "autoprefixer": "^10.4.14",
     "cloc": "^2.11.0",
     "cssnano": "^6.0.1",
-    "eslint": "^8.42.0",
+    "eslint": "^8.43.0",
     "eslint-plugin-prettier": "^4.2.1",
-    "eslint-plugin-vue": "^9.14.1",
+    "eslint-plugin-vue": "^9.15.0",
     "husky": "^8.0.3",
     "lint-staged": "^13.2.2",
     "picocolors": "^1.0.0",
@@ -88,9 +88,9 @@
     "pretty-quick": "^3.1.3",
     "rimraf": "^5.0.1",
     "rollup-plugin-visualizer": "^5.9.2",
-    "sass": "^1.63.3",
+    "sass": "^1.63.4",
     "sass-loader": "^13.3.2",
-    "stylelint": "^15.7.0",
+    "stylelint": "^15.8.0",
     "stylelint-config-html": "^1.1.0",
     "stylelint-config-recess-order": "^4.2.0",
     "stylelint-config-recommended": "^12.0.0",
@@ -112,7 +112,7 @@
     "vite-plugin-remove-console": "^2.1.1",
     "vite-svg-loader": "^4.0.0",
     "vue-eslint-parser": "^9.3.1",
-    "vue-tsc": "^1.6.5"
+    "vue-tsc": "^1.8.0"
   },
   "pnpm": {
     "peerDependencyRules": {
