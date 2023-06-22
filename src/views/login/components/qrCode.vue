@@ -1,7 +1,15 @@
 <script setup lang="ts">
 import Motion from "../utils/motion";
 import ReQrcode from "@/components/ReQrcode";
-import { useUserStoreHook } from "@/store/modules/user";
+
+defineProps({
+  currentPage: {
+    type: Number,
+    default: 2
+  }
+});
+
+const $pageEmit = defineEmits(["update:currentPage"]);
 </script>
 
 <template>
@@ -12,10 +20,7 @@ import { useUserStoreHook } from "@/store/modules/user";
     </el-divider>
   </Motion>
   <Motion :delay="150">
-    <el-button
-      class="w-full mt-4"
-      @click="useUserStoreHook().SET_CURRENTPAGE(0)"
-    >
+    <el-button class="w-full mt-4" @click="$pageEmit('update:currentPage', 0)">
       {{ "返回" }}
     </el-button>
   </Motion>

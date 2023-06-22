@@ -5,9 +5,17 @@ import { message } from "@/utils/message";
 import { phoneRules } from "../utils/rule";
 import type { FormInstance } from "element-plus";
 import { useVerifyCode } from "../utils/verifyCode";
-import { useUserStoreHook } from "@/store/modules/user";
 import { useRenderIcon } from "@/components/ReIcon/src/hooks";
 import Iphone from "@iconify-icons/ep/iphone";
+
+defineProps({
+  currentPage: {
+    type: Number,
+    default: 1
+  }
+});
+
+const $pageEmit = defineEmits(["update:currentPage"]);
 
 const loading = ref(false);
 const ruleForm = reactive({
@@ -36,7 +44,7 @@ const onLogin = async (formEl: FormInstance | undefined) => {
 
 function onBack() {
   useVerifyCode().end();
-  useUserStoreHook().SET_CURRENTPAGE(0);
+  $pageEmit("update:currentPage", 0);
 }
 </script>
 

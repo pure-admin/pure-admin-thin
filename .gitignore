@@ -5,7 +5,6 @@ dist-ssr
 *.local
 .eslintcache
 report.html
-.idea
 
 yarn.lock
 npm-debug.log*

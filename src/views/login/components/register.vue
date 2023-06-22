@@ -5,11 +5,19 @@ import { message } from "@/utils/message";
 import { updateRules } from "../utils/rule";
 import type { FormInstance } from "element-plus";
 import { useVerifyCode } from "../utils/verifyCode";
-import { useUserStoreHook } from "@/store/modules/user";
 import { useRenderIcon } from "@/components/ReIcon/src/hooks";
 import Lock from "@iconify-icons/ri/lock-fill";
 import Iphone from "@iconify-icons/ep/iphone";
 import User from "@iconify-icons/ri/user-3-fill";
+
+defineProps({
+  currentPage: {
+    type: Number,
+    default: 3
+  }
+});
+
+const $pageEmit = defineEmits(["update:currentPage"]);
 
 const checked = ref(false);
 const loading = ref(false);
@@ -63,7 +71,7 @@ const onUpdate = async (formEl: FormInstance | undefined) => {
 
 function onBack() {
   useVerifyCode().end();
-  useUserStoreHook().SET_CURRENTPAGE(0);
+  $pageEmit("update:currentPage", 0);
 }
 </script>
 

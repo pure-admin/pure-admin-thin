@@ -1,12 +1,15 @@
 const operates = [
   {
-    title: "手机登录"
+    title: "手机登录",
+    page: 1
   },
   {
-    title: "二维码登录"
+    title: "二维码登录",
+    page: 2
   },
   {
-    title: "注册"
+    title: "注册",
+    page: 3
   }
 ];
 

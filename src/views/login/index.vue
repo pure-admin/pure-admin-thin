@@ -1,12 +1,5 @@
 <script setup lang="ts">
-import {
-  ref,
-  toRaw,
-  reactive,
-  computed,
-  onMounted,
-  onBeforeUnmount
-} from "vue";
+import { ref, toRaw, reactive, onMounted, onBeforeUnmount } from "vue";
 import Motion from "./utils/motion";
 import { useRouter } from "vue-router";
 import { message } from "@/utils/message";
@@ -14,8 +7,8 @@ import { loginRules } from "./utils/rule";
 import phone from "./components/phone.vue";
 import TypeIt from "@/components/ReTypeit";
 import qrCode from "./components/qrCode.vue";
-import regist from "./components/regist.vue";
-import update from "./components/update.vue";
+import register from "./components/register.vue";
+import resetPassword from "./components/resetPassword.vue";
 import { useNav } from "@/layout/hooks/useNav";
 import type { FormInstance } from "element-plus";
 import { operates, thirdParty } from "./utils/enums";
@@ -41,9 +34,8 @@ const router = useRouter();
 const loading = ref(false);
 const checked = ref(false);
 const ruleFormRef = ref<FormInstance>();
-const currentPage = computed(() => {
-  return useUserStoreHook().currentPage;
-});
+// 判断登录页面显示哪个组件（0：登录（默认）、1：手机登录、2：二维码登录、3：注册、4：忘记密码）
+const currentPage = ref(0);
 
 const { initStorage } = useLayout();
 initStorage();
@@ -189,11 +181,7 @@ onBeforeUnmount(() => {
                   <el-checkbox v-model="checked">
                     {{ "记住密码" }}
                   </el-checkbox>
-                  <el-button
-                    link
-                    type="primary"
-                    @click="useUserStoreHook().SET_CURRENTPAGE(4)"
-                  >
+                  <el-button link type="primary" @click="currentPage = 4">
                     {{ "忘记密码" }}
                   </el-button>
                 </div>
@@ -217,7 +205,7 @@ onBeforeUnmount(() => {
                     :key="index"
                     class="w-full mt-4"
                     size="default"
-                    @click="useUserStoreHook().SET_CURRENTPAGE(index + 1)"
+                    @click="currentPage = item.page"
                   >
                     {{ item.title }}
                   </el-button>
@@ -247,13 +235,19 @@ onBeforeUnmount(() => {
             </el-form-item>
           </Motion>
           <!-- 手机号登录 -->
-          <phone v-if="currentPage === 1" />
+          <phone v-if="currentPage === 1" v-model:current-page="currentPage" />
           <!-- 二维码登录 -->
-          <qrCode v-if="currentPage === 2" />
+          <qrCode v-if="currentPage === 2" v-model:current-page="currentPage" />
           <!-- 注册 -->
-          <regist v-if="currentPage === 3" />
+          <register
+            v-if="currentPage === 3"
+            v-model:current-page="currentPage"
+          />
           <!-- 忘记密码 -->
-          <update v-if="currentPage === 4" />
+          <resetPassword
+            v-if="currentPage === 4"
+            v-model:current-page="currentPage"
+          />
         </div>
       </div>
     </div>
