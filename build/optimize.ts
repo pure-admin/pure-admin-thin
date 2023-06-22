@@ -14,8 +14,7 @@ const include = [
   "sortablejs",
   "@vueuse/core",
   "@pureadmin/utils",
-  "responsive-storage",
-  "element-resize-detector"
+  "responsive-storage"
 ];
 
 /**
