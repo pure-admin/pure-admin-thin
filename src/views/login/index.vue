@@ -29,7 +29,10 @@ defineOptions({
   name: "Login"
 });
 
+// TODO 当请求验证码过于频繁的话  服务器会报错  但是前端没有反应 这块需要处理一下, 通过axios处理一下
 const captchaCodeBase64 = ref("");
+const isCaptchaOn = ref(false);
+
 const router = useRouter();
 const loading = ref(false);
 const checked = ref(false);
@@ -80,23 +83,21 @@ function onkeypress({ code }: KeyboardEvent) {
   }
 }
 
-function getCaptchaCode() {
-  CommonAPI.getCaptchaCode().then(res => {
+async function getCaptchaCode() {
+  await CommonAPI.getCaptchaCode().then(res => {
+    isCaptchaOn.value = res.data.isCaptchaOn;
     captchaCodeBase64.value = `data:image/gif;base64,${res.data.img}`;
   });
 }
 
-onMounted(async () => {
+onMounted(() => {
   window.document.addEventListener("keypress", onkeypress);
+  getCaptchaCode();
 });
 
 onBeforeUnmount(() => {
   window.document.removeEventListener("keypress", onkeypress);
 });
-
-// watch(imgCode, value => {
-//   useUserStoreHook().SET_VERIFYCODE(value);
-// });
 </script>
 
 <template>
@@ -167,7 +168,7 @@ onBeforeUnmount(() => {
             </Motion>
 
             <Motion :delay="200">
-              <el-form-item prop="verifyCode">
+              <el-form-item v-if="isCaptchaOn" prop="verifyCode">
                 <el-input
                   clearable
                   v-model="ruleForm.verifyCode"
