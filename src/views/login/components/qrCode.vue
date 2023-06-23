@@ -21,7 +21,7 @@ const $pageEmit = defineEmits(["update:currentPage"]);
   </Motion>
   <Motion :delay="150">
     <el-button class="w-full mt-4" @click="$pageEmit('update:currentPage', 0)">
-      {{ "返回" }}
+      返回
     </el-button>
   </Motion>
 </template>

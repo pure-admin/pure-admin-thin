@@ -138,7 +138,7 @@ function onBack() {
           :loading="loading"
           @click="onUpdate(ruleFormRef)"
         >
-          {{ "确定" }}
+          确定
         </el-button>
       </el-form-item>
     </Motion>
@@ -146,7 +146,7 @@ function onBack() {
     <Motion :delay="300">
       <el-form-item>
         <el-button class="w-full" size="default" @click="onBack">
-          {{ "返回" }}
+          返回
         </el-button>
       </el-form-item>
     </Motion>

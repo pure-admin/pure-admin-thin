@@ -16,7 +16,6 @@ import { useLayout } from "@/layout/hooks/useLayout";
 import { useUserStoreHook } from "@/store/modules/user";
 import { initRouter, getTopMenu } from "@/router/utils";
 import { bg, avatar, illustration } from "./utils/static";
-import { ReImageVerify } from "@/components/ReImageVerify";
 import { useRenderIcon } from "@/components/ReIcon/src/hooks";
 import { useDataThemeChange } from "@/layout/hooks/useDataThemeChange";
 
@@ -24,12 +23,13 @@ import dayIcon from "@/assets/svg/day.svg?component";
 import darkIcon from "@/assets/svg/dark.svg?component";
 import Lock from "@iconify-icons/ri/lock-fill";
 import User from "@iconify-icons/ri/user-3-fill";
+import * as CommonAPI from "@/api/common";
 
 defineOptions({
   name: "Login"
 });
 
-const imgCode = ref("");
+const captchaCodeBase64 = ref("");
 const router = useRouter();
 const loading = ref(false);
 const checked = ref(false);
@@ -80,7 +80,13 @@ function onkeypress({ code }: KeyboardEvent) {
   }
 }
 
-onMounted(() => {
+function getCaptchaCode() {
+  CommonAPI.getCaptchaCode().then(res => {
+    captchaCodeBase64.value = `data:image/gif;base64,${res.data.img}`;
+  });
+}
+
+onMounted(async () => {
   window.document.addEventListener("keypress", onkeypress);
 });
 
@@ -169,7 +175,13 @@ onBeforeUnmount(() => {
                   :prefix-icon="useRenderIcon('ri:shield-keyhole-line')"
                 >
                   <template v-slot:append>
-                    <ReImageVerify v-model:code="imgCode" />
+                    <img
+                      width="120"
+                      height="40"
+                      class="cursor-pointer"
+                      :src="captchaCodeBase64"
+                      @click="getCaptchaCode"
+                    />
                   </template>
                 </el-input>
               </el-form-item>
@@ -178,11 +190,9 @@ onBeforeUnmount(() => {
             <Motion :delay="250">
               <el-form-item>
                 <div class="w-full h-[20px] flex justify-between items-center">
-                  <el-checkbox v-model="checked">
-                    {{ "记住密码" }}
-                  </el-checkbox>
+                  <el-checkbox v-model="checked"> 记住密码 </el-checkbox>
                   <el-button link type="primary" @click="currentPage = 4">
-                    {{ "忘记密码" }}
+                    忘记密码
                   </el-button>
                 </div>
                 <el-button
@@ -192,7 +202,7 @@ onBeforeUnmount(() => {
                   :loading="loading"
                   @click="onLogin(ruleFormRef)"
                 >
-                  {{ "登录" }}
+                  登录
                 </el-button>
               </el-form-item>
             </Motion>

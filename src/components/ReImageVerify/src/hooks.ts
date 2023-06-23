@@ -30,6 +30,7 @@ export const useImageVerify = (width = 120, height = 40) => {
   };
 };
 
+/** 前端自己生成验证码 */
 function randomNum(min: number, max: number) {
   const num = Math.floor(Math.random() * (max - min) + min);
   return num;

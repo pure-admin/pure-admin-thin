@@ -159,12 +159,8 @@ function onBack() {
 
     <Motion :delay="300">
       <el-form-item>
-        <el-checkbox v-model="checked">
-          {{ "我已仔细阅读并接受" }}
-        </el-checkbox>
-        <el-button link type="primary">
-          {{ "隐私政策" }}
-        </el-button>
+        <el-checkbox v-model="checked"> 我已仔细阅读并接受 </el-checkbox>
+        <el-button link type="primary"> 隐私政策 </el-button>
       </el-form-item>
     </Motion>
 
@@ -177,7 +173,7 @@ function onBack() {
           :loading="loading"
           @click="onUpdate(ruleFormRef)"
         >
-          {{ "确定" }}
+          确定
         </el-button>
       </el-form-item>
     </Motion>
@@ -185,7 +181,7 @@ function onBack() {
     <Motion :delay="400">
       <el-form-item>
         <el-button class="w-full" size="default" @click="onBack">
-          {{ "返回" }}
+          返回
         </el-button>
       </el-form-item>
     </Motion>

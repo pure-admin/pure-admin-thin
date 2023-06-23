@@ -90,7 +90,7 @@ function onBack() {
           :loading="loading"
           @click="onLogin(ruleFormRef)"
         >
-          {{ "登录" }}
+          登录
         </el-button>
       </el-form-item>
     </Motion>
@@ -98,7 +98,7 @@ function onBack() {
     <Motion :delay="200">
       <el-form-item>
         <el-button class="w-full" size="default" @click="onBack">
-          {{ "返回" }}
+          返回
         </el-button>
       </el-form-item>
     </Motion>
