@@ -1,5 +1,12 @@
 <script setup lang="ts">
-import { ref, toRaw, reactive, onMounted, onBeforeUnmount } from "vue";
+import {
+  ref,
+  toRaw,
+  reactive,
+  onMounted,
+  onBeforeUnmount,
+  onBeforeMount
+} from "vue";
 import Motion from "./utils/motion";
 import { useRouter } from "vue-router";
 import { message } from "@/utils/message";
@@ -89,6 +96,10 @@ async function getCaptchaCode() {
     captchaCodeBase64.value = `data:image/gif;base64,${res.data.img}`;
   });
 }
+
+onBeforeMount(() => {
+  getCaptchaCode();
+});
 
 onMounted(() => {
   window.document.addEventListener("keypress", onkeypress);
