@@ -5,7 +5,8 @@ import {
   reactive,
   onMounted,
   onBeforeUnmount,
-  onBeforeMount
+  onBeforeMount,
+  watch
 } from "vue";
 import Motion from "./utils/motion";
 import { useRouter } from "vue-router";
@@ -20,11 +21,18 @@ import { useNav } from "@/layout/hooks/useNav";
 import type { FormInstance } from "element-plus";
 import { operates, thirdParty } from "./utils/enums";
 import { useLayout } from "@/layout/hooks/useLayout";
-import { useUserStoreHook } from "@/store/modules/user";
+import { rsaEncrypt } from "@/utils/crypt";
 import { initRouter, getTopMenu } from "@/router/utils";
 import { bg, avatar, illustration } from "./utils/static";
 import { useRenderIcon } from "@/components/ReIcon/src/hooks";
 import { useDataThemeChange } from "@/layout/hooks/useDataThemeChange";
+import {
+  saveIsRememberMe,
+  getIsRememberMe,
+  savePassword,
+  getPassword,
+  removePassword
+} from "@/utils/auth";
 
 import dayIcon from "@/assets/svg/day.svg?component";
 import darkIcon from "@/assets/svg/dark.svg?component";
@@ -42,7 +50,7 @@ const isCaptchaOn = ref(false);
 
 const router = useRouter();
 const loading = ref(false);
-const checked = ref(false);
+const isRememberMe = ref(false);
 const ruleFormRef = ref<FormInstance>();
 // 判断登录页面显示哪个组件（0：登录（默认）、1：手机登录、2：二维码登录、3：注册、4：忘记密码）
 const currentPage = ref(0);
@@ -56,8 +64,9 @@ const { title } = useNav();
 
 const ruleForm = reactive({
   username: "admin",
-  password: "admin123",
-  verifyCode: ""
+  password: getPassword(),
+  captchaCode: "",
+  captchaCodeKey: ""
 });
 
 const onLogin = async (formEl: FormInstance | undefined) => {
@@ -65,17 +74,23 @@ const onLogin = async (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   await formEl.validate((valid, fields) => {
     if (valid) {
-      useUserStoreHook()
-        .loginByUsername({ username: ruleForm.username, password: "admin123" })
-        .then(res => {
-          if (res.success) {
-            // 获取后端路由
-            initRouter().then(() => {
-              router.push(getTopMenu(true).path);
-              message("登录成功", { type: "success" });
-            });
+      CommonAPI.loginByPassword({
+        username: ruleForm.username,
+        password: rsaEncrypt(ruleForm.password),
+        captchaCode: ruleForm.captchaCode,
+        captchaCodeKey: ruleForm.captchaCodeKey
+      }).then(res => {
+        if (res.code === 0) {
+          // 获取后端路由
+          initRouter().then(() => {
+            router.push(getTopMenu(true).path);
+            message("登录成功", { type: "success" });
+          });
+          if (isRememberMe.value) {
+            savePassword(ruleForm.password);
           }
-        });
+        }
+      });
     } else {
       loading.value = false;
       return fields;
@@ -93,12 +108,25 @@ function onkeypress({ code }: KeyboardEvent) {
 async function getCaptchaCode() {
   await CommonAPI.getCaptchaCode().then(res => {
     isCaptchaOn.value = res.data.isCaptchaOn;
-    captchaCodeBase64.value = `data:image/gif;base64,${res.data.img}`;
+    captchaCodeBase64.value = `data:image/gif;base64,${res.data.captchaCodeImg}`;
+    ruleForm.captchaCodeKey = res.data.captchaCodeKey;
+    console.log(ruleForm);
   });
 }
 
+watch(isRememberMe, newVal => {
+  saveIsRememberMe(newVal);
+  if (newVal === false) {
+    removePassword();
+  }
+});
+
 onBeforeMount(() => {
   getCaptchaCode();
+  isRememberMe.value = getIsRememberMe();
+  if (isRememberMe.value) {
+    ruleForm.password = getPassword();
+  }
 });
 
 onMounted(() => {
@@ -179,10 +207,10 @@ onBeforeUnmount(() => {
             </Motion>
 
             <Motion :delay="200">
-              <el-form-item v-if="isCaptchaOn" prop="verifyCode">
+              <el-form-item v-if="isCaptchaOn" prop="captchaCode">
                 <el-input
                   clearable
-                  v-model="ruleForm.verifyCode"
+                  v-model="ruleForm.captchaCode"
                   placeholder="验证码"
                   :prefix-icon="useRenderIcon('ri:shield-keyhole-line')"
                 >
@@ -202,7 +230,7 @@ onBeforeUnmount(() => {
             <Motion :delay="250">
               <el-form-item>
                 <div class="w-full h-[20px] flex justify-between items-center">
-                  <el-checkbox v-model="checked"> 记住密码 </el-checkbox>
+                  <el-checkbox v-model="isRememberMe"> 记住密码 </el-checkbox>
                   <el-button link type="primary" @click="currentPage = 4">
                     忘记密码
                   </el-button>

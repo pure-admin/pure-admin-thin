@@ -28,6 +28,7 @@ specifiers:
   autoprefixer: ^10.4.14
   axios: ^1.4.0
   cloc: ^2.11.0
+  crypto-js: ^4.1.1
   cssnano: ^6.0.1
   dayjs: ^1.11.8
   echarts: ^5.4.2
@@ -37,6 +38,7 @@ specifiers:
   eslint-plugin-vue: ^9.15.0
   husky: ^8.0.3
   js-cookie: ^3.0.5
+  jsencrypt: ^3.3.2
   lint-staged: ^13.2.2
   mitt: ^3.0.0
   mockjs: ^1.1.0
@@ -94,10 +96,12 @@ dependencies:
   "@vueuse/motion": 2.0.0_vue@3.3.4
   animate.css: 4.1.1
   axios: 1.4.0
+  crypto-js: 4.1.1
   dayjs: 1.11.8
   echarts: 5.4.2
   element-plus: 2.3.6_vue@3.3.4
   js-cookie: 3.0.5
+  jsencrypt: 3.3.2
   mitt: 3.0.0
   mockjs: 1.1.0
   nprogress: 0.2.0
@@ -3116,6 +3120,13 @@ packages:
       which: 2.0.2
     dev: true
 
+  /crypto-js/4.1.1:
+    resolution:
+      {
+        integrity: sha512-o2JlM7ydqd3Qk9CA0L4NL6mTzU2sdx96a+oOfPu8Mkl/PK51vSyoi8/rQ8NknZtk44vq15lmhAj9CIAGwgeWKw==
+      }
+    dev: false
+
   /css-declaration-sorter/6.4.0_postcss@8.4.24:
     resolution:
       {
@@ -5126,6 +5137,13 @@ packages:
     dependencies:
       argparse: 2.0.1
     dev: true
+
+  /jsencrypt/3.3.2:
+    resolution:
+      {
+        integrity: sha512-arQR1R1ESGdAxY7ZheWr12wCaF2yF47v5qpB76TtV64H1pyGudk9Hvw8Y9tb/FiTIaaTRUyaSnm5T/Y53Ghm/A==
+      }
+    dev: false
 
   /jsesc/2.5.2:
     resolution:

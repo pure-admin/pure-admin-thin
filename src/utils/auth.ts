@@ -1,6 +1,7 @@
 import Cookies from "js-cookie";
 import { storageSession } from "@pureadmin/utils";
 import { useUserStoreHook } from "@/store/modules/user";
+import { aesEncrypt, aesDecrypt } from "@/utils/crypt";
 
 export interface DataInfo<T> {
   /** token */
@@ -16,13 +17,15 @@ export interface DataInfo<T> {
 }
 
 export const sessionKey = "user-info";
-export const TokenKey = "authorized-token";
+export const tokenKey = "authorized-token";
+export const isRememberMeKey = "ag-is-remember-me";
+export const passwordKey = "ag-password";
 
 /** 获取`token` */
 export function getToken(): DataInfo<number> {
   // 此处与`TokenKey`相同，此写法解决初始化时`Cookies`中不存在`TokenKey`报错
-  return Cookies.get(TokenKey)
-    ? JSON.parse(Cookies.get(TokenKey))
+  return Cookies.get(tokenKey)
+    ? JSON.parse(Cookies.get(tokenKey))
     : storageSession().getItem(sessionKey);
 }
 
@@ -39,10 +42,10 @@ export function setToken(data: DataInfo<Date>) {
   const cookieString = JSON.stringify({ accessToken, expires });
 
   expires > 0
-    ? Cookies.set(TokenKey, cookieString, {
+    ? Cookies.set(tokenKey, cookieString, {
         expires: (expires - Date.now()) / 86400000
       })
-    : Cookies.set(TokenKey, cookieString);
+    : Cookies.set(tokenKey, cookieString);
 
   function setSessionKey(username: string, roles: Array<string>) {
     useUserStoreHook().SET_USERNAME(username);
@@ -69,8 +72,41 @@ export function setToken(data: DataInfo<Date>) {
 
 /** 删除`token`以及key值为`user-info`的session信息 */
 export function removeToken() {
-  Cookies.remove(TokenKey);
+  Cookies.remove(tokenKey);
   sessionStorage.clear();
+}
+
+/** 将密码加密后 存入cookies中 */
+export function savePassword(password: string) {
+  const encryptPassword = aesEncrypt(password);
+  Cookies.set(passwordKey, encryptPassword);
+}
+
+/** 将密码中cookies中删除 */
+export function removePassword() {
+  Cookies.remove(passwordKey);
+}
+
+/** 获取密码 并解密 */
+export function getPassword(): string {
+  const encryptPassword = Cookies.get(passwordKey);
+  if (
+    encryptPassword !== null &&
+    encryptPassword !== undefined &&
+    encryptPassword.trim() !== ""
+  ) {
+    return aesDecrypt(encryptPassword);
+  }
+  return null;
+}
+
+export function saveIsRememberMe(isRememberMe: boolean) {
+  Cookies.set(isRememberMeKey, isRememberMe.toString());
+}
+
+export function getIsRememberMe() {
+  const value = Cookies.get(isRememberMeKey);
+  return value === "true";
 }
 
 /** 格式化token（jwt格式） */

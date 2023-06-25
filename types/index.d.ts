@@ -49,6 +49,12 @@ type TimeoutHandle = ReturnType<typeof setTimeout>;
 
 type IntervalHandle = ReturnType<typeof setInterval>;
 
+type ResponseData<T> = {
+  code: number;
+  msg: string;
+  data: T;
+};
+
 type Effect = "light" | "dark";
 
 interface ChangeEvent extends Event {

@@ -1,18 +1,23 @@
 import { http } from "@/utils/http";
 
-/** 可以做成泛型 */
-export type CaptchaResult = {
-  success: boolean;
-  data: CaptchaDTO;
-};
-
 export type CaptchaDTO = {
   /** 验证码开关 */
   isCaptchaOn: boolean;
-  /**  */
-  uuid: string;
-  /** `token` */
-  img: string;
+  /**  验证码的base64图片 */
+  captchaCodeImg: string;
+  /** 验证码对应的缓存key */
+  captchaCodeKey: string;
+};
+
+export type LoginByPasswordDTO = {
+  /** 用户名 */
+  username: string;
+  /**  密码 */
+  password: string;
+  /** 验证码 */
+  captchaCode: string;
+  /** 验证码对应的缓存key */
+  captchaCodeKey: string;
 };
 
 export type RefreshTokenResult = {
@@ -29,7 +34,12 @@ export type RefreshTokenResult = {
 
 /** 验证码接口 */
 export const getCaptchaCode = () => {
-  return http.request<CaptchaResult>("get", "/captchaImage");
+  return http.request<ResponseData<CaptchaDTO>>("get", "/captchaImage");
+};
+
+/** 登录接口 */
+export const loginByPassword = (data: LoginByPasswordDTO) => {
+  return http.request<ResponseData<any>>("post", "/login", { data });
 };
 
 /** 刷新token */
