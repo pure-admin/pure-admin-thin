@@ -38,7 +38,7 @@
     "axios": "^1.4.0",
     "dayjs": "^1.11.8",
     "echarts": "^5.4.2",
-    "element-plus": "^2.3.7",
+    "element-plus": "2.3.6",
     "js-cookie": "^3.0.5",
     "mitt": "^3.0.0",
     "mockjs": "^1.1.0",

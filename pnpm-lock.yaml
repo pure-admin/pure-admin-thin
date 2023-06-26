@@ -31,7 +31,7 @@ specifiers:
   cssnano: ^6.0.1
   dayjs: ^1.11.8
   echarts: ^5.4.2
-  element-plus: ^2.3.7
+  element-plus: 2.3.6
   eslint: ^8.43.0
   eslint-plugin-prettier: ^4.2.1
   eslint-plugin-vue: ^9.15.1
@@ -86,8 +86,8 @@ specifiers:
   vue-types: ^5.1.0
 
 dependencies:
-  "@pureadmin/descriptions": 1.1.1_element-plus@2.3.7
-  "@pureadmin/table": 2.3.2_element-plus@2.3.7
+  "@pureadmin/descriptions": 1.1.1_element-plus@2.3.6
+  "@pureadmin/table": 2.3.2_element-plus@2.3.6
   "@pureadmin/utils": 1.9.6_echarts@5.4.2+vue@3.3.4
   "@vueuse/core": 10.2.0_vue@3.3.4
   "@vueuse/motion": 2.0.0_vue@3.3.4
@@ -95,7 +95,7 @@ dependencies:
   axios: 1.4.0
   dayjs: 1.11.8
   echarts: 5.4.2
-  element-plus: 2.3.7_vue@3.3.4
+  element-plus: 2.3.6_vue@3.3.4
   js-cookie: 3.0.5
   mitt: 3.0.0
   mockjs: 1.1.0
@@ -1437,7 +1437,7 @@ packages:
     dev: true
     optional: true
 
-  /@pureadmin/descriptions/1.1.1_element-plus@2.3.7:
+  /@pureadmin/descriptions/1.1.1_element-plus@2.3.6:
     resolution:
       {
         integrity: sha512-4BHLKomLU/LxGs5EUA+h+aKNrJEkhrU6+QE8VoWfJZ8VTU6ddvFLT/Pi4WuO5CWNXM9ZjqvHLFFVwEPlKntqtg==
@@ -1446,11 +1446,11 @@ packages:
       element-plus: ^2.0.0
     dependencies:
       "@element-plus/icons-vue": 2.1.0_vue@3.3.4
-      element-plus: 2.3.7_vue@3.3.4
+      element-plus: 2.3.6_vue@3.3.4
       vue: 3.3.4
     dev: false
 
-  /@pureadmin/table/2.3.2_element-plus@2.3.7:
+  /@pureadmin/table/2.3.2_element-plus@2.3.6:
     resolution:
       {
         integrity: sha512-oaMf8X4bv5KPcO4li+bO7W28BS5IMy+zxPpPNh/Tdxewc2dykvoqqpRIAiS8prJOHxI42/77xbjoGb+lwQH5aA==
@@ -1458,7 +1458,7 @@ packages:
     peerDependencies:
       element-plus: ^2.0.0
     dependencies:
-      element-plus: 2.3.7_vue@3.3.4
+      element-plus: 2.3.6_vue@3.3.4
       vue: 3.3.4
     dev: false
 
@@ -3660,10 +3660,10 @@ packages:
         integrity: sha512-r6dCgNpRhPwiWlxbHzZQ/d9swfPaEJGi8ekqRBwQYaR3WmA5VkqQfBWSDDjuJU1ntO+W9tHx8OHV/96Q8e0dVw==
       }
 
-  /element-plus/2.3.7_vue@3.3.4:
+  /element-plus/2.3.6_vue@3.3.4:
     resolution:
       {
-        integrity: sha512-h6TxclbaLUJxg/Bv5j/ZKsK+K5yadQliw5+R30HWyE69pXlqXTX24oYx+yw3pA4Dy+lqEDi5501FQ0CORk3OSA==
+        integrity: sha512-GLz0pXUYI2zRfIgyI6W7SWmHk6dSEikP9yR++hsQUyy63+WjutoiGpA3SZD4cGPSXUzRFeKfVr8CnYhK5LqXZw==
       }
     peerDependencies:
       vue: ^3.2.0
