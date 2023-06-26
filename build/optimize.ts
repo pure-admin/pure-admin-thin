@@ -12,6 +12,7 @@ const include = [
   "pinia",
   "js-cookie",
   "sortablejs",
+  "pinyin-pro",
   "@vueuse/core",
   "@pureadmin/utils",
   "responsive-storage"
