@@ -31,7 +31,9 @@ import {
   getIsRememberMe,
   savePassword,
   getPassword,
-  removePassword
+  removePassword,
+  setToken,
+  DataInfo
 } from "@/utils/auth";
 
 import dayIcon from "@/assets/svg/day.svg?component";
@@ -81,6 +83,13 @@ const onLogin = async (formEl: FormInstance | undefined) => {
         captchaCodeKey: ruleForm.captchaCodeKey
       }).then(res => {
         if (res.code === 0) {
+          // 登录成功后 将token存储到sessionStorage中
+          const tokenData: DataInfo<Number> = {
+            accessToken: res.data.token,
+            expires: undefined,
+            refreshToken: ""
+          };
+          setToken(tokenData);
           // 获取后端路由
           initRouter().then(() => {
             router.push(getTopMenu(true).path);
