@@ -1,12 +1,15 @@
 import { http } from "@/utils/http";
 
 export type CaptchaDTO = {
-  /** 验证码开关 */
-  isCaptchaOn: boolean;
   /**  验证码的base64图片 */
   captchaCodeImg: string;
   /** 验证码对应的缓存key */
   captchaCodeKey: string;
+};
+
+export type ConfigDTO = {
+  /** 验证码开关 */
+  isCaptchaOn: boolean;
 };
 
 export type LoginByPasswordDTO = {
@@ -30,6 +33,11 @@ export type RefreshTokenResult = {
     /** `accessToken`的过期时间（格式'xxxx/xx/xx xx:xx:xx'） */
     expires: Date;
   };
+};
+
+/** 获取系统配置接口 */
+export const getConfig = () => {
+  return http.request<ResponseData<ConfigDTO>>("get", "/getConfig");
 };
 
 /** 验证码接口 */

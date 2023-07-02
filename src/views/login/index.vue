@@ -48,6 +48,7 @@ defineOptions({
 
 // TODO 当请求验证码过于频繁的话  服务器会报错  但是前端没有反应 这块需要处理一下, 通过axios处理一下
 const captchaCodeBase64 = ref("");
+
 const isCaptchaOn = ref(false);
 
 const router = useRouter();
@@ -116,10 +117,8 @@ function onkeypress({ code }: KeyboardEvent) {
 
 async function getCaptchaCode() {
   await CommonAPI.getCaptchaCode().then(res => {
-    isCaptchaOn.value = res.data.isCaptchaOn;
     captchaCodeBase64.value = `data:image/gif;base64,${res.data.captchaCodeImg}`;
     ruleForm.captchaCodeKey = res.data.captchaCodeKey;
-    console.log(ruleForm);
   });
 }
 
@@ -130,8 +129,15 @@ watch(isRememberMe, newVal => {
   }
 });
 
-onBeforeMount(() => {
-  getCaptchaCode();
+onBeforeMount(async () => {
+  await CommonAPI.getConfig().then(res => {
+    isCaptchaOn.value = res.data.isCaptchaOn;
+  });
+
+  if (isCaptchaOn.value) {
+    getCaptchaCode();
+  }
+
   isRememberMe.value = getIsRememberMe();
   if (isRememberMe.value) {
     ruleForm.password = getPassword();
@@ -140,7 +146,6 @@ onBeforeMount(() => {
 
 onMounted(() => {
   window.document.addEventListener("keypress", onkeypress);
-  getCaptchaCode();
 });
 
 onBeforeUnmount(() => {
