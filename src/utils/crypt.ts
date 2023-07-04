@@ -8,10 +8,19 @@ const publicKey =
   "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCh6HkK+rCM37FAzCHVythTc6pxvr551K07CRhdX/NjCddHAuQMOd/57R5fiIwgVNEfCsD1cIyS6A8IWj4DtJLR2t29JehPpqiFSJ4hNtDcLNxNJiYRcCQvyMQeyQIPE5Ljc35c72YwDtQAsIJChsauyLrc+E6HC3gn1JDm18HNXwIDAQAB";
 
 // 加密
-export function rsaEncrypt(txt) {
+export function rsaEncrypt(txt): string {
   const encryptor = new JSEncrypt();
-  encryptor.setPublicKey(publicKey); // 设置公钥
-  return encryptor.encrypt(txt); // 对数据进行加密
+  // 设置公钥
+  encryptor.setPublicKey(publicKey);
+  // 对数据进行加密
+  const encryptedValue = encryptor.encrypt(txt);
+
+  // Check if the encrypted value is a boolean
+  if (typeof encryptedValue === "boolean") {
+    throw new Error("Encryption failed: Encrypted value returned a boolean");
+  }
+
+  return encryptedValue;
 }
 
 const aesKey = "agileboot1234567";

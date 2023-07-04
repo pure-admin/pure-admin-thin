@@ -10,6 +10,8 @@ export type CaptchaDTO = {
 export type ConfigDTO = {
   /** 验证码开关 */
   isCaptchaOn: boolean;
+  /** 系统字典配置（下拉选项之类的） */
+  dictTypes: Map<String, Array<DictionaryData>>;
 };
 
 export type LoginByPasswordDTO = {
@@ -23,16 +25,26 @@ export type LoginByPasswordDTO = {
   captchaCodeKey: string;
 };
 
-export type RefreshTokenResult = {
-  success: boolean;
-  data: {
-    /** `token` */
-    accessToken: string;
-    /** 用于调用刷新`accessToken`的接口时所需的`token` */
-    refreshToken: string;
-    /** `accessToken`的过期时间（格式'xxxx/xx/xx xx:xx:xx'） */
-    expires: Date;
-  };
+/**
+ * 后端token实现
+ */
+export type TokenDTO = {
+  /** token */
+  token: string;
+  /** 当前登录的用户 */
+  currentUser: CurrentLoginUserDTO;
+};
+
+export type CurrentLoginUserDTO = {
+  userInfo: any;
+  roleKey: string;
+  permissions: Set<string>;
+};
+
+export type DictionaryData = {
+  label: string;
+  value: Number;
+  cssTag: string;
 };
 
 /** 获取系统配置接口 */
@@ -47,10 +59,5 @@ export const getCaptchaCode = () => {
 
 /** 登录接口 */
 export const loginByPassword = (data: LoginByPasswordDTO) => {
-  return http.request<ResponseData<any>>("post", "/login", { data });
-};
-
-/** 刷新token */
-export const refreshTokenApi = (data?: object) => {
-  return http.request<RefreshTokenResult>("post", "/refreshToken", { data });
+  return http.request<ResponseData<TokenDTO>>("post", "/login", { data });
 };

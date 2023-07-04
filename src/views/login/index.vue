@@ -31,9 +31,7 @@ import {
   getIsRememberMe,
   savePassword,
   getPassword,
-  removePassword,
-  setToken,
-  DataInfo
+  removePassword
 } from "@/utils/auth";
 
 import dayIcon from "@/assets/svg/day.svg?component";
@@ -41,6 +39,7 @@ import darkIcon from "@/assets/svg/dark.svg?component";
 import Lock from "@iconify-icons/ri/lock-fill";
 import User from "@iconify-icons/ri/user-3-fill";
 import * as CommonAPI from "@/api/common";
+import { setTokenFromBackend } from "../../utils/auth";
 
 defineOptions({
   name: "Login"
@@ -85,12 +84,7 @@ const onLogin = async (formEl: FormInstance | undefined) => {
       }).then(res => {
         if (res.code === 0) {
           // 登录成功后 将token存储到sessionStorage中
-          const tokenData: DataInfo<Number> = {
-            accessToken: res.data.token,
-            expires: undefined,
-            refreshToken: ""
-          };
-          setToken(tokenData);
+          setTokenFromBackend(res.data);
           // 获取后端路由
           initRouter().then(() => {
             router.push(getTopMenu(true).path);
