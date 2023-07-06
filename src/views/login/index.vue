@@ -81,18 +81,16 @@ const onLogin = async (formEl: FormInstance | undefined) => {
         password: rsaEncrypt(ruleForm.password),
         captchaCode: ruleForm.captchaCode,
         captchaCodeKey: ruleForm.captchaCodeKey
-      }).then(res => {
-        if (res.code === 0) {
-          // 登录成功后 将token存储到sessionStorage中
-          setTokenFromBackend(res.data);
-          // 获取后端路由
-          initRouter().then(() => {
-            router.push(getTopMenu(true).path);
-            message("登录成功", { type: "success" });
-          });
-          if (isRememberMe.value) {
-            savePassword(ruleForm.password);
-          }
+      }).then(({ data }) => {
+        // 登录成功后 将token存储到sessionStorage中
+        setTokenFromBackend(data);
+        // 获取后端路由
+        initRouter().then(() => {
+          router.push(getTopMenu(true).path);
+          message("登录成功", { type: "success" });
+        });
+        if (isRememberMe.value) {
+          savePassword(ruleForm.password);
         }
       });
     } else {

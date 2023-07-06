@@ -36,7 +36,7 @@ export type TokenDTO = {
 };
 
 export type CurrentLoginUserDTO = {
-  userInfo: any;
+  user: any;
   roleKey: string;
   permissions: Set<string>;
 };

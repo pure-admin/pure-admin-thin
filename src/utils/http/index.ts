@@ -12,6 +12,7 @@ import {
 import { stringify } from "qs";
 import NProgress from "../progress";
 import { getToken, formatToken } from "@/utils/auth";
+import { message } from "../message";
 
 const { VITE_APP_BASE_API } = import.meta.env;
 // 相关配置请参考：www.axios-js.com/zh-cn/docs/#axios-request-config-1
@@ -100,6 +101,9 @@ class PureHttp {
     const instance = PureHttp.axiosInstance;
     instance.interceptors.response.use(
       (response: PureHttpResponse) => {
+        if (response.data.code !== 0) {
+          message(response.data.msg, { type: "error" });
+        }
         const $config = response.config;
         // 关闭进度条动画
         NProgress.done();
@@ -147,7 +151,15 @@ class PureHttp {
           resolve(response);
         })
         .catch(error => {
-          reject(error);
+          if (error.response.status >= 500) {
+            message("网络异常", { type: "error" });
+          }
+
+          if (error.response.status >= 400 && error.response.status < 500) {
+            message("请求接口不存在", { type: "error" });
+          }
+
+          reject(error.response.statusText);
         });
     });
   }
