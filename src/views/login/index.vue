@@ -81,18 +81,22 @@ const onLogin = async (formEl: FormInstance | undefined) => {
         password: rsaEncrypt(ruleForm.password),
         captchaCode: ruleForm.captchaCode,
         captchaCodeKey: ruleForm.captchaCodeKey
-      }).then(({ data }) => {
-        // 登录成功后 将token存储到sessionStorage中
-        setTokenFromBackend(data);
-        // 获取后端路由
-        initRouter().then(() => {
-          router.push(getTopMenu(true).path);
-          message("登录成功", { type: "success" });
+      })
+        .then(({ data }) => {
+          // 登录成功后 将token存储到sessionStorage中
+          setTokenFromBackend(data);
+          // 获取后端路由
+          initRouter().then(() => {
+            router.push(getTopMenu(true).path);
+            message("登录成功", { type: "success" });
+          });
+          if (isRememberMe.value) {
+            savePassword(ruleForm.password);
+          }
+        })
+        .catch(() => {
+          loading.value = false;
         });
-        if (isRememberMe.value) {
-          savePassword(ruleForm.password);
-        }
-      });
     } else {
       loading.value = false;
       return fields;
@@ -221,13 +225,19 @@ onBeforeUnmount(() => {
                   :prefix-icon="useRenderIcon('ri:shield-keyhole-line')"
                 >
                   <template v-slot:append>
-                    <img
-                      width="120"
-                      height="40"
-                      class="cursor-pointer"
+                    <el-image
+                      style="
+                        justify-content: center;
+                        width: 120px;
+                        height: 40px;
+                      "
                       :src="captchaCodeBase64"
                       @click="getCaptchaCode"
-                    />
+                    >
+                      <template #error>
+                        <span>Loading</span>
+                      </template>
+                    </el-image>
                   </template>
                 </el-input>
               </el-form-item>

@@ -13,6 +13,10 @@ import { stringify } from "qs";
 import NProgress from "../progress";
 import { getToken, formatToken } from "@/utils/auth";
 import { message } from "../message";
+import { ElMessageBox } from "element-plus";
+import { router } from "@/router";
+import { removeToken } from "@/utils/auth";
+// console.log("Utils:" + router);
 
 const { VITE_APP_BASE_API } = import.meta.env;
 // 相关配置请参考：www.axios-js.com/zh-cn/docs/#axios-request-config-1
@@ -101,9 +105,32 @@ class PureHttp {
     const instance = PureHttp.axiosInstance;
     instance.interceptors.response.use(
       (response: PureHttpResponse) => {
+        // 请求返回失败时，有业务错误时，弹出错误提示
         if (response.data.code !== 0) {
-          message(response.data.msg, { type: "error" });
+          // token失效时弹出过期提示
+          if (response.data.code === 20101) {
+            ElMessageBox.confirm(
+              "登录状态已过期，您可以继续留在该页面，或者重新登录",
+              "系统提示",
+              {
+                confirmButtonText: "重新登录",
+                cancelButtonText: "取消",
+                type: "warning"
+              }
+            )
+              .then(() => {
+                removeToken();
+                router.push("/login");
+              })
+              .catch(() => {
+                message("取消重新登录", { type: "info" });
+              });
+          } else {
+            // 其余情况弹出错误提示框
+            message(response.data.msg, { type: "error" });
+          }
         }
+
         const $config = response.config;
         // 关闭进度条动画
         NProgress.done();
@@ -151,15 +178,20 @@ class PureHttp {
           resolve(response);
         })
         .catch(error => {
-          if (error.response.status >= 500) {
+          // 某些情况网络失效，此时直接进入error流程，所以在这边也进行拦截
+          if (error.response && error.response.status >= 500) {
             message("网络异常", { type: "error" });
           }
 
-          if (error.response.status >= 400 && error.response.status < 500) {
+          if (
+            error.response &&
+            error.response.status >= 400 &&
+            error.response.status < 500
+          ) {
             message("请求接口不存在", { type: "error" });
           }
 
-          reject(error.response.statusText);
+          reject(error);
         });
     });
   }

@@ -36,7 +36,7 @@ export type TokenDTO = {
 };
 
 export type CurrentLoginUserDTO = {
-  user: any;
+  userInfo: any;
   roleKey: string;
   permissions: Set<string>;
 };
@@ -60,4 +60,9 @@ export const getCaptchaCode = () => {
 /** 登录接口 */
 export const loginByPassword = (data: LoginByPasswordDTO) => {
   return http.request<ResponseData<TokenDTO>>("post", "/login", { data });
+};
+
+/** 获取当前登录用户接口 */
+export const getLoginUserInfo = () => {
+  return http.request<ResponseData<TokenDTO>>("get", "/getLoginUserInfo");
 };

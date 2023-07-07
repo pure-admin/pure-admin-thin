@@ -30,7 +30,7 @@ export function getToken(): TokenDTO {
   // 此处与`TokenKey`相同，此写法解决初始化时`Cookies`中不存在`TokenKey`报错
   return Cookies.get(tokenKey)
     ? JSON.parse(Cookies.get(tokenKey))
-    : storageSession().getItem<TokenDTO>(sessionKey).token;
+    : storageSession().getItem<TokenDTO>(sessionKey)?.token;
 }
 
 /**
