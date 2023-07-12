@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import { useNoticeHook } from "./utils/hook";
+import { useRole } from "./utils/hook";
 import { PureTableBar } from "@/components/RePureTableBar";
 import { useRenderIcon } from "@/components/ReIcon/src/hooks";
 
@@ -10,122 +10,104 @@ import Delete from "@iconify-icons/ep/delete";
 import EditPen from "@iconify-icons/ep/edit-pen";
 import Search from "@iconify-icons/ep/search";
 import Refresh from "@iconify-icons/ep/refresh";
+import Menu from "@iconify-icons/ep/menu";
 import AddFill from "@iconify-icons/ri/add-circle-line";
-import { useUserStoreHook } from "@/store/modules/user";
 
-/** 组件name最好和菜单表中的router_name一致 */
 defineOptions({
-  name: "SystemNotice"
+  name: "Role"
 });
 
-const sys_notice_type = useUserStoreHook().dictionaryList["sys_notice_type"];
-const tableRef = ref();
-
-const searchFormRef = ref();
+const formRef = ref();
 const {
-  searchFormParams,
-  pageLoading,
+  form,
+  loading,
   columns,
   dataList,
   pagination,
+  // buttonClass,
   onSearch,
   resetForm,
   openDialog,
+  handleMenu,
   handleDelete,
+  // handleDatabase,
   handleSizeChange,
   handleCurrentChange,
-  handleSortChange,
-  handleSelectionChange,
-  handleBulkDelete
-} = useNoticeHook();
+  handleSelectionChange
+} = useRole();
 </script>
 
 <template>
   <div class="main">
-    <!-- 搜索栏 -->
     <el-form
-      ref="searchFormRef"
+      ref="formRef"
       :inline="true"
-      :model="searchFormParams"
+      :model="form"
       class="search-form bg-bg_color w-[99/100] pl-8 pt-[12px]"
     >
-      <el-form-item label="公告标题：" prop="noticeTitle">
+      <el-form-item label="角色名称：" prop="name">
         <el-input
-          v-model="searchFormParams.noticeTitle"
-          placeholder="请输入公告标题"
+          v-model="form.name"
+          placeholder="请输入角色名称"
           clearable
           class="!w-[200px]"
         />
       </el-form-item>
-
-      <el-form-item label="公告类型：" prop="noticeType">
+      <el-form-item label="角色标识：" prop="code">
+        <el-input
+          v-model="form.code"
+          placeholder="请输入角色标识"
+          clearable
+          class="!w-[180px]"
+        />
+      </el-form-item>
+      <el-form-item label="状态：" prop="status">
         <el-select
-          v-model="searchFormParams.noticeType"
+          v-model="form.status"
           placeholder="请选择状态"
           clearable
           class="!w-[180px]"
         >
-          <el-option
-            v-for="dict in sys_notice_type"
-            :key="dict.value"
-            :label="dict.label"
-            :value="dict.value"
-          />
+          <el-option label="已启用" value="1" />
+          <el-option label="已停用" value="0" />
         </el-select>
-      </el-form-item>
-      <el-form-item label="创建者：" prop="creatorName">
-        <el-input
-          v-model="searchFormParams.creatorName"
-          placeholder="请输入创建者"
-          clearable
-          class="!w-[180px]"
-        />
       </el-form-item>
       <el-form-item>
         <el-button
           type="primary"
           :icon="useRenderIcon(Search)"
-          :loading="pageLoading"
+          :loading="loading"
           @click="onSearch"
         >
           搜索
         </el-button>
-        <el-button
-          :icon="useRenderIcon(Refresh)"
-          @click="resetForm(searchFormRef)"
-        >
+        <el-button :icon="useRenderIcon(Refresh)" @click="resetForm(formRef)">
           重置
         </el-button>
       </el-form-item>
     </el-form>
 
-    <!-- table bar 包裹  table -->
-    <PureTableBar title="通知列表" :columns="columns" @refresh="onSearch">
-      <!-- 表格操作栏 -->
+    <PureTableBar
+      title="角色列表（仅演示，操作后不生效）"
+      :columns="columns"
+      @refresh="onSearch"
+    >
       <template #buttons>
         <el-button
           type="primary"
           :icon="useRenderIcon(AddFill)"
           @click="openDialog()"
         >
-          添加公告
-        </el-button>
-        <el-button
-          type="danger"
-          :icon="useRenderIcon(Delete)"
-          @click="handleBulkDelete(tableRef)"
-        >
-          批量删除
+          新增角色
         </el-button>
       </template>
       <template v-slot="{ size, dynamicColumns }">
         <pure-table
           border
-          ref="tableRef"
           align-whole="center"
           showOverflowTooltip
           table-layout="auto"
-          :loading="pageLoading"
+          :loading="loading"
           :size="size"
           adaptive
           :data="dataList"
@@ -136,10 +118,9 @@ const {
             background: 'var(--el-table-row-hover-bg-color)',
             color: 'var(--el-text-color-primary)'
           }"
+          @selection-change="handleSelectionChange"
           @page-size-change="handleSizeChange"
           @page-current-change="handleCurrentChange"
-          @sort-change="handleSortChange"
-          @selection-change="handleSelectionChange"
         >
           <template #operation="{ row }">
             <el-button
@@ -152,15 +133,25 @@ const {
             >
               修改
             </el-button>
+            <el-button
+              class="reset-margin"
+              link
+              type="primary"
+              :size="size"
+              :icon="useRenderIcon(Menu)"
+              @click="handleMenu"
+            >
+              菜单权限
+            </el-button>
             <el-popconfirm
-              :title="`是否确认删除编号为${row.noticeId}的这条数据`"
+              :title="`是否确认删除角色名称为${row.name}的这条数据`"
               @confirm="handleDelete(row)"
             >
               <template #reference>
                 <el-button
                   class="reset-margin"
                   link
-                  type="danger"
+                  type="primary"
                   :size="size"
                   :icon="useRenderIcon(Delete)"
                 >
@@ -168,6 +159,43 @@ const {
                 </el-button>
               </template>
             </el-popconfirm>
+            <!-- <el-dropdown>
+              <el-button
+                class="ml-3 mt-[2px]"
+                link
+                type="primary"
+                :size="size"
+                :icon="useRenderIcon(More)"
+              />
+              <template #dropdown>
+                <el-dropdown-menu>
+                  <el-dropdown-item>
+                    <el-button
+                      :class="buttonClass"
+                      link
+                      type="primary"
+                      :size="size"
+                      :icon="useRenderIcon(Menu)"
+                      @click="handleMenu"
+                    >
+                      菜单权限
+                    </el-button>
+                  </el-dropdown-item>
+                  <el-dropdown-item>
+                    <el-button
+                      :class="buttonClass"
+                      link
+                      type="primary"
+                      :size="size"
+                      :icon="useRenderIcon(Database)"
+                      @click="handleDatabase"
+                    >
+                      数据权限
+                    </el-button>
+                  </el-dropdown-item>
+                </el-dropdown-menu>
+              </template>
+            </el-dropdown> -->
           </template>
         </pure-table>
       </template>

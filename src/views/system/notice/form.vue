@@ -2,52 +2,81 @@
 import { ref } from "vue";
 import { formRules } from "./utils/rule";
 import { FormProps } from "./utils/types";
+import { useUserStoreHook } from "@/store/modules/user";
 
+/** TODO 有其他方式  来换掉这个props 父子组件传值吗？ */
 const props = withDefaults(defineProps<FormProps>(), {
   formInline: () => ({
-    name: "",
-    code: "",
-    remark: ""
+    noticeTitle: "",
+    noticeType: "",
+    status: "",
+    noticeContent: ""
   })
 });
 
-const ruleFormRef = ref();
-const newFormInline = ref(props.formInline);
+const noticeData = ref(props.formInline);
 
-function getRef() {
-  return ruleFormRef.value;
+const formRuleRef = ref();
+
+function getFormRuleRef() {
+  return formRuleRef.value;
 }
 
-defineExpose({ getRef });
+defineExpose({ getFormRuleRef });
 </script>
 
 <template>
   <el-form
-    ref="ruleFormRef"
-    :model="newFormInline"
+    ref="formRuleRef"
+    :model="noticeData"
     :rules="formRules"
     label-width="82px"
   >
-    <el-form-item label="角色名称" prop="name">
+    <el-form-item label="公告标题" prop="noticeTitle">
       <el-input
-        v-model="newFormInline.name"
+        v-model="noticeData.noticeTitle"
         clearable
-        placeholder="请输入角色名称"
+        placeholder="请输入公告标题"
       />
     </el-form-item>
 
-    <el-form-item label="角色标识" prop="code">
-      <el-input
-        v-model="newFormInline.code"
+    <el-form-item label="公告类型" prop="noticeType">
+      <el-select
+        v-model="noticeData.noticeType"
+        placeholder="请选择类型"
         clearable
-        placeholder="请输入角色标识"
-      />
+        class="!w-[180px]"
+      >
+        <el-option
+          v-for="dict in useUserStoreHook().dictionaryList['sys_notice_type']"
+          :key="dict.value"
+          :label="dict.label"
+          :value="dict.value"
+        />
+      </el-select>
+    </el-form-item>
+    <el-form-item label="公告类型" prop="status">
+      <el-select
+        v-model="noticeData.status"
+        placeholder="请选择状态"
+        clearable
+        class="!w-[180px]"
+      >
+        <el-option
+          v-for="dict in useUserStoreHook().dictionaryList['sys_notice_status']"
+          :key="dict.value"
+          :label="dict.label"
+          :value="dict.value"
+        />
+      </el-select>
     </el-form-item>
 
-    <el-form-item label="备注">
+    <el-form-item label="公告内容" prop="noticeContent">
       <el-input
-        v-model="newFormInline.remark"
-        placeholder="请输入备注信息"
+        v-model="noticeData.noticeContent"
+        clearable
+        placeholder="请输入公告内容"
+        rows="6"
         type="textarea"
       />
     </el-form-item>

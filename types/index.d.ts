@@ -55,6 +55,16 @@ type ResponseData<T> = {
   data: T;
 };
 
+type PageDTO<T> = {
+  total: number;
+  rows: Array<T>;
+};
+
+interface BasePageQuery {
+  pageNumber?: number;
+  pageSize?: number;
+}
+
 type Effect = "light" | "dark";
 
 interface ChangeEvent extends Event {

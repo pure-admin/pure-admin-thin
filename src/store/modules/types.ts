@@ -1,4 +1,5 @@
 import { RouteRecordName } from "vue-router";
+import { DictionaryData } from "../../api/common";
 
 export type cacheType = {
   mode: string;
@@ -38,4 +39,8 @@ export type setType = {
 export type userType = {
   username?: string;
   roles?: Array<string>;
+  /** 字典ListMap 用于下拉框直接展示 */
+  dictionaryList: Map<String, Array<DictionaryData>>;
+  /** 字典MapMap 用于匹配值展示 */
+  dictionaryMap: Map<String, Map<String, DictionaryData>>;
 };

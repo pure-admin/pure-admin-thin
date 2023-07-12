@@ -1,15 +1,17 @@
-// 虽然字段很少 但是抽离出来 后续有扩展字段需求就很方便了
-
-interface FormItemProps {
-  /** 角色名称 */
-  name: string;
+interface AddNoticeRequest {
+  noticeId?: number;
+  /** 公告标题 */
+  noticeTitle: string;
   /** 角色编号 */
-  code: string;
+  noticeType: string;
   /** 备注 */
-  remark: string;
-}
-interface FormProps {
-  formInline: FormItemProps;
+  status: string;
+  /** 备注 */
+  noticeContent: string;
 }
 
-export type { FormItemProps, FormProps };
+interface FormProps {
+  formInline: AddNoticeRequest;
+}
+
+export type { AddNoticeRequest, FormProps };

@@ -1,74 +1,104 @@
 import dayjs from "dayjs";
 import editForm from "../form.vue";
 import { message } from "@/utils/message";
-import { getRoleList } from "@/api/system";
-import { ElMessageBox } from "element-plus";
-import { usePublicHooks } from "../../hooks";
+import { getSystemNoticeListApi } from "@/api/system";
 import { addDialog } from "@/components/ReDialog";
-import { type FormItemProps } from "../utils/types";
+import { ElMessageBox } from "element-plus";
+import { AddNoticeRequest } from "../utils/types";
 import { type PaginationProps } from "@pureadmin/table";
+import {
+  addSystemNoticeApi,
+  updateSystemNoticeApi,
+  deleteSystemNoticeApi,
+  SystemNoticeRequest
+} from "@/api/system";
 import { reactive, ref, onMounted, h, toRaw } from "vue";
+import { useUserStoreHook } from "@/store/modules/user";
 
-export function useRole() {
-  const form = reactive({
-    name: "",
-    code: "",
-    status: ""
-  });
-  const formRef = ref();
-  const dataList = ref([]);
-  const loading = ref(true);
-  const switchLoadMap = ref({});
-  const { switchStyle } = usePublicHooks();
+const sysNoticeTypeMap = useUserStoreHook().dictionaryMap["sys_notice_type"];
+const sysNoticeStatusMap =
+  useUserStoreHook().dictionaryMap["sys_notice_status"];
+
+export function useNoticeHook() {
   const pagination = reactive<PaginationProps>({
     total: 0,
     pageSize: 10,
     currentPage: 1,
     background: true
   });
+
+  const searchFormParams = reactive({
+    noticeTitle: "",
+    noticeType: "",
+    creatorName: "",
+    pageNum: pagination.currentPage,
+    pageSize: pagination.pageSize,
+    orderColumn: "createTime",
+    orderDirection: "descending"
+  });
+  const formRef = ref();
+  const dataList = ref([]);
+  const pageLoading = ref(true);
+  const multipleSelection = ref([]);
+
   const columns: TableColumnList = [
     {
-      label: "角色编号",
-      prop: "id",
+      type: "selection",
+      align: "left"
+    },
+    {
+      label: "通知编号",
+      prop: "noticeId",
       minWidth: 100
     },
     {
-      label: "角色名称",
-      prop: "name",
+      label: "通知标题",
+      prop: "noticeTitle",
       minWidth: 120
     },
     {
-      label: "角色标识",
-      prop: "code",
-      minWidth: 150
-    },
-    {
-      label: "状态",
-      minWidth: 130,
-      cellRenderer: scope => (
-        <el-switch
-          size={scope.props.size === "small" ? "small" : "default"}
-          loading={switchLoadMap.value[scope.index]?.loading}
-          v-model={scope.row.status}
-          active-value={1}
-          inactive-value={0}
-          active-text="已启用"
-          inactive-text="已停用"
-          inline-prompt
-          style={switchStyle.value}
-          onChange={() => onChange(scope as any)}
-        />
+      label: "通知类型",
+      prop: "noticeType",
+      minWidth: 120,
+      cellRenderer: ({ row, props }) => (
+        <el-tag
+          size={props.size}
+          type={sysNoticeTypeMap[row.noticeType].cssTag}
+          effect="plain"
+        >
+          {sysNoticeTypeMap[row.noticeType].label}
+        </el-tag>
       )
     },
     {
-      label: "备注",
-      prop: "remark",
+      label: "状态",
+      prop: "status",
+      minWidth: 120,
+      cellRenderer: ({ row, props }) => (
+        <el-tag
+          size={props.size}
+          type={sysNoticeStatusMap[row.status].cssTag}
+          effect="plain"
+        >
+          {sysNoticeStatusMap[row.status].label}
+        </el-tag>
+      )
+    },
+    {
+      label: "通知详情",
+      prop: "noticeContent",
       minWidth: 150
+    },
+    {
+      label: "创建者",
+      prop: "creatorName",
+      minWidth: 120
     },
     {
       label: "创建时间",
       minWidth: 180,
       prop: "createTime",
+      sortable: "custom",
       formatter: ({ createTime }) =>
         dayjs(createTime).format("YYYY-MM-DD HH:mm:ss")
     },
@@ -79,23 +109,23 @@ export function useRole() {
       slot: "operation"
     }
   ];
-  // const buttonClass = computed(() => {
-  //   return [
-  //     "!h-[20px]",
-  //     "reset-margin",
-  //     "!text-gray-500",
-  //     "dark:!text-white",
-  //     "dark:hover:!text-primary"
-  //   ];
-  // });
 
-  function onChange({ row, index }) {
+  async function handleDelete(row) {
+    await deleteSystemNoticeApi([row.noticeId]).then(() => {
+      message(`您删除了通知标题为${row.name}的这条数据`, { type: "success" });
+      // 刷新列表
+      onSearch();
+    });
+  }
+
+  async function handleBulkDelete(tableRef) {
+    if (multipleSelection.value.length === 0) {
+      message("请选择需要删除的数据", { type: "warning" });
+      return;
+    }
+
     ElMessageBox.confirm(
-      `确认要<strong>${
-        row.status === 0 ? "停用" : "启用"
-      }</strong><strong style='color:var(--el-color-primary)'>${
-        row.name
-      }</strong>吗?`,
+      `确认要<strong>删除</strong>编号为<strong style='color:var(--el-color-primary)'>[ ${multipleSelection.value} ]</strong>的通知吗?`,
       "系统提示",
       {
         confirmButtonText: "确定",
@@ -105,59 +135,81 @@ export function useRole() {
         draggable: true
       }
     )
-      .then(() => {
-        switchLoadMap.value[index] = Object.assign(
-          {},
-          switchLoadMap.value[index],
-          {
-            loading: true
-          }
-        );
-        setTimeout(() => {
-          switchLoadMap.value[index] = Object.assign(
-            {},
-            switchLoadMap.value[index],
-            {
-              loading: false
-            }
-          );
-          message(`已${row.status === 0 ? "停用" : "启用"}${row.name}`, {
+      .then(async () => {
+        await deleteSystemNoticeApi(multipleSelection.value).then(() => {
+          message(`您删除了通知编号为[ ${multipleSelection.value} ]的条数据`, {
             type: "success"
           });
-        }, 300);
+          // 刷新列表
+          onSearch();
+        });
       })
       .catch(() => {
-        row.status === 0 ? (row.status = 1) : (row.status = 0);
+        message("取消删除", {
+          type: "info"
+        });
+        tableRef.getTableRef().clearSelection();
       });
   }
 
-  function handleDelete(row) {
-    message(`您删除了角色名称为${row.name}的这条数据`, { type: "success" });
+  function handleSortChange(sort) {
+    searchFormParams.pageNum = 1;
+    searchFormParams.orderColumn = sort.prop;
+    searchFormParams.orderDirection = sort.order;
     onSearch();
   }
 
+  function handleSelectionChange(rows) {
+    multipleSelection.value = rows.map(item => item.noticeId);
+  }
+
+  async function handleAdd(row, done) {
+    await addSystemNoticeApi(row as SystemNoticeRequest).then(() => {
+      message(`您新增了通知标题为${row.noticeTitle}的这条数据`, {
+        type: "success"
+      });
+      // 关闭弹框
+      done();
+      // 刷新列表
+      onSearch();
+    });
+  }
+
+  async function handleUpdate(row, done) {
+    await updateSystemNoticeApi(row as SystemNoticeRequest).then(() => {
+      message(`您新增了通知标题为${row.noticeTitle}的这条数据`, {
+        type: "success"
+      });
+      // 关闭弹框
+      done();
+      // 刷新列表
+      onSearch();
+    });
+  }
+
   function handleSizeChange(val: number) {
-    console.log(`${val} items per page`);
+    pagination.currentPage = 1;
+    pagination.pageSize = val;
+    searchFormParams.pageNum = pagination.currentPage;
+    searchFormParams.pageSize = pagination.pageSize;
+    onSearch();
   }
 
   function handleCurrentChange(val: number) {
-    console.log(`current page: ${val}`);
-  }
-
-  function handleSelectionChange(val) {
-    console.log("handleSelectionChange", val);
+    pagination.currentPage = val;
+    searchFormParams.pageNum = pagination.currentPage;
+    onSearch();
   }
 
   async function onSearch() {
-    loading.value = true;
-    const { data } = await getRoleList(toRaw(form));
-    dataList.value = data.list;
+    pageLoading.value = true;
+    const { data } = await getSystemNoticeListApi(toRaw(searchFormParams));
+
+    dataList.value = data.rows;
     pagination.total = data.total;
-    pagination.pageSize = data.pageSize;
-    pagination.currentPage = data.currentPage;
 
     setTimeout(() => {
-      loading.value = false;
+      pageLoading.value = false;
     }, 500);
   }
 
@@ -167,14 +219,15 @@ export function useRole() {
     onSearch();
   };
 
-  function openDialog(title = "新增", row?: FormItemProps) {
+  function openDialog(title = "新增", row?: AddNoticeRequest) {
     addDialog({
-      title: `${title}角色`,
+      title: `${title}公告`,
       props: {
         formInline: {
-          name: row?.name ?? "",
-          code: row?.code ?? "",
-          remark: row?.remark ?? ""
+          noticeTitle: row?.noticeTitle ?? "",
+          noticeType: row?.noticeType ?? "",
+          status: row?.status ?? "",
+          noticeContent: row?.noticeContent ?? ""
         }
       },
       width: "40%",
@@ -183,25 +236,19 @@ export function useRole() {
       closeOnClickModal: false,
       contentRenderer: () => h(editForm, { ref: formRef }),
       beforeSure: (done, { options }) => {
-        const FormRef = formRef.value.getRef();
-        const curData = options.props.formInline as FormItemProps;
-        function chores() {
-          message(`您${title}了角色名称为${curData.name}的这条数据`, {
-            type: "success"
-          });
-          done(); // 关闭弹框
-          onSearch(); // 刷新表格数据
-        }
-        FormRef.validate(valid => {
+        const formRuleRef = formRef.value.getFormRuleRef();
+
+        const curData = options.props.formInline as AddNoticeRequest;
+
+        formRuleRef.validate(valid => {
           if (valid) {
             console.log("curData", curData);
             // 表单规则校验通过
             if (title === "新增") {
-              // 实际开发先调用新增接口，再进行下面操作
-              chores();
+              handleAdd(curData, done);
             } else {
-              // 实际开发先调用编辑接口，再进行下面操作
-              chores();
+              curData.noticeId = row.noticeId;
+              handleUpdate(curData, done);
             }
           }
         });
@@ -209,33 +256,24 @@ export function useRole() {
     });
   }
 
-  /** 菜单权限 */
-  function handleMenu() {
-    message("等菜单管理页面开发后完善");
-  }
-
-  /** 数据权限 可自行开发 */
-  // function handleDatabase() {}
-
   onMounted(() => {
     onSearch();
   });
 
   return {
-    form,
-    loading,
+    searchFormParams,
+    pageLoading,
     columns,
     dataList,
     pagination,
-    // buttonClass,
     onSearch,
     resetForm,
     openDialog,
-    handleMenu,
     handleDelete,
-    // handleDatabase,
     handleSizeChange,
     handleCurrentChange,
-    handleSelectionChange
+    handleSortChange,
+    handleSelectionChange,
+    handleBulkDelete
   };
 }

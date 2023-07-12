@@ -128,6 +128,8 @@ class PureHttp {
           } else {
             // 其余情况弹出错误提示框
             message(response.data.msg, { type: "error" });
+            NProgress.done();
+            return Promise.reject(response.data.msg);
           }
         }
 

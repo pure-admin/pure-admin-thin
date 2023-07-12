@@ -11,7 +11,7 @@ export type ConfigDTO = {
   /** 验证码开关 */
   isCaptchaOn: boolean;
   /** 系统字典配置（下拉选项之类的） */
-  dictTypes: Map<String, Array<DictionaryData>>;
+  dictionary: Map<String, Array<DictionaryData>>;
 };
 
 export type LoginByPasswordDTO = {
@@ -43,7 +43,7 @@ export type CurrentLoginUserDTO = {
 
 export type DictionaryData = {
   label: string;
-  value: Number;
+  value: number;
   cssTag: string;
 };
 

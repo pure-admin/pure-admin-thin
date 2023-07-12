@@ -40,6 +40,7 @@ import Lock from "@iconify-icons/ri/lock-fill";
 import User from "@iconify-icons/ri/user-3-fill";
 import * as CommonAPI from "@/api/common";
 import { setTokenFromBackend } from "../../utils/auth";
+import { useUserStoreHook } from "../../store/modules/user";
 
 defineOptions({
   name: "Login"
@@ -128,6 +129,7 @@ watch(isRememberMe, newVal => {
 onBeforeMount(async () => {
   await CommonAPI.getConfig().then(res => {
     isCaptchaOn.value = res.data.isCaptchaOn;
+    useUserStoreHook().SET_DICTIONARY(res.data.dictionary);
   });
 
   if (isCaptchaOn.value) {
