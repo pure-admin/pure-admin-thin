@@ -15,9 +15,8 @@ import {
 import { reactive, ref, onMounted, h, toRaw } from "vue";
 import { useUserStoreHook } from "@/store/modules/user";
 
-const sysNoticeTypeMap = useUserStoreHook().dictionaryMap["sys_notice_type"];
-const sysNoticeStatusMap =
-  useUserStoreHook().dictionaryMap["sys_notice_status"];
+const noticeTypeMap = useUserStoreHook().dictionaryMap["sysNotice.noticeType"];
+const noticeStatusMap = useUserStoreHook().dictionaryMap["sysNotice.status"];
 
 export function useNoticeHook() {
   const pagination = reactive<PaginationProps>({
@@ -63,10 +62,10 @@ export function useNoticeHook() {
       cellRenderer: ({ row, props }) => (
         <el-tag
           size={props.size}
-          type={sysNoticeTypeMap[row.noticeType].cssTag}
+          type={noticeTypeMap[row.noticeType].cssTag}
           effect="plain"
         >
-          {sysNoticeTypeMap[row.noticeType].label}
+          {noticeTypeMap[row.noticeType].label}
         </el-tag>
       )
     },
@@ -77,10 +76,10 @@ export function useNoticeHook() {
       cellRenderer: ({ row, props }) => (
         <el-tag
           size={props.size}
-          type={sysNoticeStatusMap[row.status].cssTag}
+          type={noticeStatusMap[row.status].cssTag}
           effect="plain"
         >
-          {sysNoticeStatusMap[row.status].label}
+          {noticeStatusMap[row.status].label}
         </el-tag>
       )
     },
@@ -213,9 +212,13 @@ export function useNoticeHook() {
     }, 500);
   }
 
-  const resetForm = formEl => {
+  const resetForm = (formEl, tableRef) => {
     if (!formEl) return;
     formEl.resetFields();
+    searchFormParams.orderColumn = "";
+    searchFormParams.orderDirection = "";
+
+    tableRef.getTableRef().clearSort();
     onSearch();
   };
 

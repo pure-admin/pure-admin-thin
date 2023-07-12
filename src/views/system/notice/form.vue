@@ -48,7 +48,9 @@ defineExpose({ getFormRuleRef });
         class="!w-[180px]"
       >
         <el-option
-          v-for="dict in useUserStoreHook().dictionaryList['sys_notice_type']"
+          v-for="dict in useUserStoreHook().dictionaryList[
+            'sysNotice.noticeType'
+          ]"
           :key="dict.value"
           :label="dict.label"
           :value="dict.value"
@@ -63,7 +65,7 @@ defineExpose({ getFormRuleRef });
         class="!w-[180px]"
       >
         <el-option
-          v-for="dict in useUserStoreHook().dictionaryList['sys_notice_status']"
+          v-for="dict in useUserStoreHook().dictionaryList['sysNotice.status']"
           :key="dict.value"
           :label="dict.label"
           :value="dict.value"

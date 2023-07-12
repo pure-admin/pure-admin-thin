@@ -18,7 +18,8 @@ defineOptions({
   name: "SystemNotice"
 });
 
-const sys_notice_type = useUserStoreHook().dictionaryList["sys_notice_type"];
+const noticeTypeList =
+  useUserStoreHook().dictionaryList["sysNotice.noticeType"];
 const tableRef = ref();
 
 const searchFormRef = ref();
@@ -66,7 +67,7 @@ const {
           class="!w-[180px]"
         >
           <el-option
-            v-for="dict in sys_notice_type"
+            v-for="dict in noticeTypeList"
             :key="dict.value"
             :label="dict.label"
             :value="dict.value"
@@ -92,7 +93,7 @@ const {
         </el-button>
         <el-button
           :icon="useRenderIcon(Refresh)"
-          @click="resetForm(searchFormRef)"
+          @click="resetForm(searchFormRef, tableRef)"
         >
           重置
         </el-button>
@@ -130,6 +131,7 @@ const {
           adaptive
           :data="dataList"
           :columns="dynamicColumns"
+          :default-sort="{ prop: 'createTime', order: 'descending' }"
           :pagination="pagination"
           :paginationSmall="size === 'small' ? true : false"
           :header-cell-style="{
