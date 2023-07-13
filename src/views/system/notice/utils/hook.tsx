@@ -12,13 +12,18 @@ import {
   deleteSystemNoticeApi,
   SystemNoticeRequest
 } from "@/api/system";
-import { reactive, ref, onMounted, h, toRaw } from "vue";
+import { reactive, ref, onMounted, h, toRaw, watchEffect } from "vue";
 import { useUserStoreHook } from "@/store/modules/user";
 
 const noticeTypeMap = useUserStoreHook().dictionaryMap["sysNotice.noticeType"];
 const noticeStatusMap = useUserStoreHook().dictionaryMap["sysNotice.status"];
 
 export function useNoticeHook() {
+  const defaultSort = {
+    prop: "createTime",
+    order: "descending"
+  };
+
   const pagination = reactive<PaginationProps>({
     total: 0,
     pageSize: 10,
@@ -32,9 +37,15 @@ export function useNoticeHook() {
     creatorName: "",
     pageNum: pagination.currentPage,
     pageSize: pagination.pageSize,
-    orderColumn: "createTime",
-    orderDirection: "descending"
+    orderColumn: defaultSort.prop,
+    orderDirection: defaultSort.order
   });
+
+  watchEffect(() => {
+    searchFormParams.pageNum = pagination.currentPage;
+    searchFormParams.pageSize = pagination.pageSize;
+  });
+
   const formRef = ref();
   const dataList = ref([]);
   const pageLoading = ref(true);
@@ -109,12 +120,46 @@ export function useNoticeHook() {
     }
   ];
 
+  async function onSearch() {
+    // 点击搜索的时候 需要重置分页
+    pagination.currentPage = 1;
+    getNoticeList();
+  }
+
+  function resetForm(formEl, tableRef) {
+    if (!formEl) return;
+    // 清空查询参数
+    formEl.resetFields();
+    // 清空排序
+    searchFormParams.orderColumn = "";
+    searchFormParams.orderDirection = "";
+    tableRef.getTableRef().clearSort();
+    // 重置分页并查询
+    onSearch();
+  }
+
+  async function getNoticeList() {
+    pageLoading.value = true;
+    const { data } = await getSystemNoticeListApi(toRaw(searchFormParams));
+
+    dataList.value = data.rows;
+    pagination.total = data.total;
+
+    setTimeout(() => {
+      pageLoading.value = false;
+    }, 500);
+  }
+
   async function handleDelete(row) {
     await deleteSystemNoticeApi([row.noticeId]).then(() => {
       message(`您删除了通知标题为${row.name}的这条数据`, { type: "success" });
       // 刷新列表
-      onSearch();
+      getNoticeList();
     });
+  }
+
+  function handleSelectionChange(rows) {
+    multipleSelection.value = rows.map(item => item.noticeId);
   }
 
   async function handleBulkDelete(tableRef) {
@@ -140,26 +185,29 @@ export function useNoticeHook() {
             type: "success"
           });
           // 刷新列表
-          onSearch();
+          getNoticeList();
         });
       })
       .catch(() => {
         message("取消删除", {
           type: "info"
         });
+        // 清空checkbox选择的数据
         tableRef.getTableRef().clearSelection();
       });
   }
 
+  /**
+   * 处理排序
+   * @param sort 排序参数
+   */
   function handleSortChange(sort) {
-    searchFormParams.pageNum = 1;
+    // 排序参数改变建议把分页重置为第一页
+    pagination.currentPage = 1;
+    // 填充分页参数
     searchFormParams.orderColumn = sort.prop;
     searchFormParams.orderDirection = sort.order;
-    onSearch();
-  }
-
-  function handleSelectionChange(rows) {
-    multipleSelection.value = rows.map(item => item.noticeId);
+    getNoticeList();
   }
 
   async function handleAdd(row, done) {
@@ -170,7 +218,7 @@ export function useNoticeHook() {
       // 关闭弹框
       done();
       // 刷新列表
-      onSearch();
+      getNoticeList();
     });
   }
 
@@ -182,45 +230,20 @@ export function useNoticeHook() {
       // 关闭弹框
       done();
       // 刷新列表
-      onSearch();
+      getNoticeList();
     });
   }
 
   function handleSizeChange(val: number) {
     pagination.currentPage = 1;
     pagination.pageSize = val;
-    searchFormParams.pageNum = pagination.currentPage;
-    searchFormParams.pageSize = pagination.pageSize;
-    onSearch();
+    getNoticeList();
   }
 
   function handleCurrentChange(val: number) {
     pagination.currentPage = val;
-    searchFormParams.pageNum = pagination.currentPage;
-    onSearch();
+    getNoticeList();
   }
-
-  async function onSearch() {
-    pageLoading.value = true;
-    const { data } = await getSystemNoticeListApi(toRaw(searchFormParams));
-
-    dataList.value = data.rows;
-    pagination.total = data.total;
-
-    setTimeout(() => {
-      pageLoading.value = false;
-    }, 500);
-  }
-
-  const resetForm = (formEl, tableRef) => {
-    if (!formEl) return;
-    formEl.resetFields();
-    searchFormParams.orderColumn = "";
-    searchFormParams.orderDirection = "";
-
-    tableRef.getTableRef().clearSort();
-    onSearch();
-  };
 
   function openDialog(title = "新增", row?: AddNoticeRequest) {
     addDialog({
@@ -260,7 +283,7 @@ export function useNoticeHook() {
   }
 
   onMounted(() => {
-    onSearch();
+    getNoticeList();
   });
 
   return {
@@ -269,6 +292,7 @@ export function useNoticeHook() {
     columns,
     dataList,
     pagination,
+    defaultSort,
     onSearch,
     resetForm,
     openDialog,

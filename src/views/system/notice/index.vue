@@ -29,6 +29,7 @@ const {
   columns,
   dataList,
   pagination,
+  defaultSort,
   onSearch,
   resetForm,
   openDialog,
@@ -131,7 +132,7 @@ const {
           adaptive
           :data="dataList"
           :columns="dynamicColumns"
-          :default-sort="{ prop: 'createTime', order: 'descending' }"
+          :default-sort="defaultSort"
           :pagination="pagination"
           :paginationSmall="size === 'small' ? true : false"
           :header-cell-style="{
