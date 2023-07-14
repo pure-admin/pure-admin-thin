@@ -61,8 +61,13 @@ type PageDTO<T> = {
 };
 
 interface BasePageQuery {
-  pageNumber?: number;
+  pageNum?: number;
   pageSize?: number;
+  beginTime?: string;
+  endTime?: string;
+  orderColumn?: string;
+  orderDirection?: string;
+  timeRangeColumn?: string;
 }
 
 type Effect = "light" | "dark";

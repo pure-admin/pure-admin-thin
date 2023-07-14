@@ -1,9 +1,9 @@
 import dayjs from "dayjs";
 import editForm from "../form.vue";
 import { message } from "@/utils/message";
-import { getSystemNoticeListApi } from "@/api/system";
+import { SystemNoticeQuery, getSystemNoticeListApi } from "@/api/system";
 import { addDialog } from "@/components/ReDialog";
-import { ElMessageBox } from "element-plus";
+import { ElMessageBox, Sort } from "element-plus";
 import { AddNoticeRequest } from "../utils/types";
 import { type PaginationProps } from "@pureadmin/table";
 import {
@@ -12,39 +12,46 @@ import {
   deleteSystemNoticeApi,
   SystemNoticeRequest
 } from "@/api/system";
-import { reactive, ref, onMounted, h, toRaw, watchEffect } from "vue";
+import { reactive, ref, onMounted, h, toRaw } from "vue";
 import { useUserStoreHook } from "@/store/modules/user";
+import { CommonUtils } from "@/utils/common";
 
 const noticeTypeMap = useUserStoreHook().dictionaryMap["sysNotice.noticeType"];
 const noticeStatusMap = useUserStoreHook().dictionaryMap["sysNotice.status"];
 
 export function useNoticeHook() {
-  const defaultSort = {
+  const defaultSort: Sort = {
     prop: "createTime",
     order: "descending"
   };
 
-  const pagination = reactive<PaginationProps>({
+  const pagination: PaginationProps = {
     total: 0,
     pageSize: 10,
     currentPage: 1,
     background: true
-  });
+  };
 
-  const searchFormParams = reactive({
-    noticeTitle: "",
-    noticeType: "",
-    creatorName: "",
-    pageNum: pagination.currentPage,
-    pageSize: pagination.pageSize,
+  const searchFormParams = reactive<SystemNoticeQuery>({
+    noticeTitle: undefined,
+    noticeType: undefined,
+    creatorName: undefined,
     orderColumn: defaultSort.prop,
     orderDirection: defaultSort.order
   });
 
-  watchEffect(() => {
-    searchFormParams.pageNum = pagination.currentPage;
-    searchFormParams.pageSize = pagination.pageSize;
-  });
+  // TODO  ******困惑的问题*******
+  // const pagination = reactive<PaginationProps>({
+  //   total: 0,
+  //   pageSize: 10,
+  //   currentPage: 1,
+  //   background: true
+  // });
+  // TODO 使用watchEffect会导致 axios请求拦截器中的参数使用的是旧值
+  // watchEffect(() => {
+  //   searchFormParams.pageNum = pagination.currentPage;
+  //   searchFormParams.pageSize = pagination.pageSize;
+  // });
 
   const formRef = ref();
   const dataList = ref([]);
@@ -120,9 +127,10 @@ export function useNoticeHook() {
     }
   ];
 
-  async function onSearch() {
+  function onSearch() {
     // 点击搜索的时候 需要重置分页
     pagination.currentPage = 1;
+
     getNoticeList();
   }
 
@@ -131,14 +139,19 @@ export function useNoticeHook() {
     // 清空查询参数
     formEl.resetFields();
     // 清空排序
-    searchFormParams.orderColumn = "";
-    searchFormParams.orderDirection = "";
+    searchFormParams.orderColumn = undefined;
+    searchFormParams.orderDirection = undefined;
     tableRef.getTableRef().clearSort();
     // 重置分页并查询
     onSearch();
   }
 
-  async function getNoticeList() {
+  async function getNoticeList(sort: Sort = defaultSort) {
+    if (sort != null) {
+      CommonUtils.fillSortParams(searchFormParams, sort);
+    }
+    CommonUtils.fillPaginationParams(searchFormParams, pagination);
+
     pageLoading.value = true;
     const { data } = await getSystemNoticeListApi(toRaw(searchFormParams));
 
@@ -156,10 +169,6 @@ export function useNoticeHook() {
       // 刷新列表
       getNoticeList();
     });
-  }
-
-  function handleSelectionChange(rows) {
-    multipleSelection.value = rows.map(item => item.noticeId);
   }
 
   async function handleBulkDelete(tableRef) {
@@ -197,19 +206,6 @@ export function useNoticeHook() {
       });
   }
 
-  /**
-   * 处理排序
-   * @param sort 排序参数
-   */
-  function handleSortChange(sort) {
-    // 排序参数改变建议把分页重置为第一页
-    pagination.currentPage = 1;
-    // 填充分页参数
-    searchFormParams.orderColumn = sort.prop;
-    searchFormParams.orderDirection = sort.order;
-    getNoticeList();
-  }
-
   async function handleAdd(row, done) {
     await addSystemNoticeApi(row as SystemNoticeRequest).then(() => {
       message(`您新增了通知标题为${row.noticeTitle}的这条数据`, {
@@ -232,17 +228,6 @@ export function useNoticeHook() {
       // 刷新列表
       getNoticeList();
     });
-  }
-
-  function handleSizeChange(val: number) {
-    pagination.currentPage = 1;
-    pagination.pageSize = val;
-    getNoticeList();
-  }
-
-  function handleCurrentChange(val: number) {
-    pagination.currentPage = val;
-    getNoticeList();
   }
 
   function openDialog(title = "新增", row?: AddNoticeRequest) {
@@ -293,14 +278,12 @@ export function useNoticeHook() {
     dataList,
     pagination,
     defaultSort,
+    multipleSelection,
+    getNoticeList,
     onSearch,
     resetForm,
     openDialog,
     handleDelete,
-    handleSizeChange,
-    handleCurrentChange,
-    handleSortChange,
-    handleSelectionChange,
     handleBulkDelete
   };
 }

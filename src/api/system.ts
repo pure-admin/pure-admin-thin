@@ -19,7 +19,7 @@ type ResultDept = {
   data?: Array<any>;
 };
 
-interface SystemNoticeQuery extends BasePageQuery {
+export interface SystemNoticeQuery extends BasePageQuery {
   noticeType: string;
   noticeTitle: string;
   creatorName: string;

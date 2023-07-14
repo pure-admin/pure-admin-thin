@@ -13,7 +13,7 @@ import Refresh from "@iconify-icons/ep/refresh";
 import AddFill from "@iconify-icons/ri/add-circle-line";
 import { useUserStoreHook } from "@/store/modules/user";
 
-/** 组件name最好和菜单表中的router_name一致 */
+/** !!!重要!!! 组件name最好和菜单表中的router_name一致, copy的时候记得更改这个名字*/
 defineOptions({
   name: "SystemNotice"
 });
@@ -30,15 +30,13 @@ const {
   dataList,
   pagination,
   defaultSort,
+  multipleSelection,
   onSearch,
   resetForm,
   openDialog,
   handleDelete,
-  handleSizeChange,
-  handleCurrentChange,
-  handleSortChange,
-  handleSelectionChange,
-  handleBulkDelete
+  handleBulkDelete,
+  getNoticeList
 } = useNoticeHook();
 </script>
 
@@ -121,6 +119,7 @@ const {
         </el-button>
       </template>
       <template v-slot="{ size, dynamicColumns }">
+        <!-- TODO sort-change 有其他好的处理方式吗？ -->
         <pure-table
           border
           ref="tableRef"
@@ -139,10 +138,12 @@ const {
             background: 'var(--el-table-row-hover-bg-color)',
             color: 'var(--el-text-color-primary)'
           }"
-          @page-size-change="handleSizeChange"
-          @page-current-change="handleCurrentChange"
-          @sort-change="handleSortChange"
-          @selection-change="handleSelectionChange"
+          @page-size-change="getNoticeList"
+          @page-current-change="getNoticeList"
+          @sort-change="getNoticeList"
+          @selection-change="
+            rows => (multipleSelection = rows.map(item => item.noticeId))
+          "
         >
           <template #operation="{ row }">
             <el-button
