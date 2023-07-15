@@ -7,6 +7,7 @@
 const include = [
   "qs",
   "mitt",
+  "xlsx",
   "dayjs",
   "axios",
   "pinia",

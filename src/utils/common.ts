@@ -1,5 +1,7 @@
-import { PaginationProps } from "@pureadmin/table";
+import { PaginationProps, TableColumn } from "@pureadmin/table";
 import { Sort } from "element-plus";
+import { utils, writeFile } from "xlsx";
+import { message } from "./message";
 
 export class CommonUtils {
   static getBeginTimeSafely(timeRange: string[]): string {
@@ -48,6 +50,68 @@ export class CommonUtils {
     }
     baseQuery.orderColumn = sort.prop;
     baseQuery.orderDirection = sort.order;
+  }
+
+  /** 适用于BaseQuery中固定的时间参数  beginTime和endTime参数 */
+  static fillTimeRangeParams(baseQuery: any, timeRange: string[]) {
+    if (timeRange == null || timeRange.length == 0 || timeRange === undefined) {
+      baseQuery["beginTime"] = undefined;
+      baseQuery["endTime"] = undefined;
+      return;
+    }
+
+    if (baseQuery == null || baseQuery === undefined) {
+      return;
+    }
+
+    baseQuery["beginTime"] = CommonUtils.getBeginTimeSafely(timeRange);
+    baseQuery["endTime"] = CommonUtils.getEndTimeSafely(timeRange);
+  }
+
+  static exportExcel(
+    columns: TableColumnList,
+    originalDataList: any[],
+    excelName: string
+  ) {
+    if (
+      !Array.isArray(columns) ||
+      !Array.isArray(originalDataList) ||
+      typeof excelName !== "string"
+    ) {
+      message("参数异常，导出失败", { type: "error" });
+      return;
+    }
+
+    // columns和dataList为空的话 弹出提示 不执行导出
+    if (columns.length === 0 || originalDataList.length === 0) {
+      message("无法导出空列表", { type: "warning" });
+      return;
+    }
+
+    const titleList: string[] = [];
+    const dataKeyList: string[] = [];
+    // 把columns里面的label取出来作为excel的列标题，把prop取出来等下从dataList里面根据作为key取对象中的值
+    columns.forEach((column: TableColumn) => {
+      if (column.label && column.prop) {
+        titleList.push(column.label);
+        dataKeyList.push(column.prop as string);
+      }
+    });
+
+    const excelDataList: string[][] = originalDataList.map(item => {
+      const arr = [];
+      dataKeyList.forEach(dataKey => {
+        arr.push(item[dataKey]);
+      });
+      return arr;
+    });
+
+    excelDataList.unshift(titleList);
+
+    const workSheet = utils.aoa_to_sheet(excelDataList);
+    const workBook = utils.book_new();
+    utils.book_append_sheet(workBook, workSheet, excelName);
+    writeFile(workBook, `${excelName}.xlsx`);
   }
 
   // 私有构造函数，防止类被实例化

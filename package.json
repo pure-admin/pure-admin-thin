@@ -55,7 +55,8 @@
     "typeit": "^8.7.1",
     "vue": "^3.3.4",
     "vue-router": "^4.2.2",
-    "vue-types": "^5.1.0"
+    "vue-types": "^5.1.0",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.6.6",

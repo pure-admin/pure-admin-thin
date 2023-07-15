@@ -190,7 +190,7 @@ export function useNoticeHook() {
     )
       .then(async () => {
         await deleteSystemNoticeApi(multipleSelection.value).then(() => {
-          message(`您删除了通知编号为[ ${multipleSelection.value} ]的条数据`, {
+          message(`您删除了通知编号为[ ${multipleSelection.value} ]的数据`, {
             type: "success"
           });
           // 刷新列表

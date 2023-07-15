@@ -125,6 +125,8 @@ class PureHttp {
               .catch(() => {
                 message("取消重新登录", { type: "info" });
               });
+            NProgress.done();
+            return Promise.reject(response.data.msg);
           } else {
             // 其余情况弹出错误提示框
             message(response.data.msg, { type: "error" });
