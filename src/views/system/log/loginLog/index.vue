@@ -1,11 +1,10 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import { useOperationLogHook } from "./utils/hook";
+import { useLoginLogHook } from "./utils/hook";
 import { PureTableBar } from "@/components/RePureTableBar";
 import { useRenderIcon } from "@/components/ReIcon/src/hooks";
 
 import Delete from "@iconify-icons/ep/delete";
-import View from "@iconify-icons/ep/view";
 import Search from "@iconify-icons/ep/search";
 import Refresh from "@iconify-icons/ep/refresh";
 import { useUserStoreHook } from "@/store/modules/user";
@@ -17,10 +16,9 @@ defineOptions({
   name: "SystemOperationLog"
 });
 
-const businessTypeList =
-  useUserStoreHook().dictionaryList["sysOperationLog.businessType"];
-const operationStatusList =
-  useUserStoreHook().dictionaryList["sysOperationLog.status"];
+const loginLogStatusList =
+  useUserStoreHook().dictionaryList["sysLoginLog.status"];
+
 const tableRef = ref();
 
 const searchFormRef = ref();
@@ -36,11 +34,10 @@ const {
   onSearch,
   resetForm,
   exportAllExcel,
-  openDialog,
-  getOperationLogList,
+  getLoginLogList,
   handleDelete,
   handleBulkDelete
-} = useOperationLogHook();
+} = useLoginLogHook();
 </script>
 
 <template>
@@ -52,38 +49,23 @@ const {
       :model="searchFormParams"
       class="search-form bg-bg_color w-[99/100] pl-8 pt-[12px]"
     >
-      <el-form-item label="系统模块：" prop="requestModule">
+      <el-form-item label="登录IP：" prop="ipAddress">
         <el-input
-          v-model="searchFormParams.requestModule"
-          placeholder="请输入系统模块"
+          v-model="searchFormParams.ipAddress"
+          placeholder="请输入IP地址"
+          clearable
+          class="!w-[200px]"
+        />
+      </el-form-item>
+      <el-form-item label="用户名：" prop="username">
+        <el-input
+          v-model="searchFormParams.username"
+          placeholder="请选择用户名称"
           clearable
           class="!w-[200px]"
         />
       </el-form-item>
 
-      <el-form-item label="操作类型：" prop="businessType">
-        <el-select
-          v-model="searchFormParams.businessType"
-          placeholder="请选择状态"
-          clearable
-          class="!w-[180px]"
-        >
-          <el-option
-            v-for="dict in businessTypeList"
-            :key="dict.value"
-            :label="dict.label"
-            :value="dict.value"
-          />
-        </el-select>
-      </el-form-item>
-      <el-form-item label="操作人员：" prop="username">
-        <el-input
-          v-model="searchFormParams.username"
-          placeholder="请输入创建者"
-          clearable
-          class="!w-[180px]"
-        />
-      </el-form-item>
       <el-form-item label="状态：" prop="status">
         <el-select
           v-model="searchFormParams.status"
@@ -92,7 +74,7 @@ const {
           class="!w-[180px]"
         >
           <el-option
-            v-for="dict in operationStatusList"
+            v-for="dict in loginLogStatusList"
             :key="dict.value"
             :label="dict.label"
             :value="dict.value"
@@ -101,7 +83,7 @@ const {
       </el-form-item>
       <el-form-item>
         <label class="el-form-item__label is-required font-bold"
-          >操作时间：</label
+          >登录时间：</label
         >
         <!-- TODO 如何消除这个v-model的warning -->
         <el-date-picker
@@ -133,7 +115,7 @@ const {
     </el-form>
 
     <!-- table bar 包裹  table -->
-    <PureTableBar title="操作日志列表" :columns="columns" @refresh="onSearch">
+    <PureTableBar title="登录日志列表" :columns="columns" @refresh="onSearch">
       <!-- 表格操作栏 -->
       <template #buttons>
         <el-button
@@ -145,7 +127,7 @@ const {
         </el-button>
         <el-button
           type="primary"
-          @click="CommonUtils.exportExcel(columns, dataList, '操作日志列表')"
+          @click="CommonUtils.exportExcel(columns, dataList, '登录日志列表')"
           >单页导出</el-button
         >
         <el-button type="primary" @click="exportAllExcel">全部导出</el-button>
@@ -169,26 +151,16 @@ const {
             background: 'var(--el-table-row-hover-bg-color)',
             color: 'var(--el-text-color-primary)'
           }"
-          @page-size-change="getOperationLogList"
-          @page-current-change="getOperationLogList"
-          @sort-change="getOperationLogList"
+          @page-size-change="getLoginLogList"
+          @page-current-change="getLoginLogList"
+          @sort-change="getLoginLogList"
           @selection-change="
-            rows => (multipleSelection = rows.map(item => item.operationId))
+            rows => (multipleSelection = rows.map(item => item.logId))
           "
         >
           <template #operation="{ row }">
-            <el-button
-              class="reset-margin"
-              link
-              type="primary"
-              :size="size"
-              :icon="useRenderIcon(View)"
-              @click="openDialog(row)"
-            >
-              详情
-            </el-button>
             <el-popconfirm
-              :title="`是否确认删除编号为${row.operationId}的这条日志`"
+              :title="`是否确认删除编号为${row.logId}的这条日志`"
               @confirm="handleDelete(row)"
             >
               <template #reference>

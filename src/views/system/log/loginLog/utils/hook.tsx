@@ -1,27 +1,23 @@
 import dayjs from "dayjs";
-import descriptionForm from "../description.vue";
 import { message } from "@/utils/message";
-import { addDialog, closeDialog } from "@/components/ReDialog";
 import { ElMessageBox, Sort } from "element-plus";
 import {
-  OperationLogsQuery,
-  getOperationLogListApi,
-  deleteOperationLogApi,
-  exportOperationLogExcelApi
+  getLoginLogListApi,
+  deleteLoginLogApi,
+  exportLoginLogExcelApi,
+  LoginLogQuery
 } from "@/api/system/log";
-import { reactive, ref, onMounted, h, toRaw } from "vue";
+import { reactive, ref, onMounted, toRaw } from "vue";
 import { useUserStoreHook } from "@/store/modules/user";
 import { CommonUtils } from "@/utils/common";
 import { PaginationProps } from "@pureadmin/table";
 
-const operationLogStatusMap =
-  useUserStoreHook().dictionaryMap["sysOperationLog.status"];
-const businessTypeMap =
-  useUserStoreHook().dictionaryMap["sysOperationLog.businessType"];
+const loginLogStatusMap =
+  useUserStoreHook().dictionaryMap["sysLoginLog.status"];
 
-export function useOperationLogHook() {
+export function useLoginLogHook() {
   const defaultSort: Sort = {
-    prop: "operationTime",
+    prop: "loginTime",
     order: "descending"
   };
 
@@ -34,13 +30,12 @@ export function useOperationLogHook() {
 
   const timeRange = ref([]);
 
-  const searchFormParams = reactive<OperationLogsQuery>({
+  const searchFormParams = reactive<LoginLogQuery>({
+    ipAddress: undefined,
+    username: undefined,
+    status: undefined,
     beginTime: undefined,
     endTime: undefined,
-    businessType: undefined,
-    requestModule: undefined,
-    status: undefined,
-    username: undefined,
     timeRangeColumn: defaultSort.prop
   });
 
@@ -54,42 +49,34 @@ export function useOperationLogHook() {
       align: "left"
     },
     {
-      label: "操作编号",
-      prop: "operationId",
+      label: "日志编号",
+      prop: "logId",
       minWidth: 100
     },
     {
-      label: "业务模块",
-      prop: "requestModule",
-      minWidth: 120
-    },
-    {
-      label: "操作类型",
-      prop: "businessType",
-      minWidth: 120,
-      cellRenderer: ({ row, props }) => (
-        <el-tag
-          size={props.size}
-          type={businessTypeMap[row.businessType].cssTag}
-          effect="plain"
-        >
-          {businessTypeMap[row.businessType].label}
-        </el-tag>
-      )
-    },
-    {
-      label: "请求方式",
-      prop: "requestMethod",
-      minWidth: 120
-    },
-    {
-      label: "操作人员",
+      label: "用户名",
       prop: "username",
+      minWidth: 120,
+      sortable: "custom"
+    },
+    {
+      label: "IP地址",
+      prop: "ipAddress",
       minWidth: 120
     },
     {
-      label: "登录地址",
-      prop: "operatorIp",
+      label: "登录地点",
+      prop: "loginLocation",
+      minWidth: 120
+    },
+    {
+      label: "操作系统",
+      prop: "operationSystem",
+      minWidth: 120
+    },
+    {
+      label: "浏览器",
+      prop: "browser",
       minWidth: 120
     },
     {
@@ -99,10 +86,10 @@ export function useOperationLogHook() {
       cellRenderer: ({ row, props }) => (
         <el-tag
           size={props.size}
-          type={operationLogStatusMap[row.status].cssTag}
+          type={loginLogStatusMap[row.status].cssTag}
           effect="plain"
         >
-          {operationLogStatusMap[row.status].label}
+          {loginLogStatusMap[row.status].label}
         </el-tag>
       )
     },
@@ -113,12 +100,12 @@ export function useOperationLogHook() {
       hide: true
     },
     {
-      label: "操作时间",
+      label: "登录时间",
       minWidth: 160,
-      prop: "operationTime",
+      prop: "loginTime",
       sortable: "custom",
-      formatter: ({ operationTime }) =>
-        dayjs(operationTime).format("YYYY-MM-DD HH:mm:ss")
+      formatter: ({ loginTime }) =>
+        dayjs(loginTime).format("YYYY-MM-DD HH:mm:ss")
     },
     {
       label: "操作",
@@ -131,7 +118,7 @@ export function useOperationLogHook() {
   async function onSearch() {
     // 点击搜索的时候 需要重置分页
     pagination.currentPage = 1;
-    getOperationLogList();
+    getLoginLogList();
   }
 
   function resetForm(formEl, tableRef) {
@@ -151,7 +138,7 @@ export function useOperationLogHook() {
     onSearch();
   }
 
-  async function getOperationLogList(sort: Sort = defaultSort) {
+  async function getLoginLogList(sort: Sort = defaultSort) {
     pageLoading.value = true;
     if (sort != null) {
       CommonUtils.fillSortParams(searchFormParams, sort);
@@ -159,11 +146,11 @@ export function useOperationLogHook() {
     CommonUtils.fillPaginationParams(searchFormParams, pagination);
     CommonUtils.fillTimeRangeParams(searchFormParams, timeRange.value);
 
-    const { data } = await getOperationLogListApi(
-      toRaw(searchFormParams)
-    ).finally(() => {
-      pageLoading.value = false;
-    });
+    const { data } = await getLoginLogListApi(toRaw(searchFormParams)).finally(
+      () => {
+        pageLoading.value = false;
+      }
+    );
     dataList.value = data.rows;
     pagination.total = data.total;
   }
@@ -175,16 +162,16 @@ export function useOperationLogHook() {
     CommonUtils.fillPaginationParams(searchFormParams, pagination);
     CommonUtils.fillTimeRangeParams(searchFormParams, timeRange.value);
 
-    exportOperationLogExcelApi(toRaw(searchFormParams), "操作日志.xls");
+    exportLoginLogExcelApi(toRaw(searchFormParams), "登录日志.xls");
   }
 
   async function handleDelete(row) {
-    await deleteOperationLogApi([row.operationId]).then(() => {
-      message(`您删除了操作编号为${row.operationId}的这条数据`, {
+    await deleteLoginLogApi([row.logId]).then(() => {
+      message(`您删除了操作编号为${row.logId}的这条数据`, {
         type: "success"
       });
       // 刷新列表
-      getOperationLogList();
+      getLoginLogList();
     });
   }
 
@@ -206,12 +193,12 @@ export function useOperationLogHook() {
       }
     )
       .then(async () => {
-        await deleteOperationLogApi(multipleSelection.value).then(() => {
+        await deleteLoginLogApi(multipleSelection.value).then(() => {
           message(`您删除了日志编号为[ ${multipleSelection.value} ]的数据`, {
             type: "success"
           });
           // 刷新列表
-          getOperationLogList();
+          getLoginLogList();
         });
       })
       .catch(() => {
@@ -223,30 +210,8 @@ export function useOperationLogHook() {
       });
   }
 
-  function openDialog(row) {
-    addDialog({
-      title: "日志详情",
-      width: "60%",
-      draggable: true,
-      fullscreenIcon: false,
-      closeOnClickModal: true,
-      contentRenderer: () => h(descriptionForm, toRaw(row)),
-      footerButtons: [
-        {
-          label: "关闭",
-          text: true,
-          size: "large",
-          bg: true,
-          btnClick: ({ dialog: { options, index } }) => {
-            closeDialog(options, index);
-          }
-        }
-      ]
-    });
-  }
-
   onMounted(() => {
-    getOperationLogList();
+    getLoginLogList();
   });
 
   return {
@@ -261,9 +226,8 @@ export function useOperationLogHook() {
     onSearch,
     exportAllExcel,
     // exportExcel,
-    getOperationLogList,
+    getLoginLogList,
     resetForm,
-    openDialog,
     handleDelete,
     handleBulkDelete
   };

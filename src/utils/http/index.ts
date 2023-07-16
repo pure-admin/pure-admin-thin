@@ -87,7 +87,7 @@ class PureHttp {
           "/captchaImage",
           "/getConfig"
         ];
-        return whiteList.some(v => config.url.indexOf(v) > -1)
+        return whiteList.some(v => config.url.endsWith(v))
           ? config
           : new Promise(resolve => {
               const data = getToken();
