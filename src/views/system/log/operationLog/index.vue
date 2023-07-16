@@ -9,7 +9,7 @@ import View from "@iconify-icons/ep/view";
 import Search from "@iconify-icons/ep/search";
 import Refresh from "@iconify-icons/ep/refresh";
 import { useUserStoreHook } from "@/store/modules/user";
-// 这个导入声明好长  看看如何优化
+// TODO 这个导入声明好长  看看如何优化
 import { CommonUtils } from "../../../../utils/common";
 
 /** 组件name最好和菜单表中的router_name一致 */
@@ -35,6 +35,7 @@ const {
   multipleSelection,
   onSearch,
   resetForm,
+  exportAllExcel,
   openDialog,
   getOperationLogList,
   handleDelete,
@@ -147,11 +148,7 @@ const {
           @click="CommonUtils.exportExcel(columns, dataList, '操作日志列表')"
           >单页导出</el-button
         >
-        <el-button
-          type="primary"
-          @click="CommonUtils.exportExcel(columns, dataList, '操作日志列表')"
-          >全部导出</el-button
-        >
+        <el-button type="primary" @click="exportAllExcel">全部导出</el-button>
       </template>
       <template v-slot="{ size, dynamicColumns }">
         <pure-table

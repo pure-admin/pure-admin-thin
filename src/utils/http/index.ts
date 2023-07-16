@@ -16,6 +16,7 @@ import { message } from "../message";
 import { ElMessageBox } from "element-plus";
 import { router } from "@/router";
 import { removeToken } from "@/utils/auth";
+import { downloadByData } from "@pureadmin/utils";
 // console.log("Utils:" + router);
 
 const { VITE_APP_BASE_API } = import.meta.env;
@@ -104,7 +105,34 @@ class PureHttp {
   private httpInterceptorsResponse(): void {
     const instance = PureHttp.axiosInstance;
     instance.interceptors.response.use(
-      (response: PureHttpResponse) => {
+      async (response: PureHttpResponse) => {
+        let code = undefined;
+        let msg = undefined;
+
+        // 后台返回的二进制流
+        if (response.data instanceof Blob) {
+          // 返回二进制流的时候 可能出错  这时候返回的错误是Json格式
+          if (response.data.type === "application/json") {
+            const text = await this.readBlobAsText(response.data);
+            const json = JSON.parse(text);
+            // 提取错误消息中的code和msg
+            code = json.code;
+            msg = json.msg;
+          } else {
+            NProgress.done();
+            return response.data;
+          }
+          // 正常的返回类型 直接获取code和msg字段
+        } else {
+          code = response.data.code;
+          msg = response.data.msg;
+        }
+
+        // 如果不存在code说明后端格式有问题
+        if (!code) {
+          msg = "服务器返回数据结构有误";
+        }
+
         // 请求返回失败时，有业务错误时，弹出错误提示
         if (response.data.code !== 0) {
           // token失效时弹出过期提示
@@ -126,12 +154,12 @@ class PureHttp {
                 message("取消重新登录", { type: "info" });
               });
             NProgress.done();
-            return Promise.reject(response.data.msg);
+            return Promise.reject(msg);
           } else {
             // 其余情况弹出错误提示框
-            message(response.data.msg, { type: "error" });
+            message(msg, { type: "error" });
             NProgress.done();
-            return Promise.reject(response.data.msg);
+            return Promise.reject(msg);
           }
         }
 
@@ -200,6 +228,19 @@ class PureHttp {
     });
   }
 
+  /** 从二进制流中读取文本 */
+  async readBlobAsText(blob: Blob): Promise<string> {
+    return new Promise<string>((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const text = reader.result as string;
+        resolve(text);
+      };
+      reader.onerror = reject;
+      reader.readAsText(blob, "UTF-8");
+    });
+  }
+
   /** 单独抽离的post工具函数 */
   public post<T, P>(
     url: string,
@@ -217,6 +258,54 @@ class PureHttp {
   ): Promise<P> {
     return this.request<P>("get", url, params, config);
   }
+
+  /** download文件方法 从后端获取文件流 */
+  public download(
+    url: string,
+    fileName: string,
+    params?: AxiosRequestConfig
+  ): void {
+    this.get(url, params, {
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      responseType: "blob"
+    }).then((data: Blob) => {
+      downloadByData(data, fileName);
+    });
+  }
+
+  // .post(url, params, {
+  //   transformRequest: [params => encodeURIParams(params)],
+  //   headers: { "Content-Type": "application/x-www-form-urlencoded" },
+  //   responseType: "blob"
+  // })
+  // .then(async data => {
+  //   const isLogin = await isBlobData(data);
+  //   if (isLogin) {
+  //     const blob = new Blob([data]);
+  //     saveAs(blob, filename);
+  //   } else {
+  //     const resText = await data.text();
+  //     const rspObj = JSON.parse(resText);
+  //     const errMsg =
+  //       errorCode[rspObj.code] || rspObj.msg || errorCode.default;
+  //     ElMessage.error(errMsg);
+  //   }
+  //   downloadLoadingInstance.close();
+  // })
+  // .catch(r => {
+  //   console.error(r);
+  //   ElMessage.error("下载文件出现错误，请联系管理员！");
+  //   downloadLoadingInstance.close();
+  // });
+
+  // axios
+  //   .get("https://pure-admin.github.io/pure-admin-doc/img/pure.png", {
+  //     responseType: "blob"
+  //   })
+  //   .then(({ data }) => {
+  //     downloadByData(data, "test-data.png");
+  //   });
+  // }
 }
 
 export const http = new PureHttp();

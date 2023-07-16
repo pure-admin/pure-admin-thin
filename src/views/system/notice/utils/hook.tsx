@@ -153,14 +153,14 @@ export function useNoticeHook() {
     CommonUtils.fillPaginationParams(searchFormParams, pagination);
 
     pageLoading.value = true;
-    const { data } = await getSystemNoticeListApi(toRaw(searchFormParams));
+    const { data } = await getSystemNoticeListApi(
+      toRaw(searchFormParams)
+    ).finally(() => {
+      pageLoading.value = false;
+    });
 
     dataList.value = data.rows;
     pagination.total = data.total;
-
-    setTimeout(() => {
-      pageLoading.value = false;
-    }, 500);
   }
 
   async function handleDelete(row) {

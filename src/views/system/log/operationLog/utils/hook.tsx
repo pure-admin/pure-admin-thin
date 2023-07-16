@@ -3,10 +3,14 @@ import descriptionForm from "../description.vue";
 import { message } from "@/utils/message";
 import { addDialog, closeDialog } from "@/components/ReDialog";
 import { ElMessageBox, Sort } from "element-plus";
-import { OperationLogsQuery, getOperationLogListApi } from "@/api/system/log";
+import {
+  OperationLogsQuery,
+  getOperationLogListApi,
+  deleteOperationLogApi,
+  exportOperationLogExcelApi
+} from "@/api/system/log";
 import { reactive, ref, onMounted, h, toRaw } from "vue";
 import { useUserStoreHook } from "@/store/modules/user";
-import { deleteOperationLogApi } from "@/api/system/log";
 import { CommonUtils } from "@/utils/common";
 
 const operationLogStatusMap =
@@ -154,13 +158,23 @@ export function useOperationLogHook() {
     CommonUtils.fillPaginationParams(searchFormParams, pagination);
     CommonUtils.fillTimeRangeParams(searchFormParams, timeRange.value);
 
-    const { data } = await getOperationLogListApi(toRaw(searchFormParams));
+    const { data } = await getOperationLogListApi(
+      toRaw(searchFormParams)
+    ).finally(() => {
+      pageLoading.value = false;
+    });
     dataList.value = data.rows;
     pagination.total = data.total;
+  }
 
-    setTimeout(() => {
-      pageLoading.value = false;
-    }, 500);
+  async function exportAllExcel(sort: Sort = defaultSort) {
+    if (sort != null) {
+      CommonUtils.fillSortParams(searchFormParams, sort);
+    }
+    CommonUtils.fillPaginationParams(searchFormParams, pagination);
+    CommonUtils.fillTimeRangeParams(searchFormParams, timeRange.value);
+
+    exportOperationLogExcelApi(toRaw(searchFormParams), "操作日志.xls");
   }
 
   async function handleDelete(row) {
@@ -244,6 +258,7 @@ export function useOperationLogHook() {
     timeRange,
     multipleSelection,
     onSearch,
+    exportAllExcel,
     // exportExcel,
     getOperationLogList,
     resetForm,

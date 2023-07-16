@@ -42,6 +42,15 @@ export const getOperationLogListApi = (params?: OperationLogsQuery) => {
   );
 };
 
+export const exportOperationLogExcelApi = (
+  params: OperationLogsQuery,
+  fileName: string
+) => {
+  return http.download("/logs/operationLogs/excel", fileName, {
+    params
+  });
+};
+
 export const deleteOperationLogApi = (data: Array<number>) => {
   return http.request<ResponseData<void>>("delete", "/logs/operationLogs", {
     params: {
