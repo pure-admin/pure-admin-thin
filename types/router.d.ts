@@ -29,6 +29,10 @@ declare global {
     keepAlive?: boolean;
     /** 内嵌的`iframe`链接 `可选` */
     frameSrc?: string;
+    /** 是否是内部页面   使用frameSrc来嵌入页面时，当isFrameSrcInternal=true的时候, 前端需要做特殊处理  */
+    /** 比如链接是 /druid/login.html */
+    /** 前端需要处理成 http://localhost:8080/druid/login.html */
+    isFrameSrcInternal?: boolean;
     /** `iframe`页是否开启首次加载动画（默认`true`）`可选` */
     frameLoading?: boolean;
     /** 页面加载动画（有两种形式，一种直接采用vue内置的`transitions`动画，另一种是使用`animate.css`写进、离场动画）`可选` */
