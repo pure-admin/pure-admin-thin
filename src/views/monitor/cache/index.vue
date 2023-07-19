@@ -21,13 +21,13 @@
       <el-col :span="12" class="card-box">
         <el-card>
           <template #header><span>命令统计</span></template>
-          <div ref="commandstats" style="height: 420px" />
+          <div ref="commandChartRef" style="height: 420px" />
         </el-card>
       </el-col>
       <el-col :span="12" class="card-box">
         <el-card>
           <template #header><span>内存信息</span></template>
-          <div ref="usedmemory" style="height: 420px" />
+          <div ref="memoryChartRef" style="height: 420px" />
         </el-card>
       </el-col>
     </el-row>
@@ -48,8 +48,8 @@ defineOptions({
 const loading = ref(true);
 
 const cacheInfoTable = ref([]);
-const commandstats = ref(null);
-const usedmemory = ref(null);
+const commandChartRef = ref(null);
+const memoryChartRef = ref(null);
 
 async function getList() {
   loading.value = true;
@@ -110,8 +110,8 @@ async function getList() {
     }
   ];
 
-  const commandstatsIntance = echarts.init(commandstats.value, "macarons");
-  commandstatsIntance.setOption({
+  const commandChartInstance = echarts.init(commandChartRef.value, "macarons");
+  commandChartInstance.setOption({
     tooltip: {
       trigger: "item",
       formatter: "{a} <br/>{b} : {c} ({d}%)"
@@ -129,8 +129,8 @@ async function getList() {
       }
     ]
   });
-  const usedmemoryInstance = echarts.init(usedmemory.value, "macarons");
-  usedmemoryInstance.setOption({
+  const memoryChartInstance = echarts.init(memoryChartRef.value, "macarons");
+  memoryChartInstance.setOption({
     tooltip: {
       formatter: `{b} <br/>{a} : ${cacheInfo.info.used_memory_human}`
     },

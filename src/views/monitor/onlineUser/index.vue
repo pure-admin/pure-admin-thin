@@ -10,7 +10,7 @@ import Refresh from "@iconify-icons/ep/refresh";
 
 /** 组件name最好和菜单表中的router_name一致 */
 defineOptions({
-  name: "SystemOperationLog"
+  name: "OnlineUser"
 });
 
 const tableRef = ref();
