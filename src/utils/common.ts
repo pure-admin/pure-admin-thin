@@ -114,6 +114,18 @@ export class CommonUtils {
     writeFile(workBook, `${excelName}.xlsx`);
   }
 
+  static paginateList(dataList: any[], pagination: PaginationProps): any[] {
+    // 计算起始索引
+    const startIndex = (pagination.currentPage - 1) * pagination.pageSize;
+
+    // 截取数组
+    const endIndex = startIndex + pagination.pageSize;
+    const paginatedList = dataList.slice(startIndex, endIndex);
+
+    // 返回截取后的数组
+    return paginatedList;
+  }
+
   // 私有构造函数，防止类被实例化
   private constructor() {}
 }
