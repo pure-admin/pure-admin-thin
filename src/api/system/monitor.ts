@@ -113,3 +113,25 @@ export interface SystemInfo {
 export const getServerInfoApi = () => {
   return http.request<ResponseData<ServerInfo>>("get", "/monitor/serverInfo");
 };
+
+/**
+ * RedisCacheInfoDTO
+ */
+export interface RedisCacheInfoDTO {
+  commandStats?: CommandStatusDTO[];
+  dbSize?: number;
+  info?: { [key: string]: string };
+}
+
+/**
+ * CommandStatusDTO
+ */
+export interface CommandStatusDTO {
+  name?: string;
+  value?: string;
+}
+
+/** 获取Redis信息 */
+export const getCacheInfoApi = () => {
+  return http.request<ResponseData<ServerInfo>>("get", "/monitor/cacheInfo");
+};
