@@ -27,9 +27,89 @@ export const getOnlineUserListApi = (params?: OnlineUserQuery) => {
   );
 };
 
+/** 强制登出用户 */
 export const logoutOnlineUserApi = (tokenId: string) => {
   return http.request<ResponseData<void>>(
     "delete",
     `/monitor/onlineUser/${tokenId}`
   );
+};
+
+/**
+ * ServerInfo
+ */
+export interface ServerInfo {
+  cpuInfo?: CpuInfo;
+  diskInfos?: DiskInfo[];
+  jvmInfo?: JvmInfo;
+  memoryInfo?: MemoryInfo;
+  systemInfo?: SystemInfo;
+}
+
+/**
+ * CpuInfo
+ */
+export interface CpuInfo {
+  cpuNum?: number;
+  free?: number;
+  sys?: number;
+  total?: number;
+  used?: number;
+  wait?: number;
+}
+
+/**
+ * DiskInfo
+ */
+export interface DiskInfo {
+  dirName?: string;
+  free?: string;
+  sysTypeName?: string;
+  total?: string;
+  typeName?: string;
+  usage?: number;
+  used?: string;
+}
+
+/**
+ * JvmInfo
+ */
+export interface JvmInfo {
+  free?: number;
+  home?: string;
+  inputArgs?: string;
+  max?: number;
+  name?: string;
+  runTime?: string;
+  startTime?: string;
+  total?: number;
+  usage?: number;
+  used?: number;
+  version?: string;
+}
+
+/**
+ * MemoryInfo
+ */
+export interface MemoryInfo {
+  free?: number;
+  total?: number;
+  usage?: number;
+  used?: number;
+}
+
+/**
+ * SystemInfo
+ */
+export interface SystemInfo {
+  computerIp?: string;
+  computerName?: string;
+  osArch?: string;
+  osName?: string;
+  userDir?: string;
+}
+
+/** 获取服务器信息 */
+export const getServerInfoApi = () => {
+  return http.request<ResponseData<ServerInfo>>("get", "/monitor/serverInfo");
 };
