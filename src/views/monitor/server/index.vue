@@ -1,5 +1,6 @@
 <template>
-  <div class="main">
+  <!-- v-loading指令  可以直接调用Loading动画  -->
+  <div class="main" v-loading="loading">
     <el-row :gutter="30">
       <el-col :span="12" class="card-box">
         <el-card>
@@ -93,20 +94,14 @@
 
 <script setup lang="ts">
 import { getServerInfoApi, ServerInfo } from "@/api/system/monitor";
-import { onBeforeMount, reactive, ref } from "vue";
+import { onBeforeMount, ref } from "vue";
 
 /** 组件name最好和菜单表中的router_name一致 */
 defineOptions({
   name: "ServerInfo"
 });
 
-const server = reactive<ServerInfo>({
-  cpuInfo: undefined,
-  diskInfos: undefined,
-  jvmInfo: undefined,
-  memoryInfo: undefined,
-  systemInfo: undefined
-});
+const loading = ref(true);
 
 const cpuInfoTable = ref([]);
 const memoryInfoTable = ref([]);
@@ -115,113 +110,114 @@ const jvmInfoTable = ref([]);
 const diskInfoTable = ref([]);
 
 async function getList() {
-  // pageLoading.value = true;
-  const { data } = await getServerInfoApi();
-  console.log(data);
-  Object.assign(server, data);
+  loading.value = true;
+  const { data } = await getServerInfoApi().finally(() => {
+    loading.value = false;
+  });
+  const serverInfo = data as ServerInfo;
 
   cpuInfoTable.value = [
     {
       field: "核心数",
-      value: server.cpuInfo.cpuNum
+      value: serverInfo.cpuInfo.cpuNum
     },
     {
       field: "用户使用率",
-      value: server.cpuInfo.used + "%"
+      value: serverInfo.cpuInfo.used + "%"
     },
     {
       field: "系统使用率",
-      value: server.cpuInfo.sys + "%"
+      value: serverInfo.cpuInfo.sys + "%"
     },
     {
       field: "当前空闲率",
-      value: server.cpuInfo.free + "%"
+      value: serverInfo.cpuInfo.free + "%"
     }
   ];
 
   memoryInfoTable.value = [
     {
       field: "总内存",
-      machine: server.memoryInfo.total + "G",
-      jvm: server.jvmInfo.total + "M"
+      machine: serverInfo.memoryInfo.total + "G",
+      jvm: serverInfo.jvmInfo.total + "M"
     },
     {
       field: "已用内存",
-      machine: server.memoryInfo.used + "G",
-      jvm: server.jvmInfo.used + "M"
+      machine: serverInfo.memoryInfo.used + "G",
+      jvm: serverInfo.jvmInfo.used + "M"
     },
     {
       field: "剩余内存",
-      machine: server.memoryInfo.free + "G",
-      jvm: server.jvmInfo.free + "M"
+      machine: serverInfo.memoryInfo.free + "G",
+      jvm: serverInfo.jvmInfo.free + "M"
     },
     {
       field: "使用率",
-      machine: server.memoryInfo.usage + "%",
-      jvm: server.jvmInfo.usage + "%",
+      machine: serverInfo.memoryInfo.usage + "%",
+      jvm: serverInfo.jvmInfo.usage + "%",
       // 设置warning  页面上会红字显示
-      warning: server.jvmInfo.usage > 30
+      warning: serverInfo.jvmInfo.usage > 30
     }
   ];
 
   serverInfoTable.value = [
     {
       field: "服务器名称",
-      value: server.systemInfo.computerName
+      value: serverInfo.systemInfo.computerName
     },
     {
       field: "操作系统",
-      value: server.systemInfo.osName
+      value: serverInfo.systemInfo.osName
     },
     {
       field: "服务器IP",
-      value: server.systemInfo.computerIp
+      value: serverInfo.systemInfo.computerIp
     },
     {
       field: "系统架构",
-      value: server.systemInfo.osArch
+      value: serverInfo.systemInfo.osArch
     }
   ];
 
   jvmInfoTable.value = [
     {
       field: "JDK名称",
-      value: server.jvmInfo.name,
+      value: serverInfo.jvmInfo.name,
       span: 1
     },
     {
       field: "JDK版本",
-      value: server.jvmInfo.version,
+      value: serverInfo.jvmInfo.version,
       span: 1
     },
     {
       field: "启动时间",
-      value: server.jvmInfo.startTime,
+      value: serverInfo.jvmInfo.startTime,
       span: 1
     },
     {
       field: "运行时长",
-      value: server.jvmInfo.runTime,
+      value: serverInfo.jvmInfo.runTime,
       span: 1
     },
     {
       field: "安装路径",
-      value: server.jvmInfo.home,
+      value: serverInfo.jvmInfo.home,
       span: 2
     },
     {
       field: "项目路径",
-      value: server.systemInfo.userDir,
+      value: serverInfo.systemInfo.userDir,
       span: 2
     },
     {
       field: "运行参数",
-      value: server.jvmInfo.inputArgs,
+      value: serverInfo.jvmInfo.inputArgs,
       span: 2
     }
   ];
 
-  diskInfoTable.value = server.diskInfos;
+  diskInfoTable.value = serverInfo.diskInfos;
 }
 
 function cellClassName({ row }) {
@@ -229,6 +225,7 @@ function cellClassName({ row }) {
     return "text-red-500";
   }
 }
+
 onBeforeMount(() => {
   getList();
 });
