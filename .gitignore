@@ -12,6 +12,9 @@ npm-debug.log*
 .pnpm-debug.log
 tests/**/coverage/
 
+# 本机调试debug配置文件
+.vscode/launch.json
+
 # Editor directories and files
 .idea
 *.suo

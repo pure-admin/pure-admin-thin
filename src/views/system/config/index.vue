@@ -1,24 +1,21 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import { useLoginLogHook } from "./utils/hook";
+import { useHook } from "./utils/hook";
 import { PureTableBar } from "@/components/RePureTableBar";
 import { useRenderIcon } from "@/components/ReIcon/src/hooks";
 
-import Delete from "@iconify-icons/ep/delete";
+import EditPen from "@iconify-icons/ep/edit-pen";
 import Search from "@iconify-icons/ep/search";
 import Refresh from "@iconify-icons/ep/refresh";
+import AddFill from "@iconify-icons/ri/add-circle-line";
 import { useUserStoreHook } from "@/store/modules/user";
-// TODO 这个导入声明好长  看看如何优化
-import { CommonUtils } from "@/utils/common";
 
-/** 组件name最好和菜单表中的router_name一致 */
+/** !!!重要!!! 组件name最好和菜单表中的router_name一致, copy的时候记得更改这个名字*/
 defineOptions({
-  name: "SystemOperationLog"
+  name: "SystemConfig"
 });
 
-const loginLogStatusList =
-  useUserStoreHook().dictionaryList["sysLoginLog.status"];
-
+const yesOrNoList = useUserStoreHook().dictionaryList["common.yesOrNo"];
 const tableRef = ref();
 
 const searchFormRef = ref();
@@ -28,16 +25,12 @@ const {
   columns,
   dataList,
   pagination,
-  timeRange,
-  defaultSort,
-  multipleSelection,
   onSearch,
   resetForm,
-  exportAllExcel,
-  getLoginLogList,
-  handleDelete,
-  handleBulkDelete
-} = useLoginLogHook();
+  openDialog,
+  handleRefresh,
+  getList
+} = useHook();
 </script>
 
 <template>
@@ -49,52 +42,37 @@ const {
       :model="searchFormParams"
       class="search-form bg-bg_color w-[99/100] pl-8 pt-[12px]"
     >
-      <el-form-item label="登录IP：" prop="ipAddress">
+      <el-form-item label="参数名称：" prop="configName">
         <el-input
-          v-model="searchFormParams.ipAddress"
-          placeholder="请输入IP地址"
+          v-model="searchFormParams.configName"
+          placeholder="请输入参数名称"
           clearable
           class="!w-[200px]"
         />
       </el-form-item>
-      <el-form-item label="用户名：" prop="username">
+      <el-form-item label="参数键名：" prop="configKey">
         <el-input
-          v-model="searchFormParams.username"
-          placeholder="请选择用户名称"
+          v-model="searchFormParams.configKey"
+          placeholder="请输入参数键名"
           clearable
           class="!w-[200px]"
         />
       </el-form-item>
 
-      <el-form-item label="状态：" prop="status">
+      <el-form-item label="允许修改：" prop="isAllowChange">
         <el-select
-          v-model="searchFormParams.status"
-          placeholder="请选择状态"
+          v-model="searchFormParams.isAllowChange"
+          placeholder="请选择"
           clearable
           class="!w-[180px]"
         >
           <el-option
-            v-for="dict in loginLogStatusList"
+            v-for="dict in yesOrNoList"
             :key="dict.value"
             :label="dict.label"
             :value="dict.value"
           />
         </el-select>
-      </el-form-item>
-      <el-form-item>
-        <label class="el-form-item__label is-required font-bold"
-          >登录时间：</label
-        >
-        <!-- TODO 如何消除这个v-model的warning -->
-        <el-date-picker
-          class="!w-[240px]"
-          v-model="timeRange"
-          value-format="YYYY-MM-DD"
-          type="daterange"
-          range-separator="-"
-          start-placeholder="开始日期"
-          end-placeholder="结束日期"
-        />
       </el-form-item>
       <el-form-item>
         <el-button
@@ -115,24 +93,19 @@ const {
     </el-form>
 
     <!-- table bar 包裹  table -->
-    <PureTableBar title="登录日志列表" :columns="columns" @refresh="onSearch">
+    <PureTableBar title="通知列表" :columns="columns" @refresh="onSearch">
       <!-- 表格操作栏 -->
       <template #buttons>
         <el-button
-          type="danger"
-          :icon="useRenderIcon(Delete)"
-          @click="handleBulkDelete(tableRef)"
+          type="warning"
+          :icon="useRenderIcon(AddFill)"
+          @click="handleRefresh()"
         >
-          批量删除
+          刷新缓存
         </el-button>
-        <el-button
-          type="primary"
-          @click="CommonUtils.exportExcel(columns, dataList, '登录日志列表')"
-          >单页导出</el-button
-        >
-        <el-button type="primary" @click="exportAllExcel">全部导出</el-button>
       </template>
       <template v-slot="{ size, dynamicColumns }">
+        <!-- TODO sort-change 有其他好的处理方式吗？ -->
         <pure-table
           border
           ref="tableRef"
@@ -144,37 +117,26 @@ const {
           adaptive
           :data="dataList"
           :columns="dynamicColumns"
-          :default-sort="defaultSort"
           :pagination="pagination"
           :paginationSmall="size === 'small' ? true : false"
           :header-cell-style="{
             background: 'var(--el-table-row-hover-bg-color)',
             color: 'var(--el-text-color-primary)'
           }"
-          @page-size-change="getLoginLogList"
-          @page-current-change="getLoginLogList"
-          @sort-change="getLoginLogList"
-          @selection-change="
-            rows => (multipleSelection = rows.map(item => item.logId))
-          "
+          @page-size-change="getList"
+          @page-current-change="getList"
         >
           <template #operation="{ row }">
-            <el-popconfirm
-              :title="`是否确认删除编号为${row.logId}的这条日志`"
-              @confirm="handleDelete(row)"
+            <el-button
+              class="reset-margin"
+              link
+              type="primary"
+              :size="size"
+              :icon="useRenderIcon(EditPen)"
+              @click="openDialog(row)"
             >
-              <template #reference>
-                <el-button
-                  class="reset-margin"
-                  link
-                  type="danger"
-                  :size="size"
-                  :icon="useRenderIcon(Delete)"
-                >
-                  删除
-                </el-button>
-              </template>
-            </el-popconfirm>
+              修改
+            </el-button>
           </template>
         </pure-table>
       </template>

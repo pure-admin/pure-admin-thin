@@ -1,26 +1,21 @@
-import dayjs from "dayjs";
+import editForm from "../form.vue";
 import { message } from "@/utils/message";
-import { ElMessageBox, Sort } from "element-plus";
+import { addDialog } from "@/components/ReDialog";
+import { type PaginationProps } from "@pureadmin/table";
+
 import {
-  getLoginLogListApi,
-  deleteLoginLogApi,
-  exportLoginLogExcelApi,
-  LoginLogQuery
-} from "@/api/system/log";
-import { reactive, ref, onMounted, toRaw } from "vue";
-import { useUserStoreHook } from "@/store/modules/user";
+  getConfigListApi,
+  getConfigInfoApi,
+  updateConfigApi,
+  refreshConfigCacheApi,
+  ConfigQuery,
+  ConfigDTO,
+  UpdateConfigRequest
+} from "@/api/system/config";
+import { reactive, ref, onMounted, h, toRaw } from "vue";
 import { CommonUtils } from "@/utils/common";
-import { PaginationProps } from "@pureadmin/table";
 
-const loginLogStatusMap =
-  useUserStoreHook().dictionaryMap["sysLoginLog.status"];
-
-export function useLoginLogHook() {
-  const defaultSort: Sort = {
-    prop: "loginTime",
-    order: "descending"
-  };
-
+export function useHook() {
   const pagination: PaginationProps = {
     total: 0,
     pageSize: 10,
@@ -28,190 +23,150 @@ export function useLoginLogHook() {
     background: true
   };
 
-  const timeRange = ref([]);
-
-  const searchFormParams = reactive<LoginLogQuery>({
-    ipAddress: undefined,
-    username: undefined,
-    status: undefined,
-    beginTime: undefined,
-    endTime: undefined,
-    timeRangeColumn: defaultSort.prop
+  const searchFormParams = reactive<ConfigQuery>({
+    configKey: undefined,
+    configName: undefined,
+    isAllowChange: undefined
   });
 
+  const formRef = ref();
   const dataList = ref([]);
   const pageLoading = ref(true);
   const multipleSelection = ref([]);
 
   const columns: TableColumnList = [
     {
-      type: "selection",
-      align: "left"
+      label: "参数编号",
+      prop: "configId",
+      minWidth: 60
     },
     {
-      label: "日志编号",
-      prop: "logId",
+      label: "参数名称",
+      prop: "configName",
+      minWidth: 120
+    },
+    {
+      label: "参数键",
+      prop: "configKey",
+      minWidth: 120,
+      showOverflowTooltip: true
+    },
+    {
+      label: "参数值",
+      prop: "configValue",
+      minWidth: 150
+    },
+    {
+      label: "参数选项",
+      prop: "configOptions",
+      minWidth: 120
+    },
+    {
+      label: "允许更改",
+      prop: "isAllowChangeStr",
       minWidth: 100
     },
     {
-      label: "用户名",
-      prop: "username",
+      label: "备注",
+      prop: "remark",
       minWidth: 120,
-      sortable: "custom"
-    },
-    {
-      label: "IP地址",
-      prop: "ipAddress",
-      minWidth: 120
-    },
-    {
-      label: "登录地点",
-      prop: "loginLocation",
-      minWidth: 120
-    },
-    {
-      label: "操作系统",
-      prop: "operationSystem",
-      minWidth: 120
-    },
-    {
-      label: "浏览器",
-      prop: "browser",
-      minWidth: 120
-    },
-    {
-      label: "状态",
-      prop: "status",
-      minWidth: 120,
-      cellRenderer: ({ row, props }) => (
-        <el-tag
-          size={props.size}
-          type={loginLogStatusMap[row.status].cssTag}
-          effect="plain"
-        >
-          {loginLogStatusMap[row.status].label}
-        </el-tag>
-      )
-    },
-    {
-      label: "状态名",
-      prop: "statusStr",
-      minWidth: 120,
-      hide: true
-    },
-    {
-      label: "登录时间",
-      minWidth: 160,
-      prop: "loginTime",
-      sortable: "custom",
-      formatter: ({ loginTime }) =>
-        dayjs(loginTime).format("YYYY-MM-DD HH:mm:ss")
+      showOverflowTooltip: true
     },
     {
       label: "操作",
       fixed: "right",
-      width: 140,
+      width: 120,
       slot: "operation"
     }
   ];
 
-  async function onSearch() {
+  function onSearch() {
     // 点击搜索的时候 需要重置分页
     pagination.currentPage = 1;
-    getLoginLogList();
+
+    getList();
   }
 
   function resetForm(formEl, tableRef) {
     if (!formEl) return;
     // 清空查询参数
     formEl.resetFields();
-    // 清空排序
-    searchFormParams.orderColumn = undefined;
-    searchFormParams.orderDirection = undefined;
-    // 清空时间查询  TODO  这块有点繁琐  有可以优化的地方吗？
-    // Form组件的resetFields方法无法清除datepicker里面的数据。
-    timeRange.value = [];
-    searchFormParams.beginTime = undefined;
-    searchFormParams.endTime = undefined;
+
     tableRef.getTableRef().clearSort();
     // 重置分页并查询
     onSearch();
   }
 
-  async function getLoginLogList(sort: Sort = defaultSort) {
-    pageLoading.value = true;
-    if (sort != null) {
-      CommonUtils.fillSortParams(searchFormParams, sort);
-    }
+  async function getList() {
     CommonUtils.fillPaginationParams(searchFormParams, pagination);
-    CommonUtils.fillTimeRangeParams(searchFormParams, timeRange.value);
 
-    const { data } = await getLoginLogListApi(toRaw(searchFormParams)).finally(
+    pageLoading.value = true;
+    const { data } = await getConfigListApi(toRaw(searchFormParams)).finally(
       () => {
         pageLoading.value = false;
       }
     );
+
     dataList.value = data.rows;
     pagination.total = data.total;
   }
 
-  async function exportAllExcel(sort: Sort = defaultSort) {
-    if (sort != null) {
-      CommonUtils.fillSortParams(searchFormParams, sort);
-    }
-    CommonUtils.fillPaginationParams(searchFormParams, pagination);
-    CommonUtils.fillTimeRangeParams(searchFormParams, timeRange.value);
-
-    exportLoginLogExcelApi(toRaw(searchFormParams), "登录日志.xls");
-  }
-
-  async function handleDelete(row) {
-    await deleteLoginLogApi([row.logId]).then(() => {
-      message(`您删除了操作编号为${row.logId}的这条数据`, {
+  async function handleRefresh() {
+    await refreshConfigCacheApi().then(() => {
+      message("刷新缓存成功", {
         type: "success"
       });
       // 刷新列表
-      getLoginLogList();
+      getList();
     });
   }
 
-  async function handleBulkDelete(tableRef) {
-    if (multipleSelection.value.length === 0) {
-      message("请选择需要删除的数据", { type: "warning" });
-      return;
-    }
+  async function handleUpdate(curData, done) {
+    const request: UpdateConfigRequest = {
+      configValue: curData.configValue
+    };
+    console.log("curData");
+    console.log(curData);
 
-    ElMessageBox.confirm(
-      `确认要<strong>删除</strong>编号为<strong style='color:var(--el-color-primary)'>[ ${multipleSelection.value} ]</strong>的日志吗?`,
-      "系统提示",
-      {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning",
-        dangerouslyUseHTMLString: true,
-        draggable: true
-      }
-    )
-      .then(async () => {
-        await deleteLoginLogApi(multipleSelection.value).then(() => {
-          message(`您删除了日志编号为[ ${multipleSelection.value} ]的数据`, {
-            type: "success"
-          });
-          // 刷新列表
-          getLoginLogList();
-        });
-      })
-      .catch(() => {
-        message("取消删除", {
-          type: "info"
-        });
-        // 清空checkbox选择的数据
-        tableRef.getTableRef().clearSelection();
+    await updateConfigApi(curData.configId, request).then(() => {
+      message(`您成功修改了配置：${curData.configName}`, {
+        type: "success"
       });
+      // 关闭弹框
+      done();
+      // 刷新列表
+      getList();
+    });
+  }
+
+  async function openDialog(row?: ConfigDTO) {
+    const { data } = await getConfigInfoApi(row.configId);
+    addDialog({
+      title: `修改配置`,
+      props: {
+        formInline: data
+      },
+      width: "40%",
+      draggable: true,
+      fullscreenIcon: true,
+      closeOnClickModal: false,
+      contentRenderer: () => h(editForm, { ref: formRef }),
+      beforeSure: (done, { options }) => {
+        const formRuleRef = formRef.value.getFormRuleRef();
+
+        const curData = options.props.formInline;
+
+        formRuleRef.validate(valid => {
+          if (valid) {
+            handleUpdate(curData, done);
+          }
+        });
+      }
+    });
   }
 
   onMounted(() => {
-    getLoginLogList();
+    getList();
   });
 
   return {
@@ -220,15 +175,11 @@ export function useLoginLogHook() {
     columns,
     dataList,
     pagination,
-    defaultSort,
-    timeRange,
     multipleSelection,
+    getList,
     onSearch,
-    exportAllExcel,
-    // exportExcel,
-    getLoginLogList,
     resetForm,
-    handleDelete,
-    handleBulkDelete
+    handleRefresh,
+    openDialog
   };
 }
