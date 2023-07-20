@@ -60,9 +60,12 @@ type PageDTO<T> = {
   rows: Array<T>;
 };
 
-interface BasePageQuery {
+interface BasePageQuery extends BaseQuery {
   pageNum?: number;
   pageSize?: number;
+}
+
+interface BaseQuery {
   beginTime?: string;
   endTime?: string;
   orderColumn?: string;
