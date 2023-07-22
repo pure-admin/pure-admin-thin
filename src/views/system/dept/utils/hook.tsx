@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
 import editForm from "../form.vue";
-import { handleTree } from "@/utils/tree";
+import { setDisabledForTreeOptions, handleTree } from "@/utils/tree";
 import { message } from "@/utils/message";
 import {
   DeptDTO,
@@ -29,14 +29,14 @@ export function useHook() {
     let filterDataList = [...originalDataList.value];
     if (!isAllEmpty(searchFormParams.deptName)) {
       // 前端搜索部门名称
-      filterDataList = filterDataList.filter(item =>
+      filterDataList = filterDataList.filter((item: DeptDTO) =>
         item.deptName.includes(searchFormParams.deptName)
       );
     }
     if (!isAllEmpty(searchFormParams.status)) {
       // 前端搜索状态
       filterDataList = filterDataList.filter(
-        item => item.status === searchFormParams.status
+        (item: DeptDTO) => item.status === searchFormParams.status
       );
     }
     // 处理成树结构
@@ -109,24 +109,6 @@ export function useHook() {
     originalDataList.value = data;
   }
 
-  /**
-   * 根据返回数据的status字段值判断追加是否禁用disabled字段，返回处理后的树结构，用于上级部门级联选择器的展示
-   *（实际开发中也是如此，不可能前端需要的每个字段后端都会返回，这时需要前端自行根据后端返回的某些字段做逻辑处理）
-   * 这个是作者留下的例子， 也可以通过设置disabled 对应的字段来实现 比如disabled: 'status' (需要后端的字段为true/false)
-   * @param treeList
-   * @returns
-   */
-  function setDisabledForTreeOptions(treeList) {
-    if (!treeList || !treeList.length) return;
-    const newTreeList = [];
-    for (let i = 0; i < treeList.length; i++) {
-      treeList[i].disabled = treeList[i].status === 0 ? true : false;
-      setDisabledForTreeOptions(treeList[i].children);
-      newTreeList.push(treeList[i]);
-    }
-    return newTreeList;
-  }
-
   async function handleAdd(row, done) {
     await addDeptApi(row).then(() => {
       message(`您新增了部门:${row.deptName}`, {
@@ -153,7 +135,7 @@ export function useHook() {
 
   async function openDialog(title = "新增", row?: DeptDTO) {
     const { data } = await getDeptListApi();
-    const treeList = setDisabledForTreeOptions(handleTree(data));
+    const treeList = setDisabledForTreeOptions(handleTree(data), "status");
 
     if (title === "编辑") {
       row = (await getDeptInfoApi(row.id + "")).data;

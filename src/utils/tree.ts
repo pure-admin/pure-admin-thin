@@ -127,6 +127,25 @@ export const appendFieldByUniqueId = (
 };
 
 /**
+ * 根据返回数据的status字段值判断追加是否禁用disabled字段，返回处理后的树结构，用于上级部门级联选择器的展示
+ *（实际开发中也是如此，不可能前端需要的每个字段后端都会返回，这时需要前端自行根据后端返回的某些字段做逻辑处理）
+ * 这个是pure作者留下的例子， 也可以通过设置disabled 对应的字段来实现 比如disabled: 'status' (需要后端的字段为true/false)
+ * @param treeList
+ * @param field 根据哪个字段来设置disabled
+ * @returns
+ */
+export function setDisabledForTreeOptions(treeList, field) {
+  if (!treeList || !treeList.length) return;
+  const newTreeList = [];
+  for (let i = 0; i < treeList.length; i++) {
+    treeList[i].disabled = treeList[i][field] === 0 ? true : false;
+    setDisabledForTreeOptions(treeList[i].children, field);
+    newTreeList.push(treeList[i]);
+  }
+  return newTreeList;
+}
+
+/**
  * @description 构造树型结构数据
  * @param data 数据源
  * @param id id字段 默认id

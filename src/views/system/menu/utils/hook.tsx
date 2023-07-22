@@ -1,234 +1,251 @@
 import dayjs from "dayjs";
+import editForm from "../form.vue";
+import { handleTree, setDisabledForTreeOptions } from "@/utils/tree";
 import { message } from "@/utils/message";
-import { ElMessageBox, Sort } from "element-plus";
+import { transferToStandardRouterData } from "./menuLogic";
 import {
-  getLoginLogListApi,
-  deleteLoginLogApi,
-  exportLoginLogExcelApi,
-  LoginLogQuery
-} from "@/api/system/log";
-import { reactive, ref, onMounted, toRaw } from "vue";
-import { useUserStoreHook } from "@/store/modules/user";
-import { CommonUtils } from "@/utils/common";
-import { PaginationProps } from "@pureadmin/table";
+  MenuDTO,
+  MenuRequest,
+  getMenuListApi,
+  addMenuApi,
+  deleteMenuApi,
+  getMenuInfoApi,
+  updateMenuApi,
+  MenuDetailDTO
+} from "@/api/system/menu";
+import { usePublicHooks } from "../../hooks";
+import { addDialog } from "@/components/ReDialog";
+import { reactive, ref, onMounted, h, computed } from "vue";
+import { isAllEmpty } from "@pureadmin/utils";
 
-const loginLogStatusMap =
-  useUserStoreHook().dictionaryMap["sysLoginLog.status"];
-
-export function useLoginLogHook() {
-  const defaultSort: Sort = {
-    prop: "loginTime",
-    order: "descending"
-  };
-
-  const pagination: PaginationProps = {
-    total: 0,
-    pageSize: 10,
-    currentPage: 1,
-    background: true
-  };
-
-  const timeRange = ref([]);
-
-  const searchFormParams = reactive<LoginLogQuery>({
-    ipAddress: undefined,
-    username: undefined,
-    status: undefined,
-    beginTime: undefined,
-    endTime: undefined,
-    timeRangeColumn: defaultSort.prop
+export function useHook() {
+  const searchFormParams = reactive({
+    menuName: "",
+    status: null
   });
 
-  const dataList = ref([]);
-  const pageLoading = ref(true);
-  const multipleSelection = ref([]);
+  const formRef = ref();
+
+  const originalDataList = ref([]);
+  const dataList = computed(() => {
+    let filterDataList = [...originalDataList.value];
+    if (!isAllEmpty(searchFormParams.menuName)) {
+      // 前端搜索菜单名称
+      filterDataList = filterDataList.filter((item: MenuDTO) =>
+        item.menuName.includes(searchFormParams.menuName)
+      );
+    }
+    if (!isAllEmpty(searchFormParams.status)) {
+      // 前端搜索状态
+      filterDataList = filterDataList.filter(
+        (item: MenuDTO) => item.status === searchFormParams.status
+      );
+    }
+    // 处理成树结构
+    return [...handleTree(filterDataList)];
+  });
+  const loading = ref(true);
+  const { tagStyle } = usePublicHooks();
 
   const columns: TableColumnList = [
     {
-      type: "selection",
+      label: "菜单名称",
+      prop: "menuName",
+      width: 200,
       align: "left"
     },
     {
-      label: "日志编号",
-      prop: "logId",
-      minWidth: 100
+      label: "页面路径",
+      prop: "path",
+      minWidth: 170
     },
     {
-      label: "用户名",
-      prop: "username",
-      minWidth: 120,
-      sortable: "custom"
-    },
-    {
-      label: "IP地址",
-      prop: "ipAddress",
-      minWidth: 120
-    },
-    {
-      label: "登录地点",
-      prop: "loginLocation",
-      minWidth: 120
-    },
-    {
-      label: "操作系统",
-      prop: "operationSystem",
-      minWidth: 120
-    },
-    {
-      label: "浏览器",
-      prop: "browser",
-      minWidth: 120
+      label: "路由名称",
+      prop: "routerName",
+      width: 160,
+      align: "center"
     },
     {
       label: "状态",
       prop: "status",
-      minWidth: 120,
+      minWidth: 100,
       cellRenderer: ({ row, props }) => (
-        <el-tag
-          size={props.size}
-          type={loginLogStatusMap[row.status].cssTag}
-          effect="plain"
-        >
-          {loginLogStatusMap[row.status].label}
+        <el-tag size={props.size} style={tagStyle.value(row.status)}>
+          {row.status === 1 ? "启用" : "停用"}
         </el-tag>
       )
     },
     {
-      label: "状态名",
-      prop: "statusStr",
-      minWidth: 120,
-      hide: true
+      label: "类型",
+      prop: "isButton",
+      minWidth: 100,
+      formatter: ({ isButton }) => (isButton ? "按钮" : "菜单")
     },
     {
-      label: "登录时间",
-      minWidth: 160,
-      prop: "loginTime",
-      sortable: "custom",
-      formatter: ({ loginTime }) =>
-        dayjs(loginTime).format("YYYY-MM-DD HH:mm:ss")
+      label: "子类型",
+      prop: "menuTypeStr",
+      minWidth: 100
+    },
+    {
+      label: "排序",
+      prop: "rank",
+      minWidth: 70
+    },
+    {
+      label: "创建时间",
+      minWidth: 200,
+      prop: "createTime",
+      formatter: ({ createTime }) =>
+        dayjs(createTime).format("YYYY-MM-DD HH:mm:ss")
     },
     {
       label: "操作",
       fixed: "right",
-      width: 140,
+      width: 240,
       slot: "operation"
     }
   ];
 
-  async function onSearch() {
-    // 点击搜索的时候 需要重置分页
-    pagination.currentPage = 1;
-    getLoginLogList();
-  }
-
-  function resetForm(formEl, tableRef) {
+  function resetForm(formEl) {
     if (!formEl) return;
-    // 清空查询参数
     formEl.resetFields();
-    // 清空排序
-    searchFormParams.orderColumn = undefined;
-    searchFormParams.orderDirection = undefined;
-    // 清空时间查询  TODO  这块有点繁琐  有可以优化的地方吗？
-    // Form组件的resetFields方法无法清除datepicker里面的数据。
-    timeRange.value = [];
-    searchFormParams.beginTime = undefined;
-    searchFormParams.endTime = undefined;
-    tableRef.getTableRef().clearSort();
-    // 重置分页并查询
     onSearch();
   }
 
-  async function getLoginLogList(sort: Sort = defaultSort) {
-    pageLoading.value = true;
-    if (sort != null) {
-      CommonUtils.fillSortParams(searchFormParams, sort);
-    }
-    CommonUtils.fillPaginationParams(searchFormParams, pagination);
-    CommonUtils.fillTimeRangeParams(searchFormParams, timeRange.value);
-
-    const { data } = await getLoginLogListApi(toRaw(searchFormParams)).finally(
-      () => {
-        pageLoading.value = false;
-      }
-    );
-    dataList.value = data.rows;
-    pagination.total = data.total;
+  async function onSearch() {
+    loading.value = true;
+    // 这里是返回一维数组结构，前端自行处理成树结构，返回格式要求：唯一id加父节点parentId，parentId取父节点id
+    const { data } = await getMenuListApi({ isButton: null }).finally(() => {
+      loading.value = false;
+    });
+    originalDataList.value = data;
   }
 
-  async function exportAllExcel(sort: Sort = defaultSort) {
-    if (sort != null) {
-      CommonUtils.fillSortParams(searchFormParams, sort);
-    }
-    CommonUtils.fillPaginationParams(searchFormParams, pagination);
-    CommonUtils.fillTimeRangeParams(searchFormParams, timeRange.value);
-
-    exportLoginLogExcelApi(toRaw(searchFormParams), "登录日志.xls");
-  }
-
-  async function handleDelete(row) {
-    await deleteLoginLogApi([row.logId]).then(() => {
-      message(`您删除了操作编号为${row.logId}的这条数据`, {
+  /**
+   * 测试用例
+   * 1.添加外链跳转菜单
+   * 2.添加iframe菜单  外链+内链
+   * 3.添加目录
+   * 4.添加一级菜单
+   * 5.添加按钮
+   * 6.iframe和外链跳转不允许添加按钮
+   * 7.只允许目录添加子菜单
+   * 8.基于目录 测试以上1~5的步骤
+   * @param row dialog表单数据
+   * @param done
+   */
+  async function handleAdd(row, done) {
+    await addMenuApi(row).then(() => {
+      message(`您新增了菜单:${row.menuName}`, {
         type: "success"
       });
+      // 关闭弹框
+      done();
       // 刷新列表
-      getLoginLogList();
+      onSearch();
     });
   }
 
-  async function handleBulkDelete(tableRef) {
-    if (multipleSelection.value.length === 0) {
-      message("请选择需要删除的数据", { type: "warning" });
-      return;
+  /**
+   * 测试用例
+   * 1.编辑页面/目录/iframe/外链/按钮的数据
+   * 2.更换父级菜单
+   * 3.不允许改变类型(会导致逻辑变复杂，比如改变类型需要考虑子节点)
+   * @param row
+   * @param done
+   */
+  async function handleUpdate(row, done) {
+    await updateMenuApi(row.id, row).then(() => {
+      message(`您更新了菜单:${row.menuName}`, {
+        type: "success"
+      });
+      // 关闭弹框
+      done();
+      // 刷新列表
+      onSearch();
+    });
+  }
+
+  async function openDialog(title = "新增", row?: MenuDTO) {
+    // 下拉选项需要排除掉按钮
+    const { data } = await getMenuListApi({ isButton: false });
+    const optionTree = setDisabledForTreeOptions(handleTree(data), "status");
+
+    let meta = undefined;
+    if (title === "编辑") {
+      row = (await getMenuInfoApi(row.id + "")).data;
+      meta = (row as MenuDetailDTO).meta;
     }
 
-    ElMessageBox.confirm(
-      `确认要<strong>删除</strong>编号为<strong style='color:var(--el-color-primary)'>[ ${multipleSelection.value} ]</strong>的日志吗?`,
-      "系统提示",
-      {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning",
-        dangerouslyUseHTMLString: true,
-        draggable: true
+    console.log(row);
+
+    // TODO 为什么声明一个formInline变量,把变量填充进去，  再给props.formInline 结果就不生效
+    addDialog({
+      title: `${title}菜单`,
+      props: {
+        formInline: {
+          id: row?.id ?? 0,
+          parentId: row?.parentId ?? 0,
+          menuName: row?.menuName ?? "",
+          routerName: row?.routerName ?? "",
+          path: row?.path ?? "",
+          isButton: row?.isButton,
+          permission: row?.permission ?? "",
+          menuType: row?.menuType ?? undefined,
+          status: row?.status ?? 1,
+          meta: meta ?? { rank: 0 }
+        },
+        higherMenuOptions: [...optionTree]
+      },
+      width: "60%",
+      draggable: true,
+      fullscreenIcon: true,
+      closeOnClickModal: false,
+      contentRenderer: () => h(editForm, { ref: formRef }),
+      beforeSure: (done, { options }) => {
+        const FormRef = formRef.value.getRef();
+        const curData = options.props.formInline as MenuRequest;
+
+        // 将菜单的数据转换为标准的路由数据
+        transferToStandardRouterData(curData, optionTree);
+
+        console.log(curData);
+
+        FormRef.validate(valid => {
+          if (valid) {
+            // 表单规则校验通过
+            if (title === "新增") {
+              handleAdd(curData, done);
+            } else {
+              // 实际开发先调用编辑接口，再进行下面操作
+              handleUpdate(curData, done);
+            }
+          }
+        });
       }
-    )
-      .then(async () => {
-        await deleteLoginLogApi(multipleSelection.value).then(() => {
-          message(`您删除了日志编号为[ ${multipleSelection.value} ]的数据`, {
-            type: "success"
-          });
-          // 刷新列表
-          getLoginLogList();
-        });
-      })
-      .catch(() => {
-        message("取消删除", {
-          type: "info"
-        });
-        // 清空checkbox选择的数据
-        tableRef.getTableRef().clearSelection();
-      });
+    });
+  }
+
+  async function handleDelete(row) {
+    await deleteMenuApi(row.id).then(() => {
+      message(`您删除了${row.menuName}`, { type: "success" });
+      // 刷新列表
+      onSearch();
+    });
   }
 
   onMounted(() => {
-    getLoginLogList();
+    onSearch();
   });
 
   return {
     searchFormParams,
-    pageLoading,
+    loading,
     columns,
     dataList,
-    pagination,
-    defaultSort,
-    timeRange,
-    multipleSelection,
     onSearch,
-    exportAllExcel,
-    // exportExcel,
-    getLoginLogList,
     resetForm,
-    handleDelete,
-    handleBulkDelete
+    openDialog,
+    handleDelete
   };
 }

@@ -2,6 +2,7 @@ import { PaginationProps, TableColumn } from "@pureadmin/table";
 import { Sort } from "element-plus";
 import { utils, writeFile } from "xlsx";
 import { message } from "./message";
+import { pinyin } from "pinyin-pro";
 
 export class CommonUtils {
   static getBeginTimeSafely(timeRange: string[]): string {
@@ -124,6 +125,15 @@ export class CommonUtils {
 
     // 返回截取后的数组
     return paginatedList;
+  }
+
+  static toPinyin(chineseStr: string): string {
+    if (chineseStr == null || chineseStr === undefined || chineseStr === "") {
+      return chineseStr;
+    }
+
+    const pinyinStr = pinyin(chineseStr, { toneType: "none" });
+    return pinyinStr.replace(/\s/g, "");
   }
 
   // 私有构造函数，防止类被实例化
