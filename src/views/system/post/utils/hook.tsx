@@ -1,23 +1,22 @@
 import dayjs from "dayjs";
 import { message } from "@/utils/message";
 import { ElMessageBox, Sort } from "element-plus";
-import {
-  getLoginLogListApi,
-  deleteLoginLogApi,
-  exportLoginLogExcelApi,
-  LoginLogQuery
-} from "@/api/system/log";
-import { reactive, ref, onMounted, toRaw } from "vue";
+import { reactive, ref, onMounted, toRaw, computed } from "vue";
 import { useUserStoreHook } from "@/store/modules/user";
 import { CommonUtils } from "@/utils/common";
 import { PaginationProps } from "@pureadmin/table";
+import {
+  PostListCommand,
+  getPostListApi,
+  exportPostExcelApi,
+  deletePostApi
+} from "@/api/system/post";
 
-const loginLogStatusMap =
-  useUserStoreHook().dictionaryMap["sysLoginLog.status"];
+const statusMap = useUserStoreHook().dictionaryMap["common.status"];
 
-export function useLoginLogHook() {
+export function usePostHook() {
   const defaultSort: Sort = {
-    prop: "loginTime",
+    prop: "createTime",
     order: "descending"
   };
 
@@ -28,20 +27,35 @@ export function useLoginLogHook() {
     background: true
   };
 
-  const timeRange = ref([]);
+  const timeRange = computed<[string, string] | null>({
+    get() {
+      if (searchFormParams.beginTime && searchFormParams.endTime) {
+        return [searchFormParams.beginTime, searchFormParams.endTime];
+      } else {
+        return null;
+      }
+    },
+    set(v) {
+      if (v?.length === 2) {
+        searchFormParams.beginTime = v[0];
+        searchFormParams.endTime = v[1];
+      } else {
+        searchFormParams.beginTime = undefined;
+        searchFormParams.endTime = undefined;
+      }
+    }
+  });
 
-  const searchFormParams = reactive<LoginLogQuery>({
-    ipAddress: undefined,
-    username: undefined,
-    status: undefined,
-    beginTime: undefined,
-    endTime: undefined,
-    timeRangeColumn: defaultSort.prop
+  const searchFormParams = reactive<PostListCommand>({
+    postCode: "",
+    postName: "",
+    status: undefined
   });
 
   const dataList = ref([]);
   const pageLoading = ref(true);
   const multipleSelection = ref([]);
+  const sortState = ref<Sort>(defaultSort);
 
   const columns: TableColumnList = [
     {
@@ -49,34 +63,23 @@ export function useLoginLogHook() {
       align: "left"
     },
     {
-      label: "日志编号",
-      prop: "logId",
+      label: "岗位编号",
+      prop: "postId",
       minWidth: 100
     },
     {
-      label: "用户名",
-      prop: "username",
-      minWidth: 120,
-      sortable: "custom"
-    },
-    {
-      label: "IP地址",
-      prop: "ipAddress",
+      label: "岗位编码",
+      prop: "postCode",
       minWidth: 120
     },
     {
-      label: "登录地点",
-      prop: "loginLocation",
+      label: "岗位名称",
+      prop: "postName",
       minWidth: 120
     },
     {
-      label: "操作系统",
-      prop: "operationSystem",
-      minWidth: 120
-    },
-    {
-      label: "浏览器",
-      prop: "browser",
+      label: "岗位排序",
+      prop: "postSort",
       minWidth: 120
     },
     {
@@ -86,26 +89,20 @@ export function useLoginLogHook() {
       cellRenderer: ({ row, props }) => (
         <el-tag
           size={props.size}
-          type={loginLogStatusMap[row.status].cssTag}
+          type={statusMap[row.status].cssTag}
           effect="plain"
         >
-          {loginLogStatusMap[row.status].label}
+          {statusMap[row.status].label}
         </el-tag>
       )
     },
     {
-      label: "状态名",
-      prop: "statusStr",
-      minWidth: 120,
-      hide: true
-    },
-    {
-      label: "登录时间",
+      label: "创建时间",
       minWidth: 160,
-      prop: "loginTime",
+      prop: "createTime",
       sortable: "custom",
-      formatter: ({ loginTime }) =>
-        dayjs(loginTime).format("YYYY-MM-DD HH:mm:ss")
+      formatter: ({ createTime }) =>
+        dayjs(createTime).format("YYYY-MM-DD HH:mm:ss")
     },
     {
       label: "操作",
@@ -115,10 +112,15 @@ export function useLoginLogHook() {
     }
   ];
 
+  function onSortChanged(sort: Sort) {
+    sortState.value = sort;
+    onSearch();
+  }
+
   async function onSearch() {
     // 点击搜索的时候 需要重置分页
     pagination.currentPage = 1;
-    getLoginLogList();
+    getPostList();
   }
 
   function resetForm(formEl, tableRef) {
@@ -130,7 +132,6 @@ export function useLoginLogHook() {
     searchFormParams.orderDirection = undefined;
     // 清空时间查询  TODO  这块有点繁琐  有可以优化的地方吗？
     // Form组件的resetFields方法无法清除datepicker里面的数据。
-    timeRange.value = [];
     searchFormParams.beginTime = undefined;
     searchFormParams.endTime = undefined;
     tableRef.getTableRef().clearSort();
@@ -138,15 +139,14 @@ export function useLoginLogHook() {
     onSearch();
   }
 
-  async function getLoginLogList(sort: Sort = defaultSort) {
+  async function getPostList(sort: Sort = defaultSort) {
     pageLoading.value = true;
     if (sort != null) {
       CommonUtils.fillSortParams(searchFormParams, sort);
     }
     CommonUtils.fillPaginationParams(searchFormParams, pagination);
-    CommonUtils.fillTimeRangeParams(searchFormParams, timeRange.value);
 
-    const { data } = await getLoginLogListApi(toRaw(searchFormParams)).finally(
+    const { data } = await getPostListApi(toRaw(searchFormParams)).finally(
       () => {
         pageLoading.value = false;
       }
@@ -155,23 +155,23 @@ export function useLoginLogHook() {
     pagination.total = data.total;
   }
 
-  async function exportAllExcel(sort: Sort = defaultSort) {
-    if (sort != null) {
-      CommonUtils.fillSortParams(searchFormParams, sort);
+  async function exportAllExcel() {
+    if (sortState.value != null) {
+      CommonUtils.fillSortParams(searchFormParams, sortState.value);
     }
     CommonUtils.fillPaginationParams(searchFormParams, pagination);
     CommonUtils.fillTimeRangeParams(searchFormParams, timeRange.value);
 
-    exportLoginLogExcelApi(toRaw(searchFormParams), "登录日志.xls");
+    exportPostExcelApi(toRaw(searchFormParams), "岗位数据.xls");
   }
 
   async function handleDelete(row) {
-    await deleteLoginLogApi([row.logId]).then(() => {
+    await deletePostApi([row.logId]).then(() => {
       message(`您删除了操作编号为${row.logId}的这条数据`, {
         type: "success"
       });
       // 刷新列表
-      getLoginLogList();
+      getPostList();
     });
   }
 
@@ -193,12 +193,12 @@ export function useLoginLogHook() {
       }
     )
       .then(async () => {
-        await deleteLoginLogApi(multipleSelection.value).then(() => {
+        await deletePostApi(multipleSelection.value).then(() => {
           message(`您删除了日志编号为[ ${multipleSelection.value} ]的数据`, {
             type: "success"
           });
           // 刷新列表
-          getLoginLogList();
+          getPostList();
         });
       })
       .catch(() => {
@@ -210,9 +210,7 @@ export function useLoginLogHook() {
       });
   }
 
-  onMounted(() => {
-    getLoginLogList();
-  });
+  onMounted(getPostList);
 
   return {
     searchFormParams,
@@ -224,9 +222,10 @@ export function useLoginLogHook() {
     timeRange,
     multipleSelection,
     onSearch,
+    onSortChanged,
     exportAllExcel,
     // exportExcel,
-    getLoginLogList,
+    getPostList,
     resetForm,
     handleDelete,
     handleBulkDelete

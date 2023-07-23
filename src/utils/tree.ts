@@ -205,3 +205,25 @@ export const handleTree = (
   }
   return tree;
 };
+
+export interface Tree {
+  children?: this[];
+}
+
+export function toTree<T extends Tree>(
+  src: T[],
+  keyField: keyof T,
+  parentField: keyof T
+): T[] {
+  const map = new Map<unknown, T>(src.map(it => [it[keyField], it]));
+  src.forEach(it => {
+    if (map.has(it[parentField])) {
+      const parent = map.get(it[parentField])!;
+      if (!parent.children) {
+        parent.children = [];
+      }
+      parent.children.push(it);
+    }
+  });
+  return src.filter(it => !it[parentField]);
+}

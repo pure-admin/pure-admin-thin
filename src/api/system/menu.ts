@@ -1,4 +1,5 @@
 import { http } from "@/utils/http";
+import { Tree } from "@/utils/tree";
 
 export interface MenuQuery {
   isButton: boolean;
@@ -7,7 +8,7 @@ export interface MenuQuery {
 /**
  * MenuDTO
  */
-export interface MenuDTO {
+export interface MenuDTO extends Tree {
   createTime?: Date;
   isButton?: number;
   id?: number;
