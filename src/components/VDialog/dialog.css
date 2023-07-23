@@ -1,0 +1,62 @@
+html.dark .v-dialog {
+  --header-bg-color: #171d1e;
+  --footer-bg-color: #171d1e;
+}
+
+.v-dialog {
+  --header-bg-color: #f5f7fa;
+  --footer-bg-color: #f5f7fa;
+}
+
+.v-dialog.el-dialog.hidden-footer .el-dialog__footer {
+  padding: 0;
+  border: none;
+}
+
+.el-dialog__footer {
+  padding: 10px;
+  /*border-top: 1px solid var(--el-border-color);*/
+  /*border-bottom: 1px solid var(--el-border-color);*/
+  box-sizing: border-box;
+  background-color: var(--header-bg-color);
+  position: relative; /* 防止被表单覆盖底部 */
+  z-index: calc(var(--el-index-normal) + 1);
+}
+
+.v-dialog.el-dialog {
+  box-sizing: border-box;
+  margin: 15dvh auto;
+}
+
+.v-dialog.el-dialog.is-fullscreen {
+  box-sizing: border-box;
+  margin: auto;
+}
+
+.v-dialog.el-dialog .el-dialog__header {
+  padding: 10px 16px;
+  /*border-bottom: 1px solid var(--el-border-color);*/
+  margin-right: 0;
+  box-sizing: border-box;
+  background-color: var(--header-bg-color);
+}
+
+.v-dialog.el-dialog--center .el-dialog__body,
+.el-dialog__body {
+  padding: 16px 20px;
+  box-sizing: border-box;
+}
+
+.v-dialog.el-dialog.is-fullscreen .el-dialog__body {
+  height: calc(100dvh - 44px - 52px);
+  max-height: calc(100dvh - 44px - 52px);
+}
+
+.v-dialog.el-dialog .el-dialog__body {
+  height: calc(70dvh - 44px - 52px);
+}
+
+.v-dialog.el-dialog.flex-body:not(.is-fullscreen) .el-dialog__body {
+  height: initial;
+  max-height: calc(70dvh - 44px - 52px);
+}

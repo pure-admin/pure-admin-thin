@@ -1,21 +1,24 @@
 import dayjs from "dayjs";
-import editForm from "../form.vue";
 import { message } from "@/utils/message";
-import { getRoleList } from "@/api/system";
-import { ElMessageBox } from "element-plus";
+import {
+  deleteRoleApi,
+  getRoleListApi,
+  RoleDTO,
+  RoleQuery
+} from "@/api/system/role";
+import { getMenuListApi, MenuDTO } from "@/api/system/menu";
+import { ElMessage, ElMessageBox } from "element-plus";
 import { usePublicHooks } from "../../hooks";
-import { addDialog } from "@/components/ReDialog";
-import { type FormItemProps } from "../utils/types";
 import { type PaginationProps } from "@pureadmin/table";
-import { reactive, ref, onMounted, h, toRaw } from "vue";
+import { reactive, ref, onMounted, toRaw } from "vue";
+import { toTree } from "@/utils/tree";
 
 export function useRole() {
-  const form = reactive({
-    name: "",
-    code: "",
-    status: ""
+  const form = reactive<RoleQuery>({
+    roleKey: "",
+    roleName: "",
+    status: undefined
   });
-  const formRef = ref();
   const dataList = ref([]);
   const loading = ref(true);
   const switchLoadMap = ref({});
@@ -29,17 +32,17 @@ export function useRole() {
   const columns: TableColumnList = [
     {
       label: "角色编号",
-      prop: "id",
+      prop: "roleId",
       minWidth: 100
     },
     {
       label: "角色名称",
-      prop: "name",
+      prop: "roleName",
       minWidth: 120
     },
     {
       label: "角色标识",
-      prop: "code",
+      prop: "roleKey",
       minWidth: 150
     },
     {
@@ -131,34 +134,33 @@ export function useRole() {
       });
   }
 
-  function handleDelete(row) {
-    message(`您删除了角色名称为${row.name}的这条数据`, { type: "success" });
-    onSearch();
-  }
-
-  function handleSizeChange(val: number) {
-    console.log(`${val} items per page`);
-  }
-
-  function handleCurrentChange(val: number) {
-    console.log(`current page: ${val}`);
-  }
-
-  function handleSelectionChange(val) {
-    console.log("handleSelectionChange", val);
+  async function handleDelete(row: RoleDTO) {
+    try {
+      loading.value = true;
+      await deleteRoleApi(row.roleId);
+      message(`您删除了角色名称为${row.roleName}的这条数据`, { type: "info" });
+      onSearch();
+    } catch (e) {
+      console.error(e);
+      message((e as Error)?.message || "删除失败", { type: "error" });
+    } finally {
+      loading.value = false;
+    }
   }
 
   async function onSearch() {
-    loading.value = true;
-    const { data } = await getRoleList(toRaw(form));
-    dataList.value = data.list;
-    pagination.total = data.total;
-    pagination.pageSize = data.pageSize;
-    pagination.currentPage = data.currentPage;
-
-    setTimeout(() => {
+    try {
+      loading.value = true;
+      const { data } = await getRoleListApi(toRaw(form));
+      console.log("role list", data);
+      dataList.value = data.rows;
+      pagination.total = data.total;
+    } catch (e) {
+      console.error(e);
+      ElMessage.error((e as Error)?.message || "加载失败");
+    } finally {
       loading.value = false;
-    }, 500);
+    }
   }
 
   const resetForm = formEl => {
@@ -167,59 +169,22 @@ export function useRole() {
     onSearch();
   };
 
-  function openDialog(title = "新增", row?: FormItemProps) {
-    addDialog({
-      title: `${title}角色`,
-      props: {
-        formInline: {
-          name: row?.name ?? "",
-          code: row?.code ?? "",
-          remark: row?.remark ?? ""
-        }
-      },
-      width: "40%",
-      draggable: true,
-      fullscreenIcon: true,
-      closeOnClickModal: false,
-      contentRenderer: () => h(editForm, { ref: formRef }),
-      beforeSure: (done, { options }) => {
-        const FormRef = formRef.value.getRef();
-        const curData = options.props.formInline as FormItemProps;
-        function chores() {
-          message(`您${title}了角色名称为${curData.name}的这条数据`, {
-            type: "success"
-          });
-          done(); // 关闭弹框
-          onSearch(); // 刷新表格数据
-        }
-        FormRef.validate(valid => {
-          if (valid) {
-            console.log("curData", curData);
-            // 表单规则校验通过
-            if (title === "新增") {
-              // 实际开发先调用新增接口，再进行下面操作
-              chores();
-            } else {
-              // 实际开发先调用编辑接口，再进行下面操作
-              chores();
-            }
-          }
-        });
-      }
-    });
-  }
-
+  const menuTree = ref<MenuDTO[]>([]);
   /** 菜单权限 */
-  function handleMenu() {
-    message("等菜单管理页面开发后完善");
+  async function getMenuTree() {
+    if (menuTree.value?.length) {
+      return menuTree.value;
+    }
+    const { data } = await getMenuListApi({ isButton: false });
+    console.log("menu data", data);
+    menuTree.value = toTree(data, "id", "parentId");
+    return menuTree.value;
   }
 
   /** 数据权限 可自行开发 */
   // function handleDatabase() {}
 
-  onMounted(() => {
-    onSearch();
-  });
+  onMounted(onSearch);
 
   return {
     form,
@@ -227,15 +192,10 @@ export function useRole() {
     columns,
     dataList,
     pagination,
-    // buttonClass,
     onSearch,
     resetForm,
-    openDialog,
-    handleMenu,
-    handleDelete,
-    // handleDatabase,
-    handleSizeChange,
-    handleCurrentChange,
-    handleSelectionChange
+    menuTree,
+    getMenuTree,
+    handleDelete
   };
 }

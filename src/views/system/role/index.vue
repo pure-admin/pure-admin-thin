@@ -4,17 +4,17 @@ import { useRole } from "./utils/hook";
 import { PureTableBar } from "@/components/RePureTableBar";
 import { useRenderIcon } from "@/components/ReIcon/src/hooks";
 
-// import Database from "@iconify-icons/ri/database-2-line";
-// import More from "@iconify-icons/ep/more-filled";
 import Delete from "@iconify-icons/ep/delete";
 import EditPen from "@iconify-icons/ep/edit-pen";
 import Search from "@iconify-icons/ep/search";
 import Refresh from "@iconify-icons/ep/refresh";
-import Menu from "@iconify-icons/ep/menu";
 import AddFill from "@iconify-icons/ri/add-circle-line";
+import { getRoleInfoApi, RoleDTO } from "@/api/system/role";
+import RoleFormModal from "@/views/system/role/role-form-modal.vue";
+import { ElMessage } from "element-plus";
 
 defineOptions({
-  name: "Role"
+  name: "SystemRole"
 });
 
 const formRef = ref();
@@ -24,19 +24,34 @@ const {
   columns,
   dataList,
   pagination,
-  // buttonClass,
   onSearch,
   resetForm,
-  openDialog,
-  handleMenu,
-  handleDelete,
-  // handleDatabase,
-  handleSizeChange,
-  handleCurrentChange,
-  handleSelectionChange
+  menuTree,
+  getMenuTree,
+  handleDelete
 } = useRole();
-</script>
 
+const opType = ref<"add" | "update">("add");
+const modalVisible = ref(false);
+const opRow = ref<RoleDTO>();
+async function openDialog(type: "add" | "update", row?: RoleDTO) {
+  debugger;
+  try {
+    await getMenuTree();
+    if (row) {
+      const { data } = await getRoleInfoApi(row.roleId);
+      row.selectedMenuList = data.selectedMenuList;
+      row.selectedDeptList = data.selectedDeptList;
+    }
+  } catch (e) {
+    console.error(e);
+    ElMessage.error((e as Error)?.message || "加载菜单失败");
+  }
+  opType.value = type;
+  opRow.value = row;
+  modalVisible.value = true;
+}
+</script>
 <template>
   <div class="main">
     <el-form
@@ -47,7 +62,7 @@ const {
     >
       <el-form-item label="角色名称：" prop="name">
         <el-input
-          v-model="form.name"
+          v-model="form.roleName"
           placeholder="请输入角色名称"
           clearable
           class="!w-[200px]"
@@ -55,7 +70,7 @@ const {
       </el-form-item>
       <el-form-item label="角色标识：" prop="code">
         <el-input
-          v-model="form.code"
+          v-model="form.roleKey"
           placeholder="请输入角色标识"
           clearable
           class="!w-[180px]"
@@ -96,7 +111,7 @@ const {
         <el-button
           type="primary"
           :icon="useRenderIcon(AddFill)"
-          @click="openDialog()"
+          @click="openDialog('add')"
         >
           新增角色
         </el-button>
@@ -129,22 +144,12 @@ const {
               type="primary"
               :size="size"
               :icon="useRenderIcon(EditPen)"
-              @click="openDialog('编辑', row)"
+              @click="openDialog('update', row)"
             >
               修改
             </el-button>
-            <el-button
-              class="reset-margin"
-              link
-              type="primary"
-              :size="size"
-              :icon="useRenderIcon(Menu)"
-              @click="handleMenu"
-            >
-              菜单权限
-            </el-button>
             <el-popconfirm
-              :title="`是否确认删除角色名称为${row.name}的这条数据`"
+              :title="`是否确认删除角色名称为${row.roleName}的这条数据`"
               @confirm="handleDelete(row)"
             >
               <template #reference>
@@ -200,6 +205,13 @@ const {
         </pure-table>
       </template>
     </PureTableBar>
+
+    <role-form-modal
+      v-model="modalVisible"
+      :type="opType"
+      :row="opRow"
+      :menu-options="menuTree"
+    />
   </div>
 </template>
 
