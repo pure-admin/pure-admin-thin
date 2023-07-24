@@ -78,6 +78,11 @@ export function useNav() {
     router.push("/login");
   }
 
+  /** 个人中心 */
+  function userProfile() {
+    router.push("/system/user/profile");
+  }
+
   function backTopMenu() {
     router.push(getTopMenu()?.path);
   }
@@ -121,6 +126,7 @@ export function useNav() {
     device,
     layout,
     logout,
+    userProfile,
     routers,
     $storage,
     backTopMenu,
