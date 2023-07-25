@@ -28,6 +28,7 @@ specifiers:
   autoprefixer: ^10.4.14
   axios: ^1.4.0
   cloc: ^2.11.0
+  cropperjs: ^1.5.13
   crypto-js: ^4.1.1
   cssnano: ^6.0.1
   dayjs: ^1.11.8
@@ -86,6 +87,7 @@ specifiers:
   vue: ^3.3.4
   vue-eslint-parser: ^9.3.1
   vue-router: ^4.2.2
+  vue-tippy: ^6.2.0
   vue-tsc: ^1.8.1
   vue-types: ^5.1.0
   xlsx: ^0.18.5
@@ -98,6 +100,7 @@ dependencies:
   "@vueuse/motion": 2.0.0_vue@3.3.4
   animate.css: 4.1.1
   axios: 1.4.0
+  cropperjs: 1.5.13
   crypto-js: 4.1.1
   dayjs: 1.11.8
   echarts: 5.4.2
@@ -117,6 +120,7 @@ dependencies:
   typeit: 8.7.1
   vue: 3.3.4
   vue-router: 4.2.2_vue@3.3.4
+  vue-tippy: 6.2.0_vue@3.3.4
   vue-types: 5.1.0_vue@3.3.4
   xlsx: 0.18.5
 
@@ -1446,6 +1450,13 @@ packages:
     requiresBuild: true
     dev: true
     optional: true
+
+  /@popperjs/core/2.11.8:
+    resolution:
+      {
+        integrity: sha512-P1st0aksCrn9sGZhp8GMYwBnQsbvAWsZAX44oXNNvLHGqAOcoVxmjZiohstwQ7SqKnbR47akdNi+uleWD8+g6A==
+      }
+    dev: false
 
   /@pureadmin/descriptions/1.1.1_element-plus@2.3.6:
     resolution:
@@ -3149,6 +3160,13 @@ packages:
         integrity: sha512-dcKFX3jn0MpIaXjisoRvexIJVEKzaq7z2rZKxf+MSr9TkdmHmsU4m2lcLojrj/FHl8mk5VxMmYA+ftRkP/3oKQ==
       }
     dev: true
+
+  /cropperjs/1.5.13:
+    resolution:
+      {
+        integrity: sha512-by7jKAo73y5/Do0K6sxdTKHgndY0NMjG2bEdgeJxycbcmHuCiMXqw8sxy5C5Y5WTOTcDGmbT7Sr5CgKOXR06OA==
+      }
+    dev: false
 
   /cross-spawn/7.0.3:
     resolution:
@@ -8676,6 +8694,15 @@ packages:
       readable-stream: 3.6.2
     dev: true
 
+  /tippy.js/6.3.7:
+    resolution:
+      {
+        integrity: sha512-E1d3oP2emgJ9dRQZdf3Kkn0qJgI6ZLpyS5z6ZkY1DF3kaQaBsGZsndEpHwx+eC+tYM41HaSNvNtLx8tU57FzTQ==
+      }
+    dependencies:
+      "@popperjs/core": 2.11.8
+    dev: false
+
   /to-fast-properties/2.0.0:
     resolution:
       {
@@ -9177,6 +9204,18 @@ packages:
       de-indent: 1.0.2
       he: 1.2.0
     dev: true
+
+  /vue-tippy/6.2.0_vue@3.3.4:
+    resolution:
+      {
+        integrity: sha512-UytUItp2ZDLXUwAotmioz02uLQoaAl5iVM+5yKsQWrXr29L9ivavtkL684FqbmOfbeCypBw+rVKsXhwdnCt/Cg==
+      }
+    peerDependencies:
+      vue: ^3.2.0
+    dependencies:
+      tippy.js: 6.3.7
+      vue: 3.3.4
+    dev: false
 
   /vue-tsc/1.8.1_typescript@5.0.4:
     resolution:

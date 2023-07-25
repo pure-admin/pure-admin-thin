@@ -57,6 +57,26 @@ export interface UserRequest {
 }
 
 /**
+ * UpdateProfileCommand
+ */
+export interface UserProfileRequest {
+  email?: string;
+  nickName?: string;
+  phoneNumber?: string;
+  sex?: number;
+  userId?: number;
+}
+
+/**
+ * ResetPasswordCommand
+ */
+export interface ResetPasswordRequest {
+  newPassword?: string;
+  oldPassword?: string;
+  userId?: number;
+}
+
+/**
  * 修改密码
  */
 export interface PasswordRequest {
@@ -119,4 +139,38 @@ export const exportUserExcelApi = (params: UserQuery, fileName: string) => {
   return http.download("/system/users/excel", fileName, {
     params
   });
+};
+
+/** 用户头像上传 */
+export const uploadUserAvatarApi = data => {
+  return http.request<ResponseData<void>>(
+    "post",
+    "/system/user/profile/avatar",
+    {
+      data
+    },
+    {
+      headers: {
+        "Content-Type": "multipart/form-data"
+      }
+    }
+  );
+};
+
+/** 更改用户资料 */
+export const updateUserProfileApi = (data?: UserProfileRequest) => {
+  return http.request<ResponseData<void>>("put", "/system/user/profile", {
+    data
+  });
+};
+
+/** 更改当前用户密码 */
+export const updateCurrentUserPasswordApi = (data?: ResetPasswordRequest) => {
+  return http.request<ResponseData<void>>(
+    "put",
+    "/system/user/profile/password",
+    {
+      data
+    }
+  );
 };

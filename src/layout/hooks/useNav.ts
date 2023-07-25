@@ -80,7 +80,7 @@ export function useNav() {
 
   /** 个人中心 */
   function userProfile() {
-    router.push("/system/user/profile");
+    router.push("/global/user/profile");
   }
 
   function backTopMenu() {

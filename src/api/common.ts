@@ -36,10 +36,40 @@ export type TokenDTO = {
 };
 
 export type CurrentLoginUserDTO = {
-  userInfo: any;
+  userInfo: CurrentUserInfoDTO;
   roleKey: string;
   permissions: Set<string>;
 };
+
+/**
+ * 当前User
+ */
+export interface CurrentUserInfoDTO {
+  avatar?: string;
+  createTime?: Date;
+  creatorId?: number;
+  creatorName?: string;
+  deptId?: number;
+  deptName?: string;
+  email?: string;
+  loginDate?: Date;
+  loginIp?: string;
+  nickName?: string;
+  phoneNumber?: string;
+  postId?: number;
+  postName?: string;
+  remark?: string;
+  roleId?: number;
+  roleName?: string;
+  sex?: number;
+  status?: number;
+  updaterId?: number;
+  updaterName?: string;
+  updateTime?: Date;
+  userId?: number;
+  username?: string;
+  userType?: number;
+}
 
 export type DictionaryData = {
   label: string;

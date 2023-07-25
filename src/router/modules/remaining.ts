@@ -26,5 +26,21 @@ export default [
         component: () => import("@/layout/redirect.vue")
       }
     ]
+  },
+  {
+    path: "/system/user/profile",
+    component: Layout,
+    meta: {
+      title: "个人中心",
+      showLink: false,
+      rank: 102
+    },
+    children: [
+      {
+        path: "/",
+        name: "Redirect",
+        component: () => import("@/views/system/user/profile/index.vue")
+      }
+    ]
   }
 ] as Array<RouteConfigsTable>;

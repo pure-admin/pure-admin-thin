@@ -356,7 +356,7 @@ export function useHook() {
 
   onMounted(async () => {
     onSearch();
-    const deptResponse = getDeptListApi();
+    const deptResponse = await getDeptListApi();
     deptTreeList.value = await setDisabledForTreeOptions(
       handleTree(deptResponse.data),
       "status"

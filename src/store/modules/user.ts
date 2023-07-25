@@ -30,7 +30,9 @@ export const useUserStore = defineStore({
     dictionaryMap:
       storageLocal().getItem<Map<String, Map<String, DictionaryData>>>(
         dictionaryMapKey
-      ) ?? new Map()
+      ) ?? new Map(),
+    currentUserInfo:
+      storageSession().getItem<TokenDTO>(sessionKey)?.currentUser.userInfo ?? {}
   }),
   actions: {
     /** 存储用户名 */
