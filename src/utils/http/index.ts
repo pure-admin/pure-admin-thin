@@ -136,7 +136,7 @@ class PureHttp {
         // 请求返回失败时，有业务错误时，弹出错误提示
         if (response.data.code !== 0) {
           // token失效时弹出过期提示
-          if (response.data.code === 20101) {
+          if (response.data.code === 106) {
             ElMessageBox.confirm(
               "登录状态已过期，您可以继续留在该页面，或者重新登录",
               "系统提示",
