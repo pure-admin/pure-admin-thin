@@ -96,3 +96,13 @@ export const loginByPassword = (data: LoginByPasswordDTO) => {
 export const getLoginUserInfo = () => {
   return http.request<ResponseData<TokenDTO>>("get", "/getLoginUserInfo");
 };
+
+type Result = {
+  success: boolean;
+  data: Array<any>;
+};
+
+/** 获取动态菜单 */
+export const getAsyncRoutes = () => {
+  return http.request<Result>("get", "/getRouters");
+};

@@ -2,7 +2,7 @@ import Cookies from "js-cookie";
 import { storageSession } from "@pureadmin/utils";
 import { useUserStoreHook } from "@/store/modules/user";
 import { aesEncrypt, aesDecrypt } from "@/utils/crypt";
-import { TokenDTO } from "@/api/common";
+import { TokenDTO } from "@/api/common/login";
 
 /**
  * 原版前端token实现

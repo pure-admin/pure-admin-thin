@@ -1,24 +1,5 @@
 import { http } from "@/utils/http";
 
-type Result = {
-  success: boolean;
-  data?: {
-    /** 列表数据 */
-    list: Array<any>;
-    /** 总条目数 */
-    total?: number;
-    /** 每页显示条目个数 */
-    pageSize?: number;
-    /** 当前页数 */
-    currentPage?: number;
-  };
-};
-
-type ResultDept = {
-  success: boolean;
-  data?: Array<any>;
-};
-
 export interface SystemNoticeQuery extends BasePageQuery {
   noticeType: string;
   noticeTitle: string;
@@ -41,21 +22,6 @@ export type SystemNoticeRequest = {
   noticeType: number;
   noticeContent: string;
   status: number;
-};
-
-/** 获取用户管理列表 */
-export const getUserList = (data?: object) => {
-  return http.request<Result>("post", "/user", { data });
-};
-
-/** 获取角色管理列表 */
-export const getRoleList = (data?: object) => {
-  return http.request<Result>("post", "/role", { data });
-};
-
-/** 获取部门管理列表 */
-export const getDeptList = (data?: object) => {
-  return http.request<ResultDept>("post", "/dept", { data });
 };
 
 /** 获取系统通知列表 */
@@ -95,39 +61,4 @@ export const deleteSystemNoticeApi = (data: Array<number>) => {
       noticeIds: data.toString()
     }
   });
-};
-
-type OperationLogDTO = {
-  operationId: number;
-  businessType: number;
-  businessTypeStr: string;
-  requestMethod: string;
-  requestModule: string;
-  requestUrl: string;
-  calledMethod: string;
-  operatorType: number;
-  operatorTypeStr: string;
-  userId: number;
-  username: string;
-  operatorIp: string;
-  operatorLocation: string;
-  deptId: number;
-  deptName: string;
-  operationParam: string;
-  operationResult: string;
-  status: number;
-  statusStr: string;
-  errorStack: string;
-  operationTime: Date;
-};
-
-/** 获取操作日志列表 */
-export const getOperationLogListApi = (params?: SystemNoticeQuery) => {
-  return http.request<ResponseData<PageDTO<OperationLogDTO>>>(
-    "get",
-    "/operationLog/list",
-    {
-      params
-    }
-  );
 };

@@ -1,5 +1,5 @@
 import { RouteRecordName } from "vue-router";
-import { DictionaryData } from "../../api/common";
+import { DictionaryData } from "../../api/common/login";
 
 export type cacheType = {
   mode: string;

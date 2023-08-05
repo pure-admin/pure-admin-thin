@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useUserStoreHook } from "@/store/modules/user";
-import { OperationLogDTO } from "../../../../api/system/log";
+import { OperationLogDTO } from "@/api/system/log";
 
 /** TODO 有其他方式  来换掉这个props 父子组件传值吗？ */
 const props = defineProps<OperationLogDTO>();

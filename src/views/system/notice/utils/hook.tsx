@@ -1,7 +1,7 @@
 import dayjs from "dayjs";
 import editForm from "../form.vue";
 import { message } from "@/utils/message";
-import { SystemNoticeQuery, getSystemNoticeListApi } from "@/api/system";
+import { SystemNoticeQuery, getSystemNoticeListApi } from "@/api/system/notice";
 import { addDialog } from "@/components/ReDialog";
 import { ElMessageBox, Sort } from "element-plus";
 import { AddNoticeRequest } from "../utils/types";
@@ -11,7 +11,7 @@ import {
   updateSystemNoticeApi,
   deleteSystemNoticeApi,
   SystemNoticeRequest
-} from "@/api/system";
+} from "@/api/system/notice";
 import { reactive, ref, onMounted, h, toRaw } from "vue";
 import { useUserStoreHook } from "@/store/modules/user";
 import { CommonUtils } from "@/utils/common";

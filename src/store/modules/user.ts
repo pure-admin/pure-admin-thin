@@ -6,7 +6,7 @@ import { router, resetRouter } from "@/router";
 import { storageSession } from "@pureadmin/utils";
 import { useMultiTagsStoreHook } from "@/store/modules/multiTags";
 import { removeToken, sessionKey } from "@/utils/auth";
-import { DictionaryData, TokenDTO } from "@/api/common";
+import { DictionaryData, TokenDTO } from "@/api/common/login";
 import { storageLocal } from "@pureadmin/utils";
 
 const dictionaryListKey = "ag-dictionary-list";
