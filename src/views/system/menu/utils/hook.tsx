@@ -17,6 +17,7 @@ import { usePublicHooks } from "../../hooks";
 import { addDialog } from "@/components/ReDialog";
 import { reactive, ref, onMounted, h, computed } from "vue";
 import { isAllEmpty } from "@pureadmin/utils";
+import { IconifyIconOnline } from "@/components/ReIcon";
 
 export function useHook() {
   const searchFormParams = reactive({
@@ -64,6 +65,16 @@ export function useHook() {
       prop: "routerName",
       width: 160,
       align: "center"
+    },
+    {
+      label: "图标",
+      prop: "row.icon",
+      minWidth: 40,
+      cellRenderer: ({ row }) => (
+        <div class="flex justify-center">
+          <IconifyIconOnline icon={row.icon} />
+        </div>
+      )
     },
     {
       label: "状态",

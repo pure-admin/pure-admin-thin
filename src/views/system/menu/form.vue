@@ -4,6 +4,7 @@ import ReCol from "@/components/ReCol";
 import { formRules } from "./utils/rule";
 import { usePublicHooks } from "../hooks";
 import { MenuRequest } from "@/api/system/menu";
+import IconSelect from "@/components/ReIcon/src/Select.vue";
 
 interface FormProps {
   formInline: MenuRequest;
@@ -101,7 +102,13 @@ defineExpose({ getRef });
         </re-col>
       </template>
     </el-row>
-
+    <el-row :gutter="30">
+      <re-col :value="12" :xs="24" :sm="24">
+        <el-form-item :label="`${typeName}图标`" prop="meta.icon">
+          <IconSelect v-model="newFormInline.meta.icon" />
+        </el-form-item>
+      </re-col>
+    </el-row>
     <el-row :gutter="30">
       <re-col :value="12" :xs="24" :sm="24">
         <el-form-item :label="`${typeName}名称`" prop="menuName">
@@ -188,12 +195,15 @@ defineExpose({ getRef });
 
     <el-row>
       <re-col :value="12" :xs="24" :sm="24">
-        <el-form-item label="排序">
-          <el-input-number
-            v-model="newFormInline.meta.rank"
-            :min="0"
-            :max="999"
-            controls-position="right"
+        <el-form-item label="显示">
+          <el-switch
+            v-model="newFormInline.meta.showLink"
+            inline-prompt
+            :active-value="true"
+            :inactive-value="false"
+            active-text="显示"
+            inactive-text="隐藏"
+            :style="switchStyle"
           />
         </el-form-item>
       </re-col>
@@ -207,6 +217,18 @@ defineExpose({ getRef });
             active-text="启用"
             inactive-text="停用"
             :style="switchStyle"
+          />
+        </el-form-item>
+      </re-col>
+    </el-row>
+    <el-row>
+      <re-col :value="12" :xs="24" :sm="24">
+        <el-form-item label="排序">
+          <el-input-number
+            v-model="newFormInline.meta.rank"
+            :min="0"
+            :max="999"
+            controls-position="right"
           />
         </el-form-item>
       </re-col>
