@@ -1,6 +1,6 @@
 <template>
-  <!-- v-loading指令  可以直接调用Loading动画  -->
   <div class="main" v-loading="loading">
+    <!-- v-loading指令  可以直接调用Loading动画  -->
     <el-row :gutter="2">
       <el-col :span="24" class="card-box">
         <el-card>
