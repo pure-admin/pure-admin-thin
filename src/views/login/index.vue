@@ -38,7 +38,7 @@ import dayIcon from "@/assets/svg/day.svg?component";
 import darkIcon from "@/assets/svg/dark.svg?component";
 import Lock from "@iconify-icons/ri/lock-fill";
 import User from "@iconify-icons/ri/user-3-fill";
-import * as CommonAPI from "@/api/common";
+import * as CommonAPI from "@/api/common/login";
 import { setTokenFromBackend } from "../../utils/auth";
 import { useUserStoreHook } from "../../store/modules/user";
 
