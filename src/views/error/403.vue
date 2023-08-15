@@ -1,17 +1,10 @@
 <script setup lang="ts">
 // import { useRouter } from "vue-router";
 import noAccess from "@/assets/status/403.svg?component";
-import * as CommonAPI from "@/api/common";
 
 defineOptions({
   name: "403"
 });
-
-async function getConfig() {
-  await CommonAPI.getLoginUserInfo().then(res => {
-    console.log(res);
-  });
-}
 </script>
 
 <template>
@@ -54,7 +47,6 @@ async function getConfig() {
       </p>
       <el-button
         type="primary"
-        @click="getConfig"
         v-motion
         :initial="{
           opacity: 0,
