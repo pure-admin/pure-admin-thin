@@ -169,3 +169,10 @@
     box-shadow: 0 -1px 0 0 #e0e3e8, 0 -3px 6px 0 rgb(69 98 155 / 12%);
   }
 }
+
+.box-card .el-card__header {
+  // 里面的div上下居中
+  display: flex;
+  height: 45px;
+  background-color: #eaf4f788;
+}
