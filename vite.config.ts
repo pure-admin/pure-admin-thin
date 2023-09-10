@@ -19,7 +19,7 @@ const alias: Record<string, string> = {
   "@": pathResolve("src"),
   "@build": pathResolve("build")
 };
-
+// 增加环境变量
 const { dependencies, devDependencies, name, version } = pkg;
 const __APP_INFO__ = {
   pkg: { dependencies, devDependencies, name, version },
