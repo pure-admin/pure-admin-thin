@@ -1,8 +1,9 @@
-<script setup>
+<script setup lang="ts">
 defineOptions({
   name: "AnnouncementCard"
 });
 </script>
+
 <template>
   <el-card class="box-card">
     <template #header>
@@ -22,3 +23,30 @@ defineOptions({
     </div>
   </el-card>
 </template>
+<style lang="scss" scoped>
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.box-card {
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.text {
+  align-items: center;
+  height: 5px;
+  font-size: 14px;
+}
+
+.item {
+  margin-bottom: 5px;
+}
+
+.icon-text {
+  display: flex;
+  align-items: center;
+}
+</style>

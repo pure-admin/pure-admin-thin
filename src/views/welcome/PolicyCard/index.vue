@@ -1,8 +1,9 @@
-<script setup>
+<script setup lang="ts">
 defineOptions({
   name: "PolicyCard"
 });
 </script>
+
 <template>
   <el-card class="box-card">
     <template #header>

@@ -18,3 +18,11 @@ defineProps({
     </div>
   </el-card>
 </template>
+
+<style lang="scss" scoped>
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+</style>

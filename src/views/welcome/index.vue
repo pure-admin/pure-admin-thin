@@ -15,7 +15,7 @@ defineOptions({
         <AnnouncementCard />
       </el-col>
     </el-row>
-    <el-row :gutter="48" class="el-line flex" align="middle">
+    <el-row :gutter="48" class="el-line" align="middle">
       <el-col :xs="24" :sm="6">
         <InfoCard
           icon="logos:google-photos"
