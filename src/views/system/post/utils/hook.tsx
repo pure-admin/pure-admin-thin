@@ -162,7 +162,7 @@ export function usePostHook() {
     CommonUtils.fillPaginationParams(searchFormParams, pagination);
     CommonUtils.fillTimeRangeParams(searchFormParams, timeRange.value);
 
-    exportPostExcelApi(toRaw(searchFormParams), "岗位数据.xls");
+    exportPostExcelApi(toRaw(searchFormParams), "岗位数据.xlsx");
   }
 
   async function handleDelete(row) {
