@@ -166,8 +166,8 @@ export function usePostHook() {
   }
 
   async function handleDelete(row) {
-    await deletePostApi([row.logId]).then(() => {
-      message(`您删除了操作编号为${row.logId}的这条数据`, {
+    await deletePostApi([row.postId]).then(() => {
+      message(`您删除了编号为${row.postId}的这条岗位数据`, {
         type: "success"
       });
       // 刷新列表
@@ -182,7 +182,7 @@ export function usePostHook() {
     }
 
     ElMessageBox.confirm(
-      `确认要<strong>删除</strong>编号为<strong style='color:var(--el-color-primary)'>[ ${multipleSelection.value} ]</strong>的日志吗?`,
+      `确认要<strong>删除</strong>编号为<strong style='color:var(--el-color-primary)'>[ ${multipleSelection.value} ]</strong>的岗位数据吗?`,
       "系统提示",
       {
         confirmButtonText: "确定",
@@ -194,7 +194,7 @@ export function usePostHook() {
     )
       .then(async () => {
         await deletePostApi(multipleSelection.value).then(() => {
-          message(`您删除了日志编号为[ ${multipleSelection.value} ]的数据`, {
+          message(`您删除了编号为[ ${multipleSelection.value} ]的岗位数据`, {
             type: "success"
           });
           // 刷新列表
