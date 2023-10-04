@@ -16,7 +16,7 @@ const statusMap = useUserStoreHook().dictionaryMap["common.status"];
 
 export function usePostHook() {
   const defaultSort: Sort = {
-    prop: "post_sort",
+    prop: "postSort",
     order: "ascending"
   };
 
@@ -117,7 +117,7 @@ export function usePostHook() {
     sortState.value = sort;
     // 表格列的排序变化的时候，需要重置分页
     pagination.currentPage = 1;
-    getPostList(sort);
+    getPostList();
   }
 
   async function onSearch(tableRef) {
@@ -126,7 +126,7 @@ export function usePostHook() {
     // 点击搜索的时候，需要清空表格上列的排序
     tableRef.getTableRef().clearSort();
     // 使用默认排序发起请求
-    getPostList(defaultSort);
+    getPostList();
   }
 
   function resetForm(formEl, tableRef) {
@@ -144,11 +144,9 @@ export function usePostHook() {
     onSearch(tableRef);
   }
 
-  async function getPostList(sort: Sort = defaultSort) {
+  async function getPostList() {
     pageLoading.value = true;
-    if (sort != null) {
-      CommonUtils.fillSortParams(searchFormParams, sort);
-    }
+    CommonUtils.fillSortParams(searchFormParams, sortState.value);
     CommonUtils.fillPaginationParams(searchFormParams, pagination);
 
     const { data } = await getPostListApi(toRaw(searchFormParams)).finally(
