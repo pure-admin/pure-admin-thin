@@ -16,8 +16,8 @@ const statusMap = useUserStoreHook().dictionaryMap["common.status"];
 
 export function usePostHook() {
   const defaultSort: Sort = {
-    prop: "createTime",
-    order: "descending"
+    prop: "post_sort",
+    order: "ascending"
   };
 
   const pagination: PaginationProps = {
@@ -80,6 +80,7 @@ export function usePostHook() {
     {
       label: "岗位排序",
       prop: "postSort",
+      sortable: "custom",
       minWidth: 120
     },
     {
@@ -114,13 +115,18 @@ export function usePostHook() {
 
   function onSortChanged(sort: Sort) {
     sortState.value = sort;
-    onSearch();
+    // 表格列的排序变化的时候，需要重置分页
+    pagination.currentPage = 1;
+    getPostList(sort);
   }
 
-  async function onSearch() {
-    // 点击搜索的时候 需要重置分页
+  async function onSearch(tableRef) {
+    // 点击搜索的时候，需要重置分页
     pagination.currentPage = 1;
-    getPostList();
+    // 点击搜索的时候，需要清空表格上列的排序
+    tableRef.getTableRef().clearSort();
+    // 使用默认排序发起请求
+    getPostList(defaultSort);
   }
 
   function resetForm(formEl, tableRef) {
@@ -134,9 +140,8 @@ export function usePostHook() {
     // Form组件的resetFields方法无法清除datepicker里面的数据。
     searchFormParams.beginTime = undefined;
     searchFormParams.endTime = undefined;
-    tableRef.getTableRef().clearSort();
     // 重置分页并查询
-    onSearch();
+    onSearch(tableRef);
   }
 
   async function getPostList(sort: Sort = defaultSort) {
