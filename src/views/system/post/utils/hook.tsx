@@ -121,21 +121,14 @@ export function usePostHook() {
   }
 
   async function onSearch(tableRef) {
-    // 点击搜索的时候，需要重置分页
-    pagination.currentPage = 1;
-    // 点击搜索的时候，需要清空表格上列的排序
-    tableRef.getTableRef().clearSort();
-    // 使用默认排序发起请求
-    getPostList();
+    // 点击搜索的时候，需要重置排序，重新排序的时候会重置分页并发起查询请求
+    tableRef.getTableRef().sort("postSort", "ascending");
   }
 
   function resetForm(formEl, tableRef) {
     if (!formEl) return;
     // 清空查询参数
     formEl.resetFields();
-    // 清空排序
-    searchFormParams.orderColumn = undefined;
-    searchFormParams.orderDirection = undefined;
     // 清空时间查询  TODO  这块有点繁琐  有可以优化的地方吗？
     // Form组件的resetFields方法无法清除datepicker里面的数据。
     searchFormParams.beginTime = undefined;
