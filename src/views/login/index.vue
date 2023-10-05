@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import {
+  onBeforeMount,
+  onBeforeUnmount,
+  onMounted,
+  reactive,
   ref,
   toRaw,
-  reactive,
-  onMounted,
-  onBeforeUnmount,
-  onBeforeMount,
   watch
 } from "vue";
 import Motion from "./utils/motion";
@@ -22,16 +22,17 @@ import type { FormInstance } from "element-plus";
 import { operates, thirdParty } from "./utils/enums";
 import { useLayout } from "@/layout/hooks/useLayout";
 import { rsaEncrypt } from "@/utils/crypt";
-import { initRouter, getTopMenu } from "@/router/utils";
-import { bg, avatar, illustration } from "./utils/static";
+import { getTopMenu, initRouter } from "@/router/utils";
+import { avatar, bg, illustration } from "./utils/static";
 import { useRenderIcon } from "@/components/ReIcon/src/hooks";
 import { useDataThemeChange } from "@/layout/hooks/useDataThemeChange";
 import {
-  saveIsRememberMe,
   getIsRememberMe,
-  savePassword,
   getPassword,
-  removePassword
+  removePassword,
+  saveIsRememberMe,
+  savePassword,
+  setTokenFromBackend
 } from "@/utils/auth";
 
 import dayIcon from "@/assets/svg/day.svg?component";
@@ -39,8 +40,7 @@ import darkIcon from "@/assets/svg/dark.svg?component";
 import Lock from "@iconify-icons/ri/lock-fill";
 import User from "@iconify-icons/ri/user-3-fill";
 import * as CommonAPI from "@/api/common/login";
-import { setTokenFromBackend } from "../../utils/auth";
-import { useUserStoreHook } from "../../store/modules/user";
+import { useUserStoreHook } from "@/store/modules/user";
 
 defineOptions({
   name: "Login"
@@ -97,6 +97,8 @@ const onLogin = async (formEl: FormInstance | undefined) => {
         })
         .catch(() => {
           loading.value = false;
+          //如果登陆失败则重新获取验证码
+          getCaptchaCode();
         });
     } else {
       loading.value = false;
@@ -113,10 +115,12 @@ function onkeypress({ code }: KeyboardEvent) {
 }
 
 async function getCaptchaCode() {
-  await CommonAPI.getCaptchaCode().then(res => {
-    captchaCodeBase64.value = `data:image/gif;base64,${res.data.captchaCodeImg}`;
-    ruleForm.captchaCodeKey = res.data.captchaCodeKey;
-  });
+  if (isCaptchaOn.value) {
+    await CommonAPI.getCaptchaCode().then(res => {
+      captchaCodeBase64.value = `data:image/gif;base64,${res.data.captchaCodeImg}`;
+      ruleForm.captchaCodeKey = res.data.captchaCodeKey;
+    });
+  }
 }
 
 watch(isRememberMe, newVal => {
@@ -132,9 +136,7 @@ onBeforeMount(async () => {
     useUserStoreHook().SET_DICTIONARY(res.data.dictionary);
   });
 
-  if (isCaptchaOn.value) {
-    getCaptchaCode();
-  }
+  await getCaptchaCode();
 
   isRememberMe.value = getIsRememberMe();
   if (isRememberMe.value) {
@@ -158,9 +160,9 @@ onBeforeUnmount(() => {
       <!-- 主题 -->
       <el-switch
         v-model="dataTheme"
-        inline-prompt
         :active-icon="dayIcon"
         :inactive-icon="darkIcon"
+        inline-prompt
         @change="dataThemeChange"
       />
     </div>
@@ -175,7 +177,7 @@ onBeforeUnmount(() => {
           <avatar class="avatar" />
           <Motion>
             <h2 class="outline-none">
-              <TypeIt :values="[title]" :cursor="false" :speed="150" />
+              <TypeIt :cursor="false" :speed="150" :values="[title]" />
             </h2>
           </Motion>
 
@@ -198,10 +200,10 @@ onBeforeUnmount(() => {
                 prop="username"
               >
                 <el-input
-                  clearable
                   v-model="ruleForm.username"
-                  placeholder="账号"
                   :prefix-icon="useRenderIcon(User)"
+                  clearable
+                  placeholder="账号"
                 />
               </el-form-item>
             </Motion>
@@ -209,11 +211,11 @@ onBeforeUnmount(() => {
             <Motion :delay="150">
               <el-form-item prop="password">
                 <el-input
-                  clearable
-                  show-password
                   v-model="ruleForm.password"
-                  placeholder="密码"
                   :prefix-icon="useRenderIcon(Lock)"
+                  clearable
+                  placeholder="密码"
+                  show-password
                 />
               </el-form-item>
             </Motion>
@@ -221,19 +223,19 @@ onBeforeUnmount(() => {
             <Motion :delay="200">
               <el-form-item v-if="isCaptchaOn" prop="captchaCode">
                 <el-input
-                  clearable
                   v-model="ruleForm.captchaCode"
-                  placeholder="验证码"
                   :prefix-icon="useRenderIcon('ri:shield-keyhole-line')"
+                  clearable
+                  placeholder="验证码"
                 >
                   <template v-slot:append>
                     <el-image
+                      :src="captchaCodeBase64"
                       style="
                         justify-content: center;
                         width: 120px;
                         height: 40px;
                       "
-                      :src="captchaCodeBase64"
                       @click="getCaptchaCode"
                     >
                       <template #error>
@@ -248,16 +250,16 @@ onBeforeUnmount(() => {
             <Motion :delay="250">
               <el-form-item>
                 <div class="w-full h-[20px] flex justify-between items-center">
-                  <el-checkbox v-model="isRememberMe"> 记住密码 </el-checkbox>
+                  <el-checkbox v-model="isRememberMe"> 记住密码</el-checkbox>
                   <el-button link type="primary" @click="currentPage = 4">
                     忘记密码
                   </el-button>
                 </div>
                 <el-button
+                  :loading="loading"
                   class="w-full mt-4"
                   size="default"
                   type="primary"
-                  :loading="loading"
                   @click="onLogin(ruleFormRef)"
                 >
                   登录
@@ -295,8 +297,8 @@ onBeforeUnmount(() => {
                 >
                   <IconifyIconOnline
                     :icon="`ri:${item.icon}-fill`"
-                    width="20"
                     class="text-gray-500 cursor-pointer hover:text-blue-400"
+                    width="20"
                   />
                 </span>
               </div>
@@ -328,8 +330,8 @@ onBeforeUnmount(() => {
           rel="external nofollow"
           target="_blank"
           type="primary"
-          >闽ICP备2022018106号-2</el-link
-        >
+          >闽ICP备2022018106号-2
+        </el-link>
       </div>
     </div>
   </div>
