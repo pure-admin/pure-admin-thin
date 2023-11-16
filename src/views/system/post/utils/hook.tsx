@@ -16,8 +16,8 @@ const statusMap = useUserStoreHook().dictionaryMap["common.status"];
 
 export function usePostHook() {
   const defaultSort: Sort = {
-    prop: "createTime",
-    order: "descending"
+    prop: "postSort",
+    order: "ascending"
   };
 
   const pagination: PaginationProps = {
@@ -80,6 +80,7 @@ export function usePostHook() {
     {
       label: "岗位排序",
       prop: "postSort",
+      sortable: "custom",
       minWidth: 120
     },
     {
@@ -114,36 +115,31 @@ export function usePostHook() {
 
   function onSortChanged(sort: Sort) {
     sortState.value = sort;
-    onSearch();
-  }
-
-  async function onSearch() {
-    // 点击搜索的时候 需要重置分页
+    // 表格列的排序变化的时候，需要重置分页
     pagination.currentPage = 1;
     getPostList();
+  }
+
+  async function onSearch(tableRef) {
+    // 点击搜索的时候，需要重置排序，重新排序的时候会重置分页并发起查询请求
+    tableRef.getTableRef().sort("postSort", "ascending");
   }
 
   function resetForm(formEl, tableRef) {
     if (!formEl) return;
     // 清空查询参数
     formEl.resetFields();
-    // 清空排序
-    searchFormParams.orderColumn = undefined;
-    searchFormParams.orderDirection = undefined;
     // 清空时间查询  TODO  这块有点繁琐  有可以优化的地方吗？
     // Form组件的resetFields方法无法清除datepicker里面的数据。
     searchFormParams.beginTime = undefined;
     searchFormParams.endTime = undefined;
-    tableRef.getTableRef().clearSort();
     // 重置分页并查询
-    onSearch();
+    onSearch(tableRef);
   }
 
-  async function getPostList(sort: Sort = defaultSort) {
+  async function getPostList() {
     pageLoading.value = true;
-    if (sort != null) {
-      CommonUtils.fillSortParams(searchFormParams, sort);
-    }
+    CommonUtils.fillSortParams(searchFormParams, sortState.value);
     CommonUtils.fillPaginationParams(searchFormParams, pagination);
 
     const { data } = await getPostListApi(toRaw(searchFormParams)).finally(
@@ -162,12 +158,12 @@ export function usePostHook() {
     CommonUtils.fillPaginationParams(searchFormParams, pagination);
     CommonUtils.fillTimeRangeParams(searchFormParams, timeRange.value);
 
-    exportPostExcelApi(toRaw(searchFormParams), "岗位数据.xls");
+    exportPostExcelApi(toRaw(searchFormParams), "岗位数据.xlsx");
   }
 
   async function handleDelete(row) {
-    await deletePostApi([row.logId]).then(() => {
-      message(`您删除了操作编号为${row.logId}的这条数据`, {
+    await deletePostApi([row.postId]).then(() => {
+      message(`您删除了编号为${row.postId}的这条岗位数据`, {
         type: "success"
       });
       // 刷新列表
@@ -182,7 +178,7 @@ export function usePostHook() {
     }
 
     ElMessageBox.confirm(
-      `确认要<strong>删除</strong>编号为<strong style='color:var(--el-color-primary)'>[ ${multipleSelection.value} ]</strong>的日志吗?`,
+      `确认要<strong>删除</strong>编号为<strong style='color:var(--el-color-primary)'>[ ${multipleSelection.value} ]</strong>的岗位数据吗?`,
       "系统提示",
       {
         confirmButtonText: "确定",
@@ -194,7 +190,7 @@ export function usePostHook() {
     )
       .then(async () => {
         await deletePostApi(multipleSelection.value).then(() => {
-          message(`您删除了日志编号为[ ${multipleSelection.value} ]的数据`, {
+          message(`您删除了编号为[ ${multipleSelection.value} ]的岗位数据`, {
             type: "success"
           });
           // 刷新列表

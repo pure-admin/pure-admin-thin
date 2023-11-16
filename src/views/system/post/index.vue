@@ -110,7 +110,7 @@ function openDialog(type: "add" | "update", row?: PostPageResponse) {
           type="primary"
           :icon="useRenderIcon(Search)"
           :loading="pageLoading"
-          @click="onSearch"
+          @click="onSearch(tableRef)"
         >
           搜索
         </el-button>
