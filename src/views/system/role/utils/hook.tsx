@@ -10,7 +10,7 @@ import { getMenuListApi, MenuDTO } from "@/api/system/menu";
 import { ElMessage, ElMessageBox } from "element-plus";
 import { usePublicHooks } from "../../hooks";
 import { type PaginationProps } from "@pureadmin/table";
-import { reactive, ref, onMounted, toRaw } from "vue";
+import { onMounted, reactive, ref, toRaw } from "vue";
 import { toTree } from "@/utils/tree";
 
 export function useRole() {
@@ -97,7 +97,7 @@ export function useRole() {
       `确认要<strong>${
         row.status === 0 ? "停用" : "启用"
       }</strong><strong style='color:var(--el-color-primary)'>${
-        row.name
+        row.roleName
       }</strong>吗?`,
       "系统提示",
       {
@@ -124,7 +124,7 @@ export function useRole() {
               loading: false
             }
           );
-          message(`已${row.status === 0 ? "停用" : "启用"}${row.name}`, {
+          message(`已${row.status === 0 ? "停用" : "启用"}${row.roleName}`, {
             type: "success"
           });
         }, 300);
@@ -170,6 +170,7 @@ export function useRole() {
   };
 
   const menuTree = ref<MenuDTO[]>([]);
+
   /** 菜单权限 */
   async function getMenuTree() {
     if (menuTree.value?.length) {
