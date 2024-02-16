@@ -1,9 +1,9 @@
 <script setup lang="ts">
 defineOptions({
-  name: "Welcome"
+  name: "QAchat"
 });
 </script>
 
 <template>
-  <h1>首页</h1>
+  <h1>问答系统</h1>
 </template>

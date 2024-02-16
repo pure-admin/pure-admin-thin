@@ -28,9 +28,11 @@ export type RefreshTokenResult = {
   };
 };
 
-/** 登录 */
+/** 登录 使用后端实现，不再使用 mock 中*/
 export const getLogin = (data?: object) => {
-  return http.request<UserResult>("post", "/login", { data });
+  return http.request<UserResult>("post", "http://127.0.0.1:5005/login", {
+    data
+  });
 };
 
 /** 刷新token */
