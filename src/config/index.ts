@@ -31,7 +31,7 @@ export const getServerConfig = async (app: App): Promise<undefined> => {
   app.config.globalProperties.$config = getConfig();
   return axios({
     method: "get",
-    url: `${VITE_PUBLIC_PATH}serverConfig.json`
+    url: `${window.location.origin}/serverConfig.json`
   })
     .then(({ data: config }) => {
       let $config = app.config.globalProperties.$config;
