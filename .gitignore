@@ -22,4 +22,3 @@ tests/**/coverage/
 *.njsproj
 *.sln
 tsconfig.tsbuildinfo
-.vscode/settings.json
