@@ -158,12 +158,7 @@ router.beforeEach((to: ToRouteType, _from, next) => {
             getTopMenu(true);
             // query、params模式路由传参数的标签页不在此处处理
             if (route && route.meta?.title) {
-              if (
-                isAllEmpty(route.parentId) &&
-                route.meta?.backstage &&
-                route.children &&
-                route.children.length > 0
-              ) {
+              if (isAllEmpty(route.parentId) && route.meta?.backstage) {
                 // 此处为动态顶级路由（目录）
                 const { path, name, meta } = route.children[0];
                 useMultiTagsStoreHook().handleTags("push", {
