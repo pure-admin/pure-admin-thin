@@ -30,6 +30,7 @@ const getConfig = (key?: string): ServerConfigs => {
 export const getServerConfig = async (app: App): Promise<undefined> => {
   app.config.globalProperties.$config = getConfig();
   return axios({
+    method: "get",
     url: `${configConver()}serverConfig.json`
   })
     .then(({ data: config }) => {
