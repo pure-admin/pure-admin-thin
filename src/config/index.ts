@@ -1,8 +1,8 @@
 import { App } from "vue";
 import axios from "axios";
+import { configConver } from "@/utils/rootConver";
 
 let config: object = {};
-const { VITE_PUBLIC_PATH } = import.meta.env;
 
 const setConfig = (cfg?: unknown) => {
   config = Object.assign(config, cfg);
@@ -31,7 +31,7 @@ export const getServerConfig = async (app: App): Promise<undefined> => {
   app.config.globalProperties.$config = getConfig();
   return axios({
     method: "get",
-    url: `${VITE_PUBLIC_PATH}serverConfig.json`
+    url: `${configConver()}serverConfig.json`
   })
     .then(({ data: config }) => {
       let $config = app.config.globalProperties.$config;
