@@ -1,10 +1,10 @@
 import { storeToRefs } from "pinia";
 import { getConfig } from "@/config";
 import { emitter } from "@/utils/mitt";
-import { routeMetaType } from "../types";
 import userAvatar from "@/assets/user.jpg";
 import { getTopMenu } from "@/router/utils";
 import { useGlobal } from "@pureadmin/utils";
+import type { routeMetaType } from "../types";
 import { useRouter, useRoute } from "vue-router";
 import { router, remainingPaths } from "@/router";
 import { computed, type CSSProperties } from "vue";
@@ -107,6 +107,11 @@ export function useNav() {
     return remainingPaths.includes(path);
   }
 
+  /** 获取`logo` */
+  function getLogo() {
+    return new URL("/logo.svg", import.meta.url).href;
+  }
+
   return {
     route,
     title,
@@ -123,6 +128,7 @@ export function useNav() {
     menuSelect,
     handleResize,
     resolvePath,
+    getLogo,
     isCollapse,
     pureApp,
     username,

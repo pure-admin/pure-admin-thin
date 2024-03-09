@@ -3,21 +3,26 @@ import { emitter } from "@/utils/mitt";
 import { RouteConfigs } from "../../types";
 import { useTags } from "../../hooks/useTag";
 import { routerArrays } from "@/layout/types";
+import { useFullscreen, onClickOutside } from "@vueuse/core";
 import { handleAliveRoute, getTopMenu } from "@/router/utils";
 import { useSettingStoreHook } from "@/store/modules/settings";
-import { useResizeObserver, useFullscreen } from "@vueuse/core";
-import { isEqual, isAllEmpty, debounce } from "@pureadmin/utils";
 import { useMultiTagsStoreHook } from "@/store/modules/multiTags";
 import { ref, watch, unref, toRaw, nextTick, onBeforeUnmount } from "vue";
+import {
+  delay,
+  isEqual,
+  isAllEmpty,
+  useResizeObserver
+} from "@pureadmin/utils";
 
 import ExitFullscreen from "@iconify-icons/ri/fullscreen-exit-fill";
 import Fullscreen from "@iconify-icons/ri/fullscreen-fill";
 import ArrowDown from "@iconify-icons/ri/arrow-down-s-line";
 import ArrowRightSLine from "@iconify-icons/ri/arrow-right-s-line";
 import ArrowLeftSLine from "@iconify-icons/ri/arrow-left-s-line";
-import CloseBold from "@iconify-icons/ep/close-bold";
 
 const {
+  Close,
   route,
   router,
   visible,
@@ -32,6 +37,7 @@ const {
   pureSetting,
   activeIndex,
   getTabStyle,
+  isScrolling,
   iconIsActive,
   linkIsActive,
   currentSelect,
@@ -47,6 +53,7 @@ const {
 const tabDom = ref();
 const containerDom = ref();
 const scrollbarDom = ref();
+const contextmenuRef = ref();
 const isShowArrow = ref(false);
 const topPath = getTopMenu()?.path;
 const { VITE_HIDE_HOME } = import.meta.env;
@@ -130,6 +137,38 @@ const handleScroll = (offset: number): void => {
       translateX.value = 0;
     }
   }
+  isScrolling.value = false;
+};
+
+const handleWheel = (event: WheelEvent): void => {
+  isScrolling.value = true;
+  const scrollIntensity = Math.abs(event.deltaX) + Math.abs(event.deltaY);
+  let offset = 0;
+  if (event.deltaX < 0) {
+    offset = scrollIntensity > 0 ? scrollIntensity : 100;
+  } else {
+    offset = scrollIntensity > 0 ? -scrollIntensity : -100;
+  }
+
+  smoothScroll(offset);
+};
+
+const smoothScroll = (offset: number): void => {
+  // 每帧滚动的距离
+  const scrollAmount = 20;
+  let remaining = Math.abs(offset);
+
+  const scrollStep = () => {
+    const scrollOffset = Math.sign(offset) * Math.min(scrollAmount, remaining);
+    handleScroll(scrollOffset);
+    remaining -= Math.abs(scrollOffset);
+
+    if (remaining > 0) {
+      requestAnimationFrame(scrollStep);
+    }
+  };
+
+  requestAnimationFrame(scrollStep);
 };
 
 function dynamicRouteTag(value: string): void {
@@ -140,7 +179,7 @@ function dynamicRouteTag(value: string): void {
   function concatPath(arr: object[], value: string) {
     if (!hasValue) {
       arr.forEach((arrItem: any) => {
-        if (arrItem.path === value || arrItem.path === value) {
+        if (arrItem.path === value) {
           useMultiTagsStoreHook().handleTags("push", {
             path: value,
             meta: arrItem.meta,
@@ -326,6 +365,7 @@ function handleCommand(command: any) {
 
 /** 触发右键中菜单的点击事件 */
 function selectTag(key, item) {
+  closeMenu();
   onClickDrop(key, item, currentSelect.value);
 }
 
@@ -419,7 +459,7 @@ function openMenu(tag, e) {
   }
 
   currentSelect.value = tag;
-  const menuMinWidth = 105;
+  const menuMinWidth = 140;
   const offsetLeft = unref(containerDom).getBoundingClientRect().left;
   const offsetWidth = unref(containerDom).offsetWidth;
   const maxLeft = offsetWidth - menuMinWidth;
@@ -460,6 +500,10 @@ function tagOnClick(item) {
   // showMenuModel(item?.path, item?.query);
 }
 
+onClickOutside(contextmenuRef, closeMenu, {
+  detectIframe: true
+});
+
 watch(route, () => {
   activeIndex.value = -1;
   dynamicTagView();
@@ -495,10 +539,8 @@ onMounted(() => {
     });
   });
 
-  useResizeObserver(
-    scrollbarDom,
-    debounce(() => dynamicTagView())
-  );
+  useResizeObserver(scrollbarDom, dynamicTagView);
+  delay().then(() => dynamicTagView());
 });
 
 onBeforeUnmount(() => {
@@ -510,34 +552,31 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div ref="containerDom" class="tags-view" v-if="!showTags">
+  <div v-if="!showTags" ref="containerDom" class="tags-view">
     <span v-show="isShowArrow" class="arrow-left">
       <IconifyIconOffline :icon="ArrowLeftSLine" @click="handleScroll(200)" />
     </span>
-    <div ref="scrollbarDom" class="scroll-container">
-      <div class="tab select-none" ref="tabDom" :style="getTabStyle">
+    <div
+      ref="scrollbarDom"
+      class="scroll-container"
+      @wheel.prevent="handleWheel"
+    >
+      <div ref="tabDom" class="tab select-none" :style="getTabStyle">
         <div
-          :ref="'dynamic' + index"
           v-for="(item, index) in multiTags"
+          :ref="'dynamic' + index"
           :key="index"
-          :class="[
-            'scroll-item is-closable',
-            linkIsActive(item),
-            route.path === item.path && showModel === 'card'
-              ? 'card-active'
-              : ''
-          ]"
+          :class="['scroll-item is-closable', linkIsActive(item)]"
           @contextmenu.prevent="openMenu(item, $event)"
           @mouseenter.prevent="onMouseenter(index)"
           @mouseleave.prevent="onMouseleave(index)"
           @click="tagOnClick(item)"
         >
-          <router-link
-            :to="item.path"
-            class="dark:!text-text_color_primary dark:hover:!text-primary"
+          <span
+            class="tag-title dark:!text-text_color_primary dark:hover:!text-primary"
           >
             {{ item.meta.title }}
-          </router-link>
+          </span>
           <span
             v-if="
               iconIsActive(item, index) ||
@@ -546,11 +585,11 @@ onBeforeUnmount(() => {
             class="el-icon-close"
             @click.stop="deleteMenu(item)"
           >
-            <IconifyIconOffline :icon="CloseBold" />
+            <IconifyIconOffline :icon="Close" />
           </span>
-          <div
-            :ref="'schedule' + index"
+          <span
             v-if="showModel !== 'card'"
+            :ref="'schedule' + index"
             :class="[scheduleIsActive(item)]"
           />
         </div>
@@ -563,6 +602,7 @@ onBeforeUnmount(() => {
     <transition name="el-zoom-in-top">
       <ul
         v-show="visible"
+        ref="contextmenuRef"
         :key="Math.random()"
         :style="getContextMenuStyle"
         class="contextmenu"

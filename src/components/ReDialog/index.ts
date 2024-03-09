@@ -27,8 +27,11 @@ const addDialog = (options: DialogOptions) => {
 
 /** 关闭弹框 */
 const closeDialog = (options: DialogOptions, index: number, args?: any) => {
-  dialogStore.value.splice(index, 1);
+  dialogStore.value[index].visible = false;
   options.closeCallBack && options.closeCallBack({ options, index, args });
+  useTimeoutFn(() => {
+    dialogStore.value.splice(index, 1);
+  }, 200);
 };
 
 /**
@@ -49,7 +52,7 @@ const closeAllDialog = () => {
 /** 千万别忘了在下面这三处引入并注册下，放心注册，不使用`addDialog`调用就不会被挂载
  * https://github.com/pure-admin/vue-pure-admin/blob/main/src/App.vue#L4
  * https://github.com/pure-admin/vue-pure-admin/blob/main/src/App.vue#L13
- * https://github.com/pure-admin/vue-pure-admin/blob/main/src/App.vue#L18
+ * https://github.com/pure-admin/vue-pure-admin/blob/main/src/App.vue#L20
  */
 const ReDialog = withInstall(reDialog);
 

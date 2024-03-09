@@ -1,75 +1,99 @@
 <script setup lang="ts">
-import { type CSSProperties, computed } from "vue";
 import { hasAuth, getAuths } from "@/router/utils";
 
 defineOptions({
   name: "PermissionButton"
 });
-
-const elStyle = computed((): CSSProperties => {
-  return {
-    width: "85vw",
-    justifyContent: "start"
-  };
-});
 </script>
 
 <template>
-  <el-space direction="vertical" size="large">
-    <el-tag :style="elStyle" size="large" effect="dark">
-      当前拥有的code列表：{{ getAuths() }}
-    </el-tag>
+  <div>
+    <p class="mb-2">当前拥有的code列表：{{ getAuths() }}</p>
 
-    <el-card shadow="never" :style="elStyle">
+    <el-card shadow="never" class="mb-2">
       <template #header>
         <div class="card-header">组件方式判断权限</div>
       </template>
-      <Auth value="btn_add">
-        <el-button type="success"> 拥有code：'btn_add' 权限可见 </el-button>
-      </Auth>
-      <Auth :value="['btn_edit']">
-        <el-button type="primary"> 拥有code：['btn_edit'] 权限可见 </el-button>
-      </Auth>
-      <Auth :value="['btn_add', 'btn_edit', 'btn_delete']">
-        <el-button type="danger">
-          拥有code：['btn_add', 'btn_edit', 'btn_delete'] 权限可见
-        </el-button>
-      </Auth>
+      <el-space wrap>
+        <Auth value="permission:btn:add">
+          <el-button plain type="warning">
+            拥有code：'permission:btn:add' 权限可见
+          </el-button>
+        </Auth>
+        <Auth :value="['permission:btn:edit']">
+          <el-button plain type="primary">
+            拥有code：['permission:btn:edit'] 权限可见
+          </el-button>
+        </Auth>
+        <Auth
+          :value="[
+            'permission:btn:add',
+            'permission:btn:edit',
+            'permission:btn:delete'
+          ]"
+        >
+          <el-button plain type="danger">
+            拥有code：['permission:btn:add', 'permission:btn:edit',
+            'permission:btn:delete'] 权限可见
+          </el-button>
+        </Auth>
+      </el-space>
     </el-card>
 
-    <el-card shadow="never" :style="elStyle">
+    <el-card shadow="never" class="mb-2">
       <template #header>
         <div class="card-header">函数方式判断权限</div>
       </template>
-      <el-button type="success" v-if="hasAuth('btn_add')">
-        拥有code：'btn_add' 权限可见
-      </el-button>
-      <el-button type="primary" v-if="hasAuth(['btn_edit'])">
-        拥有code：['btn_edit'] 权限可见
-      </el-button>
-      <el-button
-        type="danger"
-        v-if="hasAuth(['btn_add', 'btn_edit', 'btn_delete'])"
-      >
-        拥有code：['btn_add', 'btn_edit', 'btn_delete'] 权限可见
-      </el-button>
+      <el-space wrap>
+        <el-button v-if="hasAuth('permission:btn:add')" plain type="warning">
+          拥有code：'permission:btn:add' 权限可见
+        </el-button>
+        <el-button v-if="hasAuth(['permission:btn:edit'])" plain type="primary">
+          拥有code：['permission:btn:edit'] 权限可见
+        </el-button>
+        <el-button
+          v-if="
+            hasAuth([
+              'permission:btn:add',
+              'permission:btn:edit',
+              'permission:btn:delete'
+            ])
+          "
+          plain
+          type="danger"
+        >
+          拥有code：['permission:btn:add', 'permission:btn:edit',
+          'permission:btn:delete'] 权限可见
+        </el-button>
+      </el-space>
     </el-card>
 
-    <el-card shadow="never" :style="elStyle">
+    <el-card shadow="never">
       <template #header>
         <div class="card-header">
           指令方式判断权限（该方式不能动态修改权限）
         </div>
       </template>
-      <el-button type="success" v-auth="'btn_add'">
-        拥有code：'btn_add' 权限可见
-      </el-button>
-      <el-button type="primary" v-auth="['btn_edit']">
-        拥有code：['btn_edit'] 权限可见
-      </el-button>
-      <el-button type="danger" v-auth="['btn_add', 'btn_edit', 'btn_delete']">
-        拥有code：['btn_add', 'btn_edit', 'btn_delete'] 权限可见
-      </el-button>
+      <el-space wrap>
+        <el-button v-auth="'permission:btn:add'" plain type="warning">
+          拥有code：'permission:btn:add' 权限可见
+        </el-button>
+        <el-button v-auth="['permission:btn:edit']" plain type="primary">
+          拥有code：['permission:btn:edit'] 权限可见
+        </el-button>
+        <el-button
+          v-auth="[
+            'permission:btn:add',
+            'permission:btn:edit',
+            'permission:btn:delete'
+          ]"
+          plain
+          type="danger"
+        >
+          拥有code：['permission:btn:add', 'permission:btn:edit',
+          'permission:btn:delete'] 权限可见
+        </el-button>
+      </el-space>
     </el-card>
-  </el-space>
+  </div>
 </template>

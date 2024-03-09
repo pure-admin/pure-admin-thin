@@ -1,16 +1,22 @@
-<script lang="ts" setup>
+<script setup lang="ts">
 import { useRoute } from "vue-router";
-import { ref, unref, onMounted, nextTick } from "vue";
+import { ref, unref, watch, onMounted, nextTick } from "vue";
 
 defineOptions({
   name: "FrameView"
 });
 
+const props = defineProps<{
+  frameInfo?: {
+    frameSrc?: string;
+    fullPath?: string;
+  };
+}>();
+
 const loading = ref(true);
 const currentRoute = useRoute();
 const frameSrc = ref<string>("");
 const frameRef = ref<HTMLElement | null>(null);
-
 if (unref(currentRoute.meta)?.frameSrc) {
   frameSrc.value = unref(currentRoute.meta)?.frameSrc as string;
 }
@@ -37,21 +43,38 @@ function init() {
   });
 }
 
+watch(
+  () => currentRoute.fullPath,
+  path => {
+    if (
+      currentRoute.name === "Redirect" &&
+      path.includes(props.frameInfo?.fullPath)
+    ) {
+      frameSrc.value = path; // redirect时，置换成任意值，待重定向后 重新赋值
+      loading.value = true;
+    }
+    // 重新赋值
+    if (props.frameInfo?.fullPath === path) {
+      frameSrc.value = props.frameInfo?.frameSrc;
+    }
+  }
+);
+
 onMounted(() => {
   init();
 });
 </script>
 
 <template>
-  <div class="frame" v-loading="loading" element-loading-text="加载中...">
-    <iframe :src="frameSrc" class="frame-iframe" ref="frameRef" />
+  <div v-loading="loading" class="frame" element-loading-text="加载中...">
+    <iframe ref="frameRef" :src="frameSrc" class="frame-iframe" />
   </div>
 </template>
 
 <style lang="scss" scoped>
 .frame {
-  z-index: 998;
-  height: calc(100vh - 88px);
+  position: absolute;
+  inset: 0;
 
   .frame-iframe {
     box-sizing: border-box;

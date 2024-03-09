@@ -118,8 +118,8 @@ onBeforeUnmount(() => {
                 prop="username"
               >
                 <el-input
-                  clearable
                   v-model="ruleForm.username"
+                  clearable
                   placeholder="账号"
                   :prefix-icon="useRenderIcon(User)"
                 />
@@ -129,9 +129,9 @@ onBeforeUnmount(() => {
             <Motion :delay="150">
               <el-form-item prop="password">
                 <el-input
+                  v-model="ruleForm.password"
                   clearable
                   show-password
-                  v-model="ruleForm.password"
                   placeholder="密码"
                   :prefix-icon="useRenderIcon(Lock)"
                 />

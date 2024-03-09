@@ -1,6 +1,8 @@
 <script setup lang="ts">
-import { ref, computed } from "vue";
+import { computed } from "vue";
+import { useGlobal } from "@pureadmin/utils";
 import { useNav } from "@/layout/hooks/useNav";
+
 import MenuFold from "@iconify-icons/ri/menu-fold-fill";
 
 interface Props {
@@ -11,7 +13,6 @@ const props = withDefaults(defineProps<Props>(), {
   isActive: false
 });
 
-const visible = ref(false);
 const { tooltipEffect } = useNav();
 
 const iconClass = computed(() => {
@@ -22,13 +23,13 @@ const iconClass = computed(() => {
     "h-[16px]",
     "inline-block",
     "align-middle",
-    "text-primary",
     "cursor-pointer",
-    "duration-[100ms]",
-    "hover:text-primary",
-    "dark:hover:!text-white"
+    "duration-[100ms]"
   ];
 });
+
+const { $storage } = useGlobal<GlobalPropertiesApi>();
+const themeColor = computed(() => $storage.layout?.themeColor);
 
 const emit = defineEmits<{
   (e: "toggleClick"): void;
@@ -40,32 +41,29 @@ const toggleClick = () => {
 </script>
 
 <template>
-  <div class="container">
-    <el-tooltip
-      placement="right"
-      :visible="visible"
-      :effect="tooltipEffect"
-      :content="props.isActive ? '点击折叠' : '点击展开'"
-    >
-      <IconifyIconOffline
-        :icon="MenuFold"
-        :class="iconClass"
-        :style="{ transform: props.isActive ? 'none' : 'rotateY(180deg)' }"
-        @click="toggleClick"
-        @mouseenter="visible = true"
-        @mouseleave="visible = false"
-      />
-    </el-tooltip>
+  <div class="collapse-container">
+    <IconifyIconOffline
+      v-tippy="{
+        content: props.isActive ? '点击折叠' : '点击展开',
+        theme: tooltipEffect,
+        hideOnClick: 'toggle',
+        placement: 'right'
+      }"
+      :icon="MenuFold"
+      :class="[iconClass, themeColor === 'light' ? '' : 'text-primary']"
+      :style="{ transform: props.isActive ? 'none' : 'rotateY(180deg)' }"
+      @click="toggleClick"
+    />
   </div>
 </template>
 
 <style lang="scss" scoped>
-.container {
+.collapse-container {
   position: absolute;
   bottom: 0;
   width: 100%;
   height: 40px;
   line-height: 40px;
-  box-shadow: 0 0 6px -2px var(--el-color-primary);
+  box-shadow: 0 0 6px -3px var(--el-color-primary);
 }
 </style>
