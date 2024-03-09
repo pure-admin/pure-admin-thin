@@ -3,7 +3,7 @@ dist
 *.d.ts
 /src/assets
 package.json
-.eslintrc.js
+eslint.config.js 
 .prettierrc.js
 commitlint.config.js
 postcss.config.js

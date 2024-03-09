@@ -8,7 +8,7 @@ export const routerArrays: Array<RouteConfigs> =
           path: "/welcome",
           meta: {
             title: "menus.hshome",
-            icon: "homeFilled"
+            icon: "ep:home-filled"
           }
         }
       ]
@@ -62,6 +62,7 @@ export interface setType {
 
 export type menuType = {
   id?: number;
+  name?: string;
   path?: string;
   noShowingChildren?: boolean;
   children?: menuType[];

@@ -29,6 +29,10 @@ const props = {
   columns: {
     type: Array as PropType<TableColumnList>,
     default: () => []
+  },
+  isExpandAll: {
+    type: Boolean,
+    default: true
   }
 };
 
@@ -37,12 +41,11 @@ export default defineComponent({
   props,
   emits: ["refresh"],
   setup(props, { emit, slots, attrs }) {
-    const buttonRef = ref();
     const size = ref("default");
-    const isExpandAll = ref(true);
     const loading = ref(false);
     const checkAll = ref(true);
     const isIndeterminate = ref(false);
+    const isExpandAll = ref(props.isExpandAll);
     const filterColumns = cloneDeep(props?.columns).filter(column =>
       isBoolean(column?.hide)
         ? !column.hide
@@ -200,11 +203,22 @@ export default defineComponent({
         : false;
     };
 
+    const rendTippyProps = (content: string) => {
+      // https://vue-tippy.netlify.app/props
+      return {
+        content,
+        offset: [0, 18],
+        duration: [300, 0],
+        followCursor: true,
+        hideOnClick: "toggle"
+      };
+    };
+
     const reference = {
       reference: () => (
         <SettingIcon
           class={["w-[16px]", iconClass.value]}
-          onMouseover={e => (buttonRef.value = e.currentTarget)}
+          v-tippy={rendTippyProps("列设置")}
         />
       )
     };
@@ -224,45 +238,43 @@ export default defineComponent({
               ) : null}
               {props.tableRef?.size ? (
                 <>
-                  <el-tooltip
-                    effect="dark"
-                    content={isExpandAll.value ? "折叠" : "展开"}
-                    placement="top"
-                  >
-                    <ExpandIcon
-                      class={["w-[16px]", iconClass.value]}
-                      style={{
-                        transform: isExpandAll.value ? "none" : "rotate(-90deg)"
-                      }}
-                      onClick={() => onExpand()}
-                    />
-                  </el-tooltip>
+                  <ExpandIcon
+                    class={["w-[16px]", iconClass.value]}
+                    style={{
+                      transform: isExpandAll.value ? "none" : "rotate(-90deg)"
+                    }}
+                    v-tippy={rendTippyProps(
+                      isExpandAll.value ? "折叠" : "展开"
+                    )}
+                    onClick={() => onExpand()}
+                  />
                   <el-divider direction="vertical" />
                 </>
               ) : null}
-              <el-tooltip effect="dark" content="刷新" placement="top">
-                <RefreshIcon
-                  class={[
-                    "w-[16px]",
-                    iconClass.value,
-                    loading.value ? "animate-spin" : ""
-                  ]}
-                  onClick={() => onReFresh()}
-                />
-              </el-tooltip>
+              <RefreshIcon
+                class={[
+                  "w-[16px]",
+                  iconClass.value,
+                  loading.value ? "animate-spin" : ""
+                ]}
+                v-tippy={rendTippyProps("刷新")}
+                onClick={() => onReFresh()}
+              />
               <el-divider direction="vertical" />
-              <el-tooltip effect="dark" content="密度" placement="top">
-                <el-dropdown v-slots={dropdown} trigger="click">
-                  <CollapseIcon class={["w-[16px]", iconClass.value]} />
-                </el-dropdown>
-              </el-tooltip>
+              <el-dropdown
+                v-slots={dropdown}
+                trigger="click"
+                v-tippy={rendTippyProps("密度")}
+              >
+                <CollapseIcon class={["w-[16px]", iconClass.value]} />
+              </el-dropdown>
               <el-divider direction="vertical" />
 
               <el-popover
                 v-slots={reference}
                 placement="bottom-start"
                 popper-style={{ padding: 0 }}
-                width="160"
+                width="200"
                 trigger="click"
               >
                 <div class={[topClass.value]}>
@@ -279,70 +291,53 @@ export default defineComponent({
                 </div>
 
                 <div class="pt-[6px] pl-[11px]">
-                  <el-checkbox-group
-                    v-model={checkedColumns.value}
-                    onChange={value => handleCheckedColumnsChange(value)}
-                  >
-                    <el-space
-                      direction="vertical"
-                      alignment="flex-start"
-                      size={0}
+                  <el-scrollbar max-height="36vh">
+                    <el-checkbox-group
+                      v-model={checkedColumns.value}
+                      onChange={value => handleCheckedColumnsChange(value)}
                     >
-                      {checkColumnList.map(item => {
-                        return (
-                          <div class="flex items-center">
-                            <DragIcon
-                              class={[
-                                "drag-btn w-[16px] mr-2",
-                                isFixedColumn(item)
-                                  ? "!cursor-no-drop"
-                                  : "!cursor-grab"
-                              ]}
-                              onMouseenter={(event: {
-                                preventDefault: () => void;
-                              }) => rowDrop(event)}
-                            />
-                            <el-checkbox
-                              key={item}
-                              label={item}
-                              onChange={value =>
-                                handleCheckColumnListChange(value, item)
-                              }
-                            >
-                              <span
-                                title={item}
-                                class="inline-block w-[120px] truncate hover:text-text_color_primary"
+                      <el-space
+                        direction="vertical"
+                        alignment="flex-start"
+                        size={0}
+                      >
+                        {checkColumnList.map(item => {
+                          return (
+                            <div class="flex items-center">
+                              <DragIcon
+                                class={[
+                                  "drag-btn w-[16px] mr-2",
+                                  isFixedColumn(item)
+                                    ? "!cursor-no-drop"
+                                    : "!cursor-grab"
+                                ]}
+                                onMouseenter={(event: {
+                                  preventDefault: () => void;
+                                }) => rowDrop(event)}
+                              />
+                              <el-checkbox
+                                key={item}
+                                value={item}
+                                onChange={value =>
+                                  handleCheckColumnListChange(value, item)
+                                }
                               >
-                                {item}
-                              </span>
-                            </el-checkbox>
-                          </div>
-                        );
-                      })}
-                    </el-space>
-                  </el-checkbox-group>
+                                <span
+                                  title={item}
+                                  class="inline-block w-[120px] truncate hover:text-text_color_primary"
+                                >
+                                  {item}
+                                </span>
+                              </el-checkbox>
+                            </div>
+                          );
+                        })}
+                      </el-space>
+                    </el-checkbox-group>
+                  </el-scrollbar>
                 </div>
               </el-popover>
             </div>
-
-            <el-tooltip
-              popper-options={{
-                modifiers: [
-                  {
-                    name: "computeStyles",
-                    options: {
-                      adaptive: false,
-                      enabled: false
-                    }
-                  }
-                ]
-              }}
-              placement="top"
-              virtual-ref={buttonRef.value}
-              virtual-triggering
-              trigger="hover"
-              content="列设置"
-            />
           </div>
           {slots.default({
             size: size.value,

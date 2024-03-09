@@ -4,10 +4,8 @@ import "animate.css";
 import "@/components/ReIcon/src/offlineIcon";
 import { setType } from "./types";
 import { useLayout } from "./hooks/useLayout";
-import { useResizeObserver } from "@vueuse/core";
 import { useAppStoreHook } from "@/store/modules/app";
 import { useSettingStoreHook } from "@/store/modules/settings";
-import { deviceDetection, useDark, useGlobal } from "@pureadmin/utils";
 import { useDataThemeChange } from "@/layout/hooks/useDataThemeChange";
 import {
   h,
@@ -18,6 +16,12 @@ import {
   onBeforeMount,
   defineComponent
 } from "vue";
+import {
+  useDark,
+  useGlobal,
+  deviceDetection,
+  useResizeObserver
+} from "@pureadmin/utils";
 
 import navbar from "./components/navbar.vue";
 import tag from "./components/tag/index.vue";
@@ -68,7 +72,9 @@ function setTheme(layoutModel: string) {
     theme: $storage.layout?.theme,
     darkMode: $storage.layout?.darkMode,
     sidebarStatus: $storage.layout?.sidebarStatus,
-    epThemeColor: $storage.layout?.epThemeColor
+    epThemeColor: $storage.layout?.epThemeColor,
+    themeColor: $storage.layout?.themeColor,
+    overallStyle: $storage.layout?.overallStyle
   };
 }
 
@@ -83,7 +89,7 @@ let isAutoCloseSidebar = true;
 useResizeObserver(appWrapperRef, entries => {
   if (isMobile) return;
   const entry = entries[0];
-  const { width } = entry.contentRect;
+  const [{ inlineSize: width }] = entry.borderBoxSize;
   width <= 760 ? setTheme("vertical") : setTheme(useAppStoreHook().layout);
   /** width app-wrapper类容器宽度
    * 0 < width <= 760 隐藏侧边栏
@@ -114,7 +120,7 @@ onMounted(() => {
 });
 
 onBeforeMount(() => {
-  useDataThemeChange().dataThemeChange();
+  useDataThemeChange().dataThemeChange($storage.layout?.overallStyle);
 });
 
 const layoutHeader = defineComponent({

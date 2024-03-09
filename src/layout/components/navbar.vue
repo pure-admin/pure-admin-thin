@@ -29,9 +29,7 @@ const { t, locale, translationCh, translationEn } = useTranslationLang();
 </script>
 
 <template>
-  <div
-    class="navbar bg-[#fff] shadow-sm shadow-[rgba(0, 21, 41, 0.08)] dark:shadow-[#0d0d0d]"
-  >
+  <div class="navbar bg-[#fff] shadow-sm shadow-[rgba(0,21,41,0.08)]">
     <topCollapse
       v-if="device === 'mobile'"
       class="hamburger-container"
@@ -48,7 +46,7 @@ const { t, locale, translationCh, translationEn } = useTranslationLang();
 
     <div v-if="layout === 'vertical'" class="vertical-header-right">
       <!-- 菜单搜索 -->
-      <Search />
+      <Search id="header-search" />
       <!-- 通知 -->
       <Notice id="header-notice" />
       <!-- 国际化 -->
@@ -64,8 +62,8 @@ const { t, locale, translationCh, translationEn } = useTranslationLang();
               @click="translationCh"
             >
               <IconifyIconOffline
-                class="check-zh"
                 v-show="locale === 'zh'"
+                class="check-zh"
                 :icon="Check"
               />
               简体中文
@@ -75,7 +73,7 @@ const { t, locale, translationCh, translationEn } = useTranslationLang();
               :class="['dark:!text-white', getDropdownItemClass(locale, 'en')]"
               @click="translationEn"
             >
-              <span class="check-en" v-show="locale === 'en'">
+              <span v-show="locale === 'en'" class="check-en">
                 <IconifyIconOffline :icon="Check" />
               </span>
               English

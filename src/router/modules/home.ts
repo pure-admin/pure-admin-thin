@@ -8,7 +8,7 @@ export default {
   component: Layout,
   redirect: "/welcome",
   meta: {
-    icon: "homeFilled",
+    icon: "ep:home-filled",
     title: $t("menus.hshome"),
     rank: 0
   },
@@ -23,4 +23,4 @@ export default {
       }
     }
   ]
-} as RouteConfigsTable;
+} satisfies RouteConfigsTable;
