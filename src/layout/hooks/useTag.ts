@@ -1,15 +1,13 @@
 import {
   ref,
   unref,
-  watch,
   computed,
   reactive,
   onMounted,
-  CSSProperties,
+  type CSSProperties,
   getCurrentInstance
 } from "vue";
-import { tagsViewsType } from "../types";
-import { useEventListener } from "@vueuse/core";
+import type { tagsViewsType } from "../types";
 import { useRoute, useRouter } from "vue-router";
 import { responsiveStorageNameSpace } from "@/config";
 import { useSettingStoreHook } from "@/store/modules/settings";
@@ -43,6 +41,7 @@ export function useTags() {
   const activeIndex = ref(-1);
   // 当前右键选中的路由信息
   const currentSelect = ref({});
+  const isScrolling = ref(false);
 
   /** 显示模式，默认灵动模式 */
   const showModel = ref(
@@ -153,7 +152,8 @@ export function useTags() {
 
   const getTabStyle = computed((): CSSProperties => {
     return {
-      transform: `translateX(${translateX.value}px)`
+      transform: `translateX(${translateX.value}px)`,
+      transition: isScrolling.value ? "none" : "transform 0.5s ease-in-out"
     };
   });
 
@@ -174,7 +174,7 @@ export function useTags() {
       toggleClass(true, "schedule-in", instance.refs["schedule" + index][0]);
       toggleClass(false, "schedule-out", instance.refs["schedule" + index][0]);
     } else {
-      if (hasClass(instance.refs["dynamic" + index][0], "card-active")) return;
+      if (hasClass(instance.refs["dynamic" + index][0], "is-active")) return;
       toggleClass(true, "card-in", instance.refs["dynamic" + index][0]);
       toggleClass(false, "card-out", instance.refs["dynamic" + index][0]);
     }
@@ -189,7 +189,7 @@ export function useTags() {
       toggleClass(false, "schedule-in", instance.refs["schedule" + index][0]);
       toggleClass(true, "schedule-out", instance.refs["schedule" + index][0]);
     } else {
-      if (hasClass(instance.refs["dynamic" + index][0], "card-active")) return;
+      if (hasClass(instance.refs["dynamic" + index][0], "is-active")) return;
       toggleClass(false, "card-in", instance.refs["dynamic" + index][0]);
       toggleClass(true, "card-out", instance.refs["dynamic" + index][0]);
     }
@@ -214,14 +214,8 @@ export function useTags() {
     }
   });
 
-  watch(
-    () => visible.value,
-    () => {
-      useEventListener(document, "click", closeMenu);
-    }
-  );
-
   return {
+    Close,
     route,
     router,
     visible,
@@ -236,6 +230,7 @@ export function useTags() {
     pureSetting,
     activeIndex,
     getTabStyle,
+    isScrolling,
     iconIsActive,
     linkIsActive,
     currentSelect,

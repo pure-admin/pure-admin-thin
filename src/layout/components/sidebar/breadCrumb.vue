@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { isEqual } from "@pureadmin/utils";
+import { useRoute, useRouter } from "vue-router";
 import { ref, watch, onMounted, toRaw } from "vue";
 import { getParentPaths, findRouteByPath } from "@/router/utils";
 import { useMultiTagsStoreHook } from "@/store/modules/multiTags";
-import { useRoute, useRouter, RouteLocationMatched } from "vue-router";
 
 const route = useRoute();
 const levelList = ref([]);
@@ -63,12 +63,28 @@ const getBreadcrumb = (): void => {
   );
 };
 
-const handleLink = (item: RouteLocationMatched): void => {
-  const { redirect, path } = item;
+const handleLink = item => {
+  const { redirect, name, path } = item;
   if (redirect) {
     router.push(redirect as any);
   } else {
-    router.push(path);
+    if (name) {
+      if (item.query) {
+        router.push({
+          name,
+          query: item.query
+        });
+      } else if (item.params) {
+        router.push({
+          name,
+          params: item.params
+        });
+      } else {
+        router.push({ name });
+      }
+    } else {
+      router.push({ path });
+    }
   }
 };
 
@@ -91,9 +107,9 @@ watch(
   <el-breadcrumb class="!leading-[50px] select-none" separator="/">
     <transition-group name="breadcrumb">
       <el-breadcrumb-item
-        class="!inline !items-stretch"
         v-for="item in levelList"
         :key="item.path"
+        class="!inline !items-stretch"
       >
         <a @click.prevent="handleLink(item)">
           {{ item.meta.title }}
