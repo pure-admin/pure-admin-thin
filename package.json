@@ -69,7 +69,6 @@
     "responsive-storage": "^2.2.0",
     "sortablejs": "^1.15.2",
     "vue": "^3.4.21",
-    "vue-i18n": "^9.10.1",
     "vue-router": "^4.3.0",
     "vue-tippy": "^6.4.1",
     "vue-types": "^5.1.1"
@@ -83,7 +82,6 @@
     "@iconify-icons/ep": "^1.2.12",
     "@iconify-icons/ri": "^1.2.10",
     "@iconify/vue": "^4.1.1",
-    "@intlify/unplugin-vue-i18n": "^2.0.0",
     "@pureadmin/theme": "^3.2.0",
     "@types/gradient-string": "^1.1.5",
     "@types/js-cookie": "^3.0.6",
