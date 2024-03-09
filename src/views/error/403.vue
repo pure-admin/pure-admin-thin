@@ -14,8 +14,8 @@ const router = useRouter();
     <noAccess />
     <div class="ml-12">
       <p
-        class="font-medium text-4xl mb-4 dark:text-white"
         v-motion
+        class="font-medium text-4xl mb-4 dark:text-white"
         :initial="{
           opacity: 0,
           y: 100
@@ -24,15 +24,15 @@ const router = useRouter();
           opacity: 1,
           y: 0,
           transition: {
-            delay: 100
+            delay: 80
           }
         }"
       >
         403
       </p>
       <p
-        class="mb-4 text-gray-500"
         v-motion
+        class="mb-4 text-gray-500"
         :initial="{
           opacity: 0,
           y: 100
@@ -41,16 +41,15 @@ const router = useRouter();
           opacity: 1,
           y: 0,
           transition: {
-            delay: 300
+            delay: 120
           }
         }"
       >
         抱歉，你无权访问该页面
       </p>
       <el-button
-        type="primary"
-        @click="router.push('/')"
         v-motion
+        type="primary"
         :initial="{
           opacity: 0,
           y: 100
@@ -59,9 +58,10 @@ const router = useRouter();
           opacity: 1,
           y: 0,
           transition: {
-            delay: 500
+            delay: 160
           }
         }"
+        @click="router.push('/')"
       >
         返回首页
       </el-button>

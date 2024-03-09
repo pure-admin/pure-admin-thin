@@ -31,6 +31,4 @@ The simplified version is based on the shelf extracted from [vue-pure-admin](htt
 
 ## License
 
-In principle, no fees and copyrights are charged, and it is commercially available, but if you need secondary open source (such as using this platform for secondary development and open source, the front-end code must be open source and free), please contact the author for permission! (Free, just take a record)
-
 [MIT © 2020-present, pure-admin](./LICENSE)

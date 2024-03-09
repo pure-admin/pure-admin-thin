@@ -1,24 +1,11 @@
 <script setup lang="ts">
+import type { Props } from "../types";
 import { transformI18n } from "@/plugins/i18n";
-import { useResizeObserver } from "@vueuse/core";
+import { useResizeObserver } from "@pureadmin/utils";
 import { useEpThemeStoreHook } from "@/store/modules/epTheme";
 import { useRenderIcon } from "@/components/ReIcon/src/hooks";
 import { ref, computed, getCurrentInstance, onMounted } from "vue";
 import enterOutlined from "@/assets/svg/enter_outlined.svg?component";
-import Bookmark2Line from "@iconify-icons/ri/bookmark-2-line";
-
-interface optionsItem {
-  path: string;
-  meta?: {
-    icon?: string;
-    title?: string;
-  };
-}
-
-interface Props {
-  value: string;
-  options: Array<optionsItem>;
-}
 
 interface Emits {
   (e: "update:value", val: string): void;
@@ -27,9 +14,9 @@ interface Emits {
 
 const resultRef = ref();
 const innerHeight = ref();
-const props = withDefaults(defineProps<Props>(), {});
 const emit = defineEmits<Emits>();
 const instance = getCurrentInstance()!;
+const props = withDefaults(defineProps<Props>(), {});
 
 const itemStyle = computed(() => {
   return item => {
@@ -65,9 +52,7 @@ function resizeResult() {
   innerHeight.value = window.innerHeight - window.innerHeight / 10 - 140;
 }
 
-useResizeObserver(resultRef, () => {
-  resizeResult();
-});
+useResizeObserver(resultRef, resizeResult);
 
 function handleScroll(index: number) {
   const curInstance = instance?.proxy?.$refs[`resultItemRef${index}`];
@@ -95,7 +80,7 @@ defineExpose({ handleScroll });
       @click="handleTo"
       @mouseenter="handleMouse(item)"
     >
-      <component :is="useRenderIcon(item.meta?.icon ?? Bookmark2Line)" />
+      <component :is="useRenderIcon(item.meta?.icon)" />
       <span class="result-item-title">
         {{ transformI18n(item.meta?.title) }}
       </span>
@@ -117,7 +102,7 @@ defineExpose({ handleScroll });
     cursor: pointer;
     border: 0.1px solid #ccc;
     border-radius: 4px;
-    transition: all 0.3s;
+    transition: font-size 0.16s;
 
     &-title {
       display: flex;

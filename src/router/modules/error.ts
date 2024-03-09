@@ -4,9 +4,9 @@ export default {
   path: "/error",
   redirect: "/error/403",
   meta: {
-    icon: "informationLine",
-    title: $t("menus.hsabnormal"),
+    icon: "ri:information-line",
     // showLink: false,
+    title: $t("menus.hsabnormal"),
     rank: 9
   },
   children: [
@@ -35,4 +35,4 @@ export default {
       }
     }
   ]
-} as RouteConfigsTable;
+} satisfies RouteConfigsTable;
