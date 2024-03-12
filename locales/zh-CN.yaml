@@ -32,6 +32,7 @@ menus:
   permission: 权限管理
   permissionPage: 页面权限
   permissionButton: 按钮权限
+  hsAbout: 关于
 status:
   hsLoad: 加载中...
 login:
