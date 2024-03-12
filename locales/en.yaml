@@ -33,6 +33,16 @@ menus:
   permissionPage: Page Permission
   permissionButton: Button Permission
   hsAbout: About
+  hssysManagement: System Manage
+  hsUser: User Manage
+  hsRole: Role Manage
+  hsSystemMenu: Menu Manage
+  hsDept: Dept Manage
+  hssysMonitor: System Monitor
+  hsOnlineUser: Online User
+  hsLoginLog: Login Log
+  hsOperationLog: Operation Log
+  hsSystemLog: System Log
 status:
   hsLoad: Loading...
 login:
