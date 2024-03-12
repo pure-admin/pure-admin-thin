@@ -4,7 +4,7 @@ import { setupStore } from "@/store";
 import { useI18n } from "@/plugins/i18n";
 import { getPlatformConfig } from "./config";
 import { MotionPlugin } from "@vueuse/motion";
-// import { useEcharts } from "@/plugins/echarts";
+import { useEcharts } from "@/plugins/echarts";
 import { createApp, type Directive } from "vue";
 import { useElementPlus } from "@/plugins/elementPlus";
 import { injectResponsiveStorage } from "@/utils/responsive";
@@ -61,7 +61,7 @@ getPlatformConfig(app).then(async config => {
     .use(useI18n)
     .use(useElementPlus)
     .use(Table)
-    .use(PureDescriptions);
-  // .use(useEcharts);
+    .use(PureDescriptions)
+    .use(useEcharts);
   app.mount("#app");
 });
