@@ -4,10 +4,10 @@ import type { userType } from "./types";
 import { routerArrays } from "@/layout/types";
 import { router, resetRouter } from "@/router";
 import { storageLocal } from "@pureadmin/utils";
-import { getLogin, refreshTokenApi } from "@/api/user";
-import type { UserResult, RefreshTokenResult } from "@/api/user";
+import { type UserLogResult, login } from "@/api/login";
 import { useMultiTagsStoreHook } from "@/store/modules/multiTags";
 import { type DataInfo, setToken, removeToken, userKey } from "@/utils/auth";
+import { encrypt } from "@/utils/rsaEncrypt";
 
 export const useUserStore = defineStore({
   id: "pure-user",
@@ -16,8 +16,6 @@ export const useUserStore = defineStore({
     username: storageLocal().getItem<DataInfo<number>>(userKey)?.username ?? "",
     // 页面级别权限
     roles: storageLocal().getItem<DataInfo<number>>(userKey)?.roles ?? [],
-    // 前端生成的验证码（按实际需求替换）
-    verifyCode: "",
     // 判断登录页面显示哪个组件（0：登录（默认）、1：手机登录、2：二维码登录、3：注册、4：忘记密码）
     currentPage: 0,
     // 是否勾选了登录页的免登录
@@ -34,10 +32,6 @@ export const useUserStore = defineStore({
     SET_ROLES(roles: Array<string>) {
       this.roles = roles;
     },
-    /** 存储前端生成的验证码 */
-    SET_VERIFYCODE(verifyCode: string) {
-      this.verifyCode = verifyCode;
-    },
     /** 存储登录页面显示哪个组件 */
     SET_CURRENTPAGE(value: number) {
       this.currentPage = value;
@@ -52,11 +46,23 @@ export const useUserStore = defineStore({
     },
     /** 登入 */
     async loginByUsername(data) {
-      return new Promise<UserResult>((resolve, reject) => {
-        getLogin(data)
+      return new Promise<UserLogResult>((resolve, reject) => {
+        login({
+          username: data.username,
+          password: encrypt(data.password),
+          code: data.code,
+          uuid: data.uuid
+        })
           .then(data => {
             if (data) {
-              setToken(data.data);
+              //;
+              setToken({
+                accessToken: data.data.token,
+                username: data.data?.user?.user?.nickName,
+                expires: new Date("2033-03-15T12:00:00Z"),
+                roles: data.data?.user?.roles,
+                user: data.data?.user?.user
+              });
               resolve(data);
             }
           })
@@ -73,21 +79,6 @@ export const useUserStore = defineStore({
       useMultiTagsStoreHook().handleTags("equal", [...routerArrays]);
       resetRouter();
       router.push("/login");
-    },
-    /** 刷新`token` */
-    async handRefreshToken(data) {
-      return new Promise<RefreshTokenResult>((resolve, reject) => {
-        refreshTokenApi(data)
-          .then(data => {
-            if (data) {
-              setToken(data.data);
-              resolve(data);
-            }
-          })
-          .catch(error => {
-            reject(error);
-          });
-      });
     }
   }
 });

@@ -12,6 +12,8 @@ import type {
 import { stringify } from "qs";
 import NProgress from "../progress";
 import { getToken, formatToken } from "@/utils/auth";
+import { message } from "@/utils/message";
+
 // 相关配置请参考：www.axios-js.com/zh-cn/docs/#axios-request-config-1
 const defaultConfig: AxiosRequestConfig = {
   // 请求超时时间
@@ -91,6 +93,7 @@ class PureHttp {
             });
       },
       error => {
+        message("请求异常!", { type: "error" });
         return Promise.reject(error);
       }
     );
@@ -116,6 +119,7 @@ class PureHttp {
         return response.data;
       },
       (error: PureHttpError) => {
+        message("服务异常!", { type: "error" });
         const $error = error;
         $error.isCancelRequest = Axios.isCancel($error);
         // 关闭进度条动画

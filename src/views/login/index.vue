@@ -68,9 +68,14 @@ const onLogin = async (formEl: FormInstance | undefined) => {
     if (valid) {
       loading.value = true;
       useUserStoreHook()
-        .loginByUsername({ username: ruleForm.username, password: "admin123" })
+        .loginByUsername({
+          username: ruleForm.username,
+          password: ruleForm.password,
+          code: ruleForm.verifyCode,
+          uuid: imgCode.value
+        })
         .then(res => {
-          if (res.success) {
+          if (res) {
             // 获取后端路由
             return initRouter().then(() => {
               disabled.value = true;
@@ -85,6 +90,7 @@ const onLogin = async (formEl: FormInstance | undefined) => {
         })
         .finally(() => (loading.value = false));
     } else {
+      loading.value = false;
       return fields;
     }
   });
@@ -101,9 +107,6 @@ useEventListener(document, "keypress", ({ code }) => {
     immediateDebounce(ruleFormRef.value);
 });
 
-watch(imgCode, value => {
-  useUserStoreHook().SET_VERIFYCODE(value);
-});
 watch(checked, bool => {
   useUserStoreHook().SET_ISREMEMBERED(bool);
 });

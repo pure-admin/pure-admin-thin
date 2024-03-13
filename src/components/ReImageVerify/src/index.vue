@@ -20,14 +20,8 @@ const props = withDefaults(defineProps<Props>(), {
 
 const emit = defineEmits<Emits>();
 
-const { domRef, imgCode, setImgCode, getImgCode } = useImageVerify();
+const { imgSrc, imgCode, getImgCode } = useImageVerify();
 
-watch(
-  () => props.code,
-  newValue => {
-    setImgCode(newValue);
-  }
-);
 watch(imgCode, newValue => {
   emit("update:code", newValue);
 });
@@ -36,11 +30,10 @@ defineExpose({ getImgCode });
 </script>
 
 <template>
-  <canvas
-    ref="domRef"
-    width="120"
-    height="40"
-    class="cursor-pointer"
+  <el-image
+    style="width: 120; height: 40"
+    :src="imgSrc"
+    fit="contain"
     @click="getImgCode"
   />
 </template>
