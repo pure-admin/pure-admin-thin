@@ -38,24 +38,11 @@ class PureHttp {
   /** token过期后，暂存待执行的请求 */
   private static requests = [];
 
-  /** 防止重复刷新token */
-  private static isRefreshing = false;
-
   /** 初始化配置对象 */
   private static initConfig: PureHttpRequestConfig = {};
 
   /** 保存当前Axios实例对象 */
   private static axiosInstance: AxiosInstance = Axios.create(defaultConfig);
-
-  /** 重连原始请求 */
-  private static retryOriginalRequest(config: PureHttpRequestConfig) {
-    return new Promise(resolve => {
-      PureHttp.requests.push((token: string) => {
-        config.headers["Authorization"] = formatToken(token);
-        resolve(config);
-      });
-    });
-  }
 
   /** 请求拦截 */
   private httpInterceptorsRequest(): void {
