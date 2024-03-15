@@ -161,6 +161,23 @@ class PureHttp {
   ): Promise<P> {
     return this.request<P>("get", url, params, config);
   }
+  /** 单独抽离的put工具函数 */
+  public put<T, P>(
+    url: string,
+    params?: AxiosRequestConfig<T>,
+    config?: PureHttpRequestConfig
+  ): Promise<P> {
+    return this.request<P>("put", url, params, config);
+  }
+
+  /** 单独抽离的delete工具函数 */
+  public delete<T, P>(
+    url: string,
+    params?: AxiosRequestConfig<T>,
+    config?: PureHttpRequestConfig
+  ): Promise<P> {
+    return this.request<P>("delete", url, params, config);
+  }
 }
 
 export const http = new PureHttp();
