@@ -1,7 +1,7 @@
 export default {
   path: "/qa",
   redirect: "/qa/chat",
-  component: () => import("@/views/qa/index.vue"),
+  component: () => import("@/views/qa/chat/index.vue"),
   meta: {
     icon: "lollipop",
     title: "问答系统",
