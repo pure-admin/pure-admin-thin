@@ -228,6 +228,8 @@ export function useRole() {
     dataList,
     pagination,
     // buttonClass,
+    switchStyle,
+    onChange,
     onSearch,
     resetForm,
     openDialog,

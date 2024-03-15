@@ -4,13 +4,11 @@ import { useRole } from "./utils/hook";
 import { PureTableBar } from "@/components/RePureTableBar";
 import { useRenderIcon } from "@/components/ReIcon/src/hooks";
 
-// import Database from "@iconify-icons/ri/database-2-line";
-// import More from "@iconify-icons/ep/more-filled";
 import Delete from "@iconify-icons/ep/delete";
-import EditPen from "@iconify-icons/ep/edit-pen";
+import Edit from "@iconify-icons/ep/edit";
 import Refresh from "@iconify-icons/ep/refresh";
-import Menu from "@iconify-icons/ep/menu";
 import AddFill from "@iconify-icons/ri/add-circle-line";
+import Download from "@iconify-icons/ep/download";
 
 defineOptions({
   name: "SystemRole"
@@ -23,13 +21,13 @@ const {
   columns,
   dataList,
   pagination,
-  // buttonClass,
+  disabledDelete,
+  disabledEdit,
+  disabledEditFrom,
   onSearch,
   resetForm,
   openDialog,
-  handleMenu,
   handleDelete,
-  // handleDatabase,
   handleSizeChange,
   handleCurrentChange,
   handleSelectionChange
@@ -38,6 +36,7 @@ const {
 
 <template>
   <div class="main">
+    <!-- 搜索状态栏 -->
     <el-form
       ref="formRef"
       :inline="true"
@@ -48,14 +47,6 @@ const {
         <el-input
           v-model="form.name"
           placeholder="请输入角色名称"
-          clearable
-          class="!w-[180px]"
-        />
-      </el-form-item>
-      <el-form-item label="角色标识：" prop="code">
-        <el-input
-          v-model="form.code"
-          placeholder="请输入角色标识"
           clearable
           class="!w-[180px]"
         />
@@ -80,26 +71,55 @@ const {
         >
           搜索
         </el-button>
-        <el-button :icon="useRenderIcon(Refresh)" @click="resetForm(formRef)">
+        <el-button
+          type="info"
+          :icon="useRenderIcon(Refresh)"
+          @click="resetForm(formRef)"
+        >
           重置
         </el-button>
       </el-form-item>
     </el-form>
-
+    <!-- 表格 -->
     <PureTableBar
       title="角色管理（仅演示，操作后不生效）"
       :columns="columns"
       @refresh="onSearch"
     >
+      <!-- 表头按钮 -->
       <template #buttons>
         <el-button
-          type="primary"
+          type="success"
           :icon="useRenderIcon(AddFill)"
           @click="openDialog()"
         >
-          新增角色
+          新增
+        </el-button>
+        <el-button
+          type="primary"
+          :icon="useRenderIcon(Edit)"
+          :disabled="disabledEdit"
+          @click="openDialog('修改', disabledEditFrom)"
+        >
+          修改
+        </el-button>
+        <el-button
+          type="danger"
+          :icon="useRenderIcon(Delete)"
+          :disabled="disabledDelete"
+          @click="openDialog()"
+        >
+          删除
+        </el-button>
+        <el-button
+          type="warning"
+          :icon="useRenderIcon(Download)"
+          @click="openDialog()"
+        >
+          导出
         </el-button>
       </template>
+      <!-- 表格内容 -->
       <template v-slot="{ size, dynamicColumns }">
         <pure-table
           align-whole="center"
@@ -108,8 +128,10 @@ const {
           :loading="loading"
           :size="size"
           adaptive
+          stripe
           :adaptiveConfig="{ offsetBottom: 108 }"
           :data="dataList"
+          row-key="id"
           :columns="dynamicColumns"
           :pagination="pagination"
           :paginationSmall="size === 'small' ? true : false"
@@ -121,26 +143,17 @@ const {
           @page-size-change="handleSizeChange"
           @page-current-change="handleCurrentChange"
         >
+          <!-- 表格数据操作按钮 -->
           <template #operation="{ row }">
             <el-button
               class="reset-margin"
               link
               type="primary"
               :size="size"
-              :icon="useRenderIcon(EditPen)"
+              :icon="useRenderIcon(Edit)"
               @click="openDialog('修改', row)"
             >
               修改
-            </el-button>
-            <el-button
-              class="reset-margin"
-              link
-              type="primary"
-              :size="size"
-              :icon="useRenderIcon(Menu)"
-              @click="handleMenu"
-            >
-              菜单权限
             </el-button>
             <el-popconfirm
               :title="`是否确认删除角色名称为${row.name}的这条数据`"
@@ -150,7 +163,7 @@ const {
                 <el-button
                   class="reset-margin"
                   link
-                  type="primary"
+                  type="danger"
                   :size="size"
                   :icon="useRenderIcon(Delete)"
                 >
@@ -158,43 +171,6 @@ const {
                 </el-button>
               </template>
             </el-popconfirm>
-            <!-- <el-dropdown>
-              <el-button
-                class="ml-3 mt-[2px]"
-                link
-                type="primary"
-                :size="size"
-                :icon="useRenderIcon(More)"
-              />
-              <template #dropdown>
-                <el-dropdown-menu>
-                  <el-dropdown-item>
-                    <el-button
-                      :class="buttonClass"
-                      link
-                      type="primary"
-                      :size="size"
-                      :icon="useRenderIcon(Menu)"
-                      @click="handleMenu"
-                    >
-                      菜单权限
-                    </el-button>
-                  </el-dropdown-item>
-                  <el-dropdown-item>
-                    <el-button
-                      :class="buttonClass"
-                      link
-                      type="primary"
-                      :size="size"
-                      :icon="useRenderIcon(Database)"
-                      @click="handleDatabase"
-                    >
-                      数据权限
-                    </el-button>
-                  </el-dropdown-item>
-                </el-dropdown-menu>
-              </template>
-            </el-dropdown> -->
           </template>
         </pure-table>
       </template>
