@@ -45,6 +45,7 @@ menus:
   hsLoginLog: Login Log
   hsOperationLog: Operation Log
   hsSystemLog: System Log
+  hsGenerator: code generation
 status:
   hsLoad: Loading...
 login:

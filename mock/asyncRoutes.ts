@@ -73,6 +73,16 @@ const systemMonitorRouter = {
   },
   children: [
     {
+      path: "/monitor/generator",
+      component: "monitor/generator/index",
+      name: "Generator",
+      meta: {
+        icon: "ri:user-voice-line",
+        title: "menus.hsGenerator",
+        roles: ["admin"]
+      }
+    },
+    {
       path: "/monitor/online-user",
       component: "monitor/online/index",
       name: "OnlineUser",

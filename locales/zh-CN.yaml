@@ -45,6 +45,7 @@ menus:
   hsLoginLog: 登录日志
   hsOperationLog: 操作日志
   hsSystemLog: 系统日志
+  hsGenerator: 代码生成
 status:
   hsLoad: 加载中...
 login:
