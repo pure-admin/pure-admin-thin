@@ -35,9 +35,10 @@ menus:
   hsAbout: 关于
   hssysManagement: 系统管理
   hsUser: 用户管理
-  hsRole: 角色管理
+  hsRole: 权限管理
   hsSystemMenu: 菜单管理
   hsDept: 部门管理
+  hsJob: 角色管理
   hssysMonitor: 系统监控
   hsOnlineUser: 在线用户
   hsLoginLog: 登录日志

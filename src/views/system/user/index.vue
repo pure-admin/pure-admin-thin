@@ -4,6 +4,7 @@ import tree from "./tree.vue";
 import { useUser } from "./utils/hook";
 import { PureTableBar } from "@/components/RePureTableBar";
 import { useRenderIcon } from "@/components/ReIcon/src/hooks";
+import datePicker from "@/views/components/date-picker.vue";
 
 import Upload from "@iconify-icons/ri/upload-line";
 import Role from "@iconify-icons/ri/admin-line";
@@ -15,7 +16,7 @@ import Refresh from "@iconify-icons/ep/refresh";
 import AddFill from "@iconify-icons/ri/add-circle-line";
 
 defineOptions({
-  name: "SystemUser"
+  name: "User"
 });
 
 const treeRef = ref();
@@ -68,34 +69,29 @@ const {
         <el-form-item label="用户名称：" prop="username">
           <el-input
             v-model="form.username"
-            placeholder="请输入用户名称"
+            placeholder="请输入用户名或邮箱"
             clearable
-            class="!w-[180px]"
+            class="!w-[160px]"
           />
         </el-form-item>
-        <el-form-item label="手机号码：" prop="phone">
-          <el-input
-            v-model="form.phone"
-            placeholder="请输入手机号码"
-            clearable
-            class="!w-[180px]"
-          />
+        <el-form-item label="" prop="createTime">
+          <datePicker v-model="form.createTime" />
         </el-form-item>
         <el-form-item label="状态：" prop="status">
           <el-select
             v-model="form.status"
             placeholder="请选择"
             clearable
-            class="!w-[180px]"
+            class="!w-[160px]"
           >
-            <el-option label="已开启" value="1" />
-            <el-option label="已关闭" value="0" />
+            <el-option label="激活" value="1" />
+            <el-option label="锁定" value="0" />
           </el-select>
         </el-form-item>
         <el-form-item>
           <el-button
             type="primary"
-            :icon="useRenderIcon('ri:search-line')"
+            :icon="useRenderIcon('search')"
             :loading="loading"
             @click="onSearch"
           >
@@ -107,18 +103,33 @@ const {
         </el-form-item>
       </el-form>
 
-      <PureTableBar
-        title="用户管理（仅演示，操作后不生效）"
-        :columns="columns"
-        @refresh="onSearch"
-      >
-        <template #buttons>
+      <PureTableBar title="用户管理" :columns="columns" @refresh="onSearch">
+        <template #add>
           <el-button
             type="primary"
             :icon="useRenderIcon(AddFill)"
             @click="openDialog()"
           >
             新增用户
+          </el-button>
+        </template>
+        <template #export>
+          <el-button
+            type="success"
+            :icon="useRenderIcon('solar:upload-bold')"
+            @click="openDialog()"
+          >
+            导出数据
+          </el-button>
+        </template>
+        <template #reset>
+          <el-button
+            type="danger"
+            disabled
+            :icon="useRenderIcon(Refresh)"
+            @click="openDialog()"
+          >
+            重置密码
           </el-button>
         </template>
         <template v-slot="{ size, dynamicColumns }">
@@ -150,7 +161,6 @@ const {
             ref="tableRef"
             row-key="id"
             adaptive
-            :adaptiveConfig="{ offsetBottom: 108 }"
             align-whole="center"
             table-layout="auto"
             :loading="loading"
@@ -174,7 +184,7 @@ const {
                 type="primary"
                 :size="size"
                 :icon="useRenderIcon(EditPen)"
-                @click="openDialog('修改', row)"
+                @click="openDialog('编辑', row)"
               >
                 修改
               </el-button>
@@ -259,10 +269,6 @@ const {
 
 :deep(.el-button:focus-visible) {
   outline: none;
-}
-
-.main-content {
-  margin: 24px 24px 0 !important;
 }
 
 .search-form {

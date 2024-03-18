@@ -4,7 +4,7 @@ import { useDept } from "./utils/hook";
 import { PureTableBar } from "@/components/RePureTableBar";
 import { useRenderIcon } from "@/components/ReIcon/src/hooks";
 import datePicker from "@/views/components/date-picker.vue";
-import * as Dept from "@/api/system/dept";
+import * as Job from "@/api/system/job";
 
 import Delete from "@iconify-icons/ep/delete";
 import EditPen from "@iconify-icons/ep/edit-pen";
@@ -28,7 +28,7 @@ const handleSelectionChange = val => {
 
 async function deleteAll() {
   ElMessageBox.confirm(
-    `确认要<strong>删除所选的</strong><strong style='color:var(--el-color-primary)'>${multipleSelection.value.length}</strong>个部门吗?`,
+    `确认要<strong>删除所选的</strong><strong style='color:var(--el-color-primary)'>${multipleSelection.value.length}</strong>个岗位吗?`,
     "系统提示",
     {
       confirmButtonText: "确定",
@@ -39,32 +39,19 @@ async function deleteAll() {
     }
   )
     .then(() => {
-      Dept.del(multipleSelection.value.map(dept => dept.id));
-      message("已删除所选的部门", {
-        type: "success"
+      Job.del(multipleSelection.value.map(dept => dept.id)).then(() => {
+        message("已删除所选的岗位", {
+          type: "success"
+        });
+        onSearch();
       });
-      onSearch();
     })
     .catch(() => {
       onSearch();
     });
 }
-const load = (
-  row: Partial<Dept.Dept>,
-  treeNode: unknown,
-  resolve: (date: Partial<Dept.Dept>[]) => void
-) => {
-  let queryDept = { pid: row?.id };
-  if (!row?.id) {
-    queryDept = null;
-  }
-  Dept.getDepts(queryDept).then(contentData => {
-    // 调用' resolve '回调以返回子节点数据并指示加载完成。
-    resolve(contentData.data.content);
-  });
-};
 const exportClick = async () => {
-  const response: Blob = await Dept.download(null);
+  const response: Blob = await Job.download(null);
   const a = document.createElement("a");
   const url = window.URL.createObjectURL(response); // 创建媒体流 url ，详细了解可自己查 URL.createObjectURL（推荐 MDN ）
 
@@ -87,10 +74,13 @@ const {
   columns,
   dataList,
   multipleSelection,
+  pagination,
   onSearch,
   resetForm,
   openDialog,
-  handleDelete
+  handleDelete,
+  handleSizeChange,
+  handleCurrentChange
 } = useDept();
 </script>
 
@@ -102,10 +92,10 @@ const {
       :model="form"
       class="search-form bg-bg_color w-[99/100] pl-8 pt-[12px]"
     >
-      <el-form-item label="部门名称：" prop="name">
+      <el-form-item label="岗位名称：" prop="name">
         <el-input
           v-model="form.name"
-          placeholder="请输入部门名称"
+          placeholder="请输入岗位名称"
           clearable
           class="!w-[200px]"
         />
@@ -140,7 +130,7 @@ const {
     </el-form>
 
     <PureTableBar
-      title="部门列表"
+      title="岗位列表"
       :columns="columns"
       :tableRef="tableRef?.getTableRef()"
       @refresh="onSearch"
@@ -151,7 +141,7 @@ const {
           :icon="useRenderIcon(AddFill)"
           @click="openDialog()"
         >
-          新增部门
+          新增岗位
         </el-button>
       </template>
       <template #delete>
@@ -161,7 +151,7 @@ const {
           :icon="useRenderIcon(Delete)"
           @click="deleteAll()"
         >
-          删除部门
+          删除岗位
         </el-button>
       </template>
       <template #export>
@@ -175,7 +165,6 @@ const {
       </template>
       <template v-slot="{ size, dynamicColumns }">
         <pure-table
-          ref="tableRef"
           adaptive
           :adaptiveConfig="{ offsetBottom: 32 }"
           align-whole="center"
@@ -187,13 +176,15 @@ const {
           :size="size"
           :columns="dynamicColumns"
           :data="dataList"
+          :pagination="pagination"
+          :paginationSmall="size === 'small' ? true : false"
           :header-cell-style="{
             background: 'var(--el-fill-color-light)',
             color: 'var(--el-text-color-primary)'
           }"
-          lazy
-          :load="load"
           @selection-change="handleSelectionChange"
+          @page-size-change="handleSizeChange"
+          @page-current-change="handleCurrentChange"
         >
           <template #operation="{ row }">
             <el-button
@@ -207,7 +198,7 @@ const {
               编辑
             </el-button>
             <el-popconfirm
-              :title="`是否确认删除部门名称为${row.name}的这条数据`"
+              :title="`是否确认删除岗位名称为${row.name}的这条数据`"
               @confirm="handleDelete(row)"
             >
               <template #reference>

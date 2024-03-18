@@ -1,16 +1,14 @@
-import type { CascaderProps } from "element-plus";
 interface FormItemProps {
   higherDeptOptions: Record<string, unknown>[];
-  higherDeptOptions2: CascaderProps;
-  parentId: number;
+  parentId?: number;
   id: number;
-  pid: number;
-  deptSort: number;
+  jobSort: number;
   name: string;
   principal: string;
   phone: string | number;
   email: string;
   sort: number;
+  version: number;
   enabled: boolean;
   remark: string;
 }

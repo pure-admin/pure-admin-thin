@@ -1,18 +1,16 @@
 <script setup lang="ts">
-import { useRenderIcon } from "@/components/ReIcon/src/hooks";
-import { ref, computed, watch, getCurrentInstance } from "vue";
+import { ref, computed, watch, defineModel, getCurrentInstance } from "vue";
 
 import Dept from "@iconify-icons/ri/git-branch-line";
 // import Reset from "@iconify-icons/ri/restart-line";
 import More2Fill from "@iconify-icons/ri/more-2-fill";
 import OfficeBuilding from "@iconify-icons/ep/office-building";
 import LocationCompany from "@iconify-icons/ep/add-location";
-import ExpandIcon from "./svg/expand.svg?component";
-import UnExpandIcon from "./svg/unexpand.svg?component";
+import { TreeKey } from "element-plus/es/components/tree/src/tree.type.mjs";
 
 interface Tree {
   id: number;
-  name: string;
+  label: string;
   highlight?: boolean;
   children?: Tree[];
 }
@@ -21,17 +19,20 @@ const props = defineProps({
   treeLoading: Boolean,
   treeData: Array
 });
+const currentRow = defineModel<TreeKey[]>("currentRow");
+const deptId = defineModel<Number>("deptId");
 
 const emit = defineEmits(["tree-select"]);
 
 const treeRef = ref();
+const treeRef2 = ref();
 const isExpand = ref(true);
 const searchValue = ref("");
 const highlightMap = ref({});
 const { proxy } = getCurrentInstance();
 const defaultProps = {
   children: "children",
-  label: "name"
+  label: "label"
 };
 const buttonClass = computed(() => {
   return [
@@ -45,30 +46,8 @@ const buttonClass = computed(() => {
 
 const filterNode = (value: string, data: Tree) => {
   if (!value) return true;
-  return data.name.includes(value);
+  return data.label.includes(value);
 };
-
-function nodeClick(value) {
-  const nodeId = value.$treeNodeId;
-  highlightMap.value[nodeId] = highlightMap.value[nodeId]?.highlight
-    ? Object.assign({ id: nodeId }, highlightMap.value[nodeId], {
-        highlight: false
-      })
-    : Object.assign({ id: nodeId }, highlightMap.value[nodeId], {
-        highlight: true
-      });
-  Object.values(highlightMap.value).forEach((v: Tree) => {
-    if (v.id !== nodeId) {
-      v.highlight = false;
-    }
-  });
-  emit(
-    "tree-select",
-    highlightMap.value[nodeId]?.highlight
-      ? Object.assign({ ...value, selected: true })
-      : Object.assign({ ...value, selected: false })
-  );
-}
 
 function toggleRowExpansionAll(status) {
   isExpand.value = status;
@@ -77,12 +56,15 @@ function toggleRowExpansionAll(status) {
     nodes[i].expanded = status;
   }
 }
-
 /** 重置部门树状态（选中状态、搜索框值、树初始化） */
 function onTreeReset() {
   highlightMap.value = {};
   searchValue.value = "";
   toggleRowExpansionAll(true);
+}
+
+function testClick() {
+  emit("tree-select", { id: deptId, menuIds: treeRef.value.getCheckedKeys() });
 }
 
 watch(searchValue, val => {
@@ -99,6 +81,19 @@ defineExpose({ onTreeReset });
     :style="{ minHeight: `calc(100vh - 133px)` }"
   >
     <div class="flex items-center h-[34px]">
+      <el-row :gutter="24">
+        <el-col :span="16"
+          ><div class="grid-content ep-bg-purple" />
+          菜单分配</el-col
+        >
+        <el-col :span="6"
+          ><div class="grid-content ep-bg-purple" />
+          <el-button type="primary" @click="testClick">✔保存</el-button>
+        </el-col>
+      </el-row>
+    </div>
+
+    <div class="flex items-center h-[34px]">
       <el-input
         v-model="searchValue"
         class="ml-2"
@@ -107,11 +102,8 @@ defineExpose({ onTreeReset });
         clearable
       >
         <template #suffix>
-          <el-icon class="el-input__icon">
-            <IconifyIconOffline
-              v-show="searchValue.length === 0"
-              icon="search"
-            />
+          <el-icon v-show="searchValue.length === 0" class="el-input__icon">
+            <IconifyIconOffline icon="search" />
           </el-icon>
         </template>
       </el-input>
@@ -128,23 +120,31 @@ defineExpose({ onTreeReset });
                 :class="buttonClass"
                 link
                 type="primary"
-                :icon="useRenderIcon(isExpand ? ExpandIcon : UnExpandIcon)"
                 @click="toggleRowExpansionAll(isExpand ? false : true)"
               >
                 {{ isExpand ? "折叠全部" : "展开全部" }}
               </el-button>
             </el-dropdown-item>
-            <!-- <el-dropdown-item>
+            <el-dropdown-item>
               <el-button
                 :class="buttonClass"
                 link
                 type="primary"
-                :icon="useRenderIcon(Reset)"
                 @click="onTreeReset"
               >
-                重置状态
+                全选
               </el-button>
-            </el-dropdown-item> -->
+            </el-dropdown-item>
+            <el-dropdown-item>
+              <el-button
+                :class="buttonClass"
+                link
+                type="primary"
+                @click="onTreeReset"
+              >
+                取消全选
+              </el-button>
+            </el-dropdown-item>
           </el-dropdown-menu>
         </template>
       </el-dropdown>
@@ -152,14 +152,15 @@ defineExpose({ onTreeReset });
     <el-divider />
     <el-tree
       ref="treeRef"
-      :data="props.treeData"
       node-key="id"
       size="small"
+      show-checkbox
+      :data="treeData"
       :props="defaultProps"
-      default-expand-all
+      :default-checked-keys="currentRow"
+      :current-node-key="treeRef2"
       :expand-on-click-node="false"
       :filter-node-method="filterNode"
-      @node-click="nodeClick"
     >
       <template #default="{ node, data }">
         <span

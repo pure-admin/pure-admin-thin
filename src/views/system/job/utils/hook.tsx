@@ -1,13 +1,14 @@
 import dayjs from "dayjs";
 import editForm from "../form.vue";
 import { message } from "@/utils/message";
-import * as Dept from "@/api/system/dept";
+import * as Job from "@/api/system/job";
 import { addDialog } from "@/components/ReDialog";
+import type { PaginationProps } from "@pureadmin/table";
 import { reactive, ref, onMounted, h } from "vue";
 import type { FormItemProps } from "../utils/types";
 import { cloneDeep, isAllEmpty } from "@pureadmin/utils";
 import { usePublicHooks } from "../../hooks";
-import { ElMessageBox, type CascaderProps } from "element-plus";
+import { ElMessageBox } from "element-plus";
 
 export function useDept() {
   const form = reactive({
@@ -23,6 +24,15 @@ export function useDept() {
   const switchLoadMap = ref({});
   const { switchStyle } = usePublicHooks();
 
+  /** 分页配置 */
+  const pagination = reactive<PaginationProps>({
+    total: 10,
+    pageSize: 2,
+    pageSizes: [10, 20, 50],
+    currentPage: 1,
+    align: "left",
+    background: true
+  });
   /** 表格索引 */
   const indexMethod = (index: number) => {
     return index + 1;
@@ -37,14 +47,14 @@ export function useDept() {
       index: indexMethod
     },
     {
-      label: "部门名称",
+      label: "岗位名称",
       prop: "name",
       width: 180,
       align: "left"
     },
     {
       label: "排序",
-      prop: "deptSort",
+      prop: "jobSort",
       minWidth: 70
     },
     {
@@ -74,11 +84,6 @@ export function useDept() {
         dayjs(createTime).format("YYYY-MM-DD HH:mm:ss")
     },
     {
-      label: "备注",
-      prop: "remark",
-      minWidth: 320
-    },
-    {
       label: "操作",
       fixed: "right",
       width: 160,
@@ -94,8 +99,7 @@ export function useDept() {
 
   async function onSearch() {
     loading.value = true;
-    const queryType = new Dept.DeptQueryCriteria();
-
+    const queryType = new Job.JobQueryCriteria();
     if (!isAllEmpty(form.name)) {
       queryType.name = form.name;
     }
@@ -105,9 +109,11 @@ export function useDept() {
     if (!isAllEmpty(form.createTime)) {
       queryType.createTime = form.createTime;
     }
-    const depts = (await Dept.getDepts(queryType)).data; // 这里是返回一维数组结构，前端自行处理成树结构，返回格式要求：唯一id加父节点parentId，parentId取父节点id
+    queryType.page = pagination.currentPage - 1;
+    queryType.size = pagination.pageSize;
+    const depts = (await Job.get(queryType)).data;
+    pagination.total = depts.totalElements;
     let newData = depts.content;
-    //dataList.value = handleTree2(newData); // 处理成树结构
     dataList.splice(0, dataList.length); // 清空数组
     newData.forEach(x => {
       dataList.push(x);
@@ -117,55 +123,20 @@ export function useDept() {
     }, 500);
   }
 
-  function formatHigherDeptOptions(treeList) {
-    // 根据返回数据的status字段值判断追加是否禁用disabled字段，返回处理后的树结构，用于上级部门级联选择器的展示（实际开发中也是如此，不可能前端需要的每个字段后端都会返回，这时需要前端自行根据后端返回的某些字段做逻辑处理）
-    if (!treeList || !treeList.length) return;
-    const newTreeList = [];
-    for (let i = 0; i < treeList.length; i++) {
-      treeList[i].disabled = treeList[i].enabled;
-      formatHigherDeptOptions(treeList[i].children);
-      newTreeList.push(treeList[i]);
-    }
-    return newTreeList;
-  }
-  const higherDeptOptions2: CascaderProps = {
-    lazy: true,
-    checkStrictly: true,
-    lazyLoad(node, resolve) {
-      setTimeout(() => {
-        let queryDept = { pid: node?.data?.value };
-        if (!node.data) {
-          queryDept = null;
-        }
-        Dept.getDepts(queryDept).then(contentData => {
-          const nodes = contentData.data.content.map(item => ({
-            value: item.id,
-            label: item.name,
-            subCount: item.subCount,
-            leaf: item.subCount === 0
-          }));
-          // 调用' resolve '回调以返回子节点数据并指示加载完成。
-          resolve(nodes);
-        });
-      }, 1000);
-    }
-  };
   function openDialog(title = "新增", row?: FormItemProps) {
     addDialog({
-      title: `${title}部门`,
+      title: `${title}岗位`,
       props: {
         formInline: {
-          higherDeptOptions: formatHigherDeptOptions(cloneDeep(dataList)),
-          higherDeptOptions2: higherDeptOptions2,
-          parentId: row?.parentId ?? 0,
+          higherDeptOptions: cloneDeep(dataList),
           id: row?.id ?? 0,
-          pid: row?.pid ?? 0,
           name: row?.name ?? "",
-          deptSort: row?.deptSort ?? 0,
+          jobSort: row?.jobSort ?? 0,
           principal: row?.principal ?? "",
           phone: row?.phone ?? "",
           email: row?.email ?? "",
           sort: row?.sort ?? 0,
+          version: row?.version ?? 0,
           enabled: row?.enabled ?? false,
           remark: row?.remark ?? ""
         }
@@ -179,7 +150,7 @@ export function useDept() {
         const FormRef = formRef.value.getRef();
         const curData = options.props.formInline as FormItemProps;
         function chores() {
-          message(`您${title}了部门名称为${curData.name}的这条数据`, {
+          message(`您${title}了岗位名称为${curData.name}的这条数据`, {
             type: "success"
           });
           done(); // 关闭弹框
@@ -190,25 +161,20 @@ export function useDept() {
             // 表单规则校验通过
             if (title === "新增") {
               // 实际开发先调用新增接口，再进行下面操作
-              Dept.add({
+              Job.add({
                 name: curData.name,
-                pid: curData.pid === 0 ? null : curData.pid[0],
-                deptSort: curData.deptSort,
-                enabled: curData.enabled
-              });
-              chores();
-            } else if (title === "修改") {
-              Dept.edit({
+                enabled: curData.enabled,
+                version: curData.version,
+                jobSort: curData.jobSort
+              }).finally(() => chores());
+            } else if (title === "编辑") {
+              Job.edit({
                 id: curData.id,
                 name: curData.name,
-                pid: curData.pid === 0 ? null : curData.pid,
-                deptSort: curData.deptSort,
-                enabled: curData.enabled
-              });
-              // 实际开发先调用编辑接口，再进行下面操作
-              chores();
-            } else {
-              chores();
+                enabled: curData.enabled,
+                version: curData.version,
+                jobSort: curData.jobSort
+              }).finally(() => chores());
             }
           }
         });
@@ -217,8 +183,8 @@ export function useDept() {
   }
 
   function handleDelete(row) {
-    Dept.del([row.id]).then(() => {
-      message(`您删除了部门名称为${row.name}的这条数据`, { type: "success" });
+    Job.del([row.id]).then(() => {
+      message(`您删除了岗位名称为${row.name}的这条数据`, { type: "success" });
     });
     onSearch();
   }
@@ -255,14 +221,14 @@ export function useDept() {
               loading: false
             }
           );
-          Dept.edit({
+          Job.edit({
             id: row.id,
             name: row.name,
-            pid: row.pid === 0 ? null : row.pid,
-            deptSort: row.deptSort,
-            enabled: row.enabled
+            enabled: row.enabled,
+            version: row.version,
+            jobSort: row.jobSort
           });
-          message("已成功修改部门状态", {
+          message("已成功修改岗位状态", {
             type: "success"
           });
         }, 300);
@@ -270,6 +236,15 @@ export function useDept() {
       .catch(() => {
         row.enabled ? (row.enabled = false) : (row.enabled = true);
       });
+  }
+  function handleSizeChange(val: number) {
+    pagination.pageSize = val;
+    onSearch();
+  }
+
+  function handleCurrentChange(val: number) {
+    pagination.currentPage = val;
+    onSearch();
   }
   onMounted(() => {
     onSearch();
@@ -281,13 +256,16 @@ export function useDept() {
     columns,
     dataList,
     multipleSelection,
+    pagination,
     /** 搜索 */
     onSearch,
     /** 重置 */
     resetForm,
-    /** 新增、编辑部门 */
+    /** 新增、编辑岗位 */
     openDialog,
-    /** 删除部门 */
-    handleDelete
+    /** 删除岗位 */
+    handleDelete,
+    handleSizeChange,
+    handleCurrentChange
   };
 }

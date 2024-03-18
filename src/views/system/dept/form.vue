@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import ReCol from "@/components/ReCol";
 import { formRules } from "./utils/rule";
 import { FormProps } from "./utils/types";
@@ -8,13 +8,17 @@ import { usePublicHooks } from "../hooks";
 const props = withDefaults(defineProps<FormProps>(), {
   formInline: () => ({
     higherDeptOptions: [],
+    higherDeptOptions2: {},
     parentId: 0,
+    id: 0,
+    pid: 0,
+    deptSort: 0,
+    enabled: false,
     name: "",
     principal: "",
     phone: "",
     email: "",
     sort: 0,
-    status: 1,
     remark: ""
   })
 });
@@ -26,7 +30,9 @@ const newFormInline = ref(props.formInline);
 function getRef() {
   return ruleFormRef.value;
 }
-
+onMounted(() => {
+  // 在这里编写页面加载后要执行的代码
+});
 defineExpose({ getRef });
 </script>
 
@@ -41,22 +47,16 @@ defineExpose({ getRef });
       <re-col>
         <el-form-item label="上级部门">
           <el-cascader
-            v-model="newFormInline.parentId"
+            v-model="newFormInline.pid"
             class="w-full"
-            :options="newFormInline.higherDeptOptions"
-            :props="{
-              value: 'id',
-              label: 'name',
-              emitPath: false,
-              checkStrictly: true
-            }"
+            :props="newFormInline.higherDeptOptions2"
             clearable
             filterable
             placeholder="请选择上级部门"
           >
             <template #default="{ node, data }">
-              <span>{{ data.name }}</span>
-              <span v-if="!node.isLeaf"> ({{ data.children.length }}) </span>
+              <span>{{ data.label }}</span>
+              <span v-if="!node.isLeaf"> ({{ data.subCount }}) </span>
             </template>
           </el-cascader>
         </el-form-item>
@@ -103,8 +103,7 @@ defineExpose({ getRef });
       <re-col :value="12" :xs="24" :sm="24">
         <el-form-item label="排序">
           <el-input-number
-            v-model="newFormInline.sort"
-            class="!w-full"
+            v-model="newFormInline.deptSort"
             :min="0"
             :max="9999"
             controls-position="right"
@@ -114,10 +113,10 @@ defineExpose({ getRef });
       <re-col :value="12" :xs="24" :sm="24">
         <el-form-item label="部门状态">
           <el-switch
-            v-model="newFormInline.status"
+            v-model="newFormInline.enabled"
             inline-prompt
-            :active-value="1"
-            :inactive-value="0"
+            :active-value="true"
+            :inactive-value="false"
             active-text="启用"
             inactive-text="停用"
             :style="switchStyle"

@@ -1,68 +1,61 @@
 import dayjs from "dayjs";
 import editForm from "../form.vue";
 import { message } from "@/utils/message";
-import { getRoleList } from "@/api/system";
-import { ElMessageBox } from "element-plus";
-import { usePublicHooks } from "../../hooks";
+import * as Role from "@/api/system/role";
 import { addDialog } from "@/components/ReDialog";
 import type { FormItemProps } from "../utils/types";
 import type { PaginationProps } from "@pureadmin/table";
-import { reactive, ref, onMounted, h, toRaw } from "vue";
+import { reactive, ref, onMounted, h, toRaw, type Ref } from "vue";
+import { handleTree } from "@/utils/tree";
+import * as Dept from "@/api/system/dept";
+import * as Menu from "@/api/system/menu";
+import { cloneDeep } from "@pureadmin/utils";
+import type { ApiAbstract } from "@/utils/http/ApiAbstract";
+//import { cloneDeep } from "@pureadmin/utils";
 
-export function useRole() {
+export function useRole(tableRef?: Ref, treeRef?: Ref) {
+  const deptList = ref();
+  console.log(tableRef, treeRef);
   const form = reactive({
-    name: "",
-    code: "",
-    status: ""
+    blurry: "",
+    createTime: "",
+    size: 10,
+    page: 0
   });
   const formRef = ref();
   const dataList = ref([]);
   const loading = ref(true);
-  const switchLoadMap = ref({});
-  const { switchStyle } = usePublicHooks();
+  const treeData = ref([]);
+  const treeLoading = ref(true);
+  const currentRow = ref([]);
+  const deptId = ref<Number>();
+  const nenus = ref<ApiAbstract<Menu.Menu>>();
   const pagination = reactive<PaginationProps>({
     total: 0,
     pageSize: 10,
     currentPage: 1,
+    pageSizes: [10, 20, 50, 100],
     background: true
   });
   const columns: TableColumnList = [
-    {
-      label: "角色编号",
-      prop: "id",
-      minWidth: 100
-    },
     {
       label: "角色名称",
       prop: "name",
       minWidth: 120
     },
     {
-      label: "角色标识",
-      prop: "code",
+      label: "数据权限",
+      prop: "dataScope",
       minWidth: 150
     },
     {
-      label: "状态",
-      minWidth: 130,
-      cellRenderer: scope => (
-        <el-switch
-          size={scope.props.size === "small" ? "small" : "default"}
-          loading={switchLoadMap.value[scope.index]?.loading}
-          v-model={scope.row.status}
-          active-value={1}
-          inactive-value={0}
-          active-text="已启用"
-          inactive-text="已停用"
-          inline-prompt
-          style={switchStyle.value}
-          onChange={() => onChange(scope as any)}
-        />
-      )
+      label: "角色级别",
+      prop: "level",
+      minWidth: 150
     },
     {
-      label: "备注",
-      prop: "remark",
+      label: "描述",
+      prop: "description",
       minWidth: 150
     },
     {
@@ -89,72 +82,37 @@ export function useRole() {
   //   ];
   // });
 
-  function onChange({ row, index }) {
-    ElMessageBox.confirm(
-      `确认要<strong>${
-        row.status === 0 ? "停用" : "启用"
-      }</strong><strong style='color:var(--el-color-primary)'>${
-        row.name
-      }</strong>吗?`,
-      "系统提示",
-      {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning",
-        dangerouslyUseHTMLString: true,
-        draggable: true
-      }
-    )
-      .then(() => {
-        switchLoadMap.value[index] = Object.assign(
-          {},
-          switchLoadMap.value[index],
-          {
-            loading: true
-          }
-        );
-        setTimeout(() => {
-          switchLoadMap.value[index] = Object.assign(
-            {},
-            switchLoadMap.value[index],
-            {
-              loading: false
-            }
-          );
-          message(`已${row.status === 0 ? "停用" : "启用"}${row.name}`, {
-            type: "success"
-          });
-        }, 300);
-      })
-      .catch(() => {
-        row.status === 0 ? (row.status = 1) : (row.status = 0);
-      });
-  }
-
   function handleDelete(row) {
     message(`您删除了角色名称为${row.name}的这条数据`, { type: "success" });
-    onSearch();
+    Role.del([row.id]).finally(() => onSearch());
   }
 
   function handleSizeChange(val: number) {
-    console.log(`${val} items per page`);
+    form.size = val - 1;
+    onSearch();
   }
 
   function handleCurrentChange(val: number) {
-    console.log(`current page: ${val}`);
+    form.page = val - 1;
+    onSearch();
   }
-
-  function handleSelectionChange(val) {
-    console.log("handleSelectionChange", val);
+  function handleCurrentChange1(value: Dept.Dept) {
+    deptId.value = value?.id;
+    const { data } = nenus.value;
+    treeData.value = cloneDeep(handleTree(data, "id", "pid"));
+    currentRow.value = value?.menus?.map(item => item.id) ?? [-1];
   }
 
   async function onSearch() {
+    getDeptTree();
     loading.value = true;
-    const { data } = await getRoleList(toRaw(form));
-    dataList.value = data.list;
-    pagination.total = data.total;
-    pagination.pageSize = data.pageSize;
-    pagination.currentPage = data.currentPage;
+    const { data } = await Role.get(
+      Object.entries(toRaw(form))
+        .filter(([_, value]) => value !== null && value !== "")
+        .reduce((acc, [key, value]) => ({ ...acc, [key]: value }), {})
+    );
+    dataList.value = data.content;
+    pagination.total = data.totalElements;
 
     setTimeout(() => {
       loading.value = false;
@@ -172,9 +130,14 @@ export function useRole() {
       title: `${title}角色`,
       props: {
         formInline: {
+          id: row?.id ?? 0,
           name: row?.name ?? "",
-          code: row?.code ?? "",
-          remark: row?.remark ?? ""
+          description: row?.description ?? "",
+          level: row?.level ?? 0,
+          dataScope: row?.dataScope ?? "全部",
+          dataIds: row?.deptIds ?? [],
+          deptIds: row?.depts.map(person => person.id) ?? [],
+          depts: cloneDeep(deptList.value)
         }
       },
       width: "40%",
@@ -194,14 +157,24 @@ export function useRole() {
         }
         FormRef.validate(valid => {
           if (valid) {
-            console.log("curData", curData);
             // 表单规则校验通过
             if (title === "新增") {
-              // 实际开发先调用新增接口，再进行下面操作
-              chores();
-            } else {
-              // 实际开发先调用修改接口，再进行下面操作
-              chores();
+              const obj = {
+                ...curData,
+                depts: curData.deptIds.map(person => ({
+                  id: Object.values(person)[Object.values(person).length - 1]
+                }))
+              }; // 复制对象
+              delete obj.id; // 删除指定字段
+              Role.add(obj).finally(() => chores());
+            } else if (title === "编辑") {
+              const roleOne = {
+                ...curData,
+                depts: curData.deptIds.map(person => ({
+                  id: Object.values(person)[Object.values(person).length - 1]
+                }))
+              };
+              Role.edit(roleOne).finally(() => chores());
             }
           }
         });
@@ -209,15 +182,35 @@ export function useRole() {
     });
   }
 
-  /** 菜单权限 */
-  function handleMenu() {
-    message("等菜单管理页面开发后完善");
+  function getDeptTree() {
+    Dept.getDeptTree([]).then(data => {
+      if (data.status) {
+        deptList.value = handleTree(data.data, "id", "pid");
+      }
+    });
   }
-
-  /** 数据权限 可自行开发 */
-  // function handleDatabase() {}
-
-  onMounted(() => {
+  function onTreeSelect({ id, menuIds }) {
+    if (
+      id.value !== null &&
+      id.value !== undefined &&
+      id.value === deptId.value
+    ) {
+      Role.menus({
+        id: id.value,
+        menus: menuIds.map(person => ({
+          id: person
+        }))
+      }).then(() => {
+        onSearch();
+      });
+    }
+  }
+  onMounted(async () => {
+    // 归属部门
+    nenus.value = await Menu.menuTree([]);
+    const { data } = nenus.value;
+    treeData.value = cloneDeep(handleTree(data, "id", "pid"));
+    treeLoading.value = false;
     onSearch();
   });
 
@@ -226,18 +219,21 @@ export function useRole() {
     loading,
     columns,
     dataList,
+    deptList,
     pagination,
+    treeData,
+    treeLoading,
+    currentRow,
+    deptId,
     // buttonClass,
-    switchStyle,
-    onChange,
+    onTreeSelect,
     onSearch,
     resetForm,
     openDialog,
-    handleMenu,
     handleDelete,
     // handleDatabase,
     handleSizeChange,
     handleCurrentChange,
-    handleSelectionChange
+    handleCurrentChange1
   };
 }
