@@ -16,6 +16,7 @@ import {
 import { message } from "@/utils/message";
 import { formRulesPwd, formRulesEmail } from "./rule";
 import type { FormInstance } from "element-plus";
+import type { DataInfo } from "@/utils/auth";
 
 export function useUser(tableRef: Ref, treeRef: Ref) {
   console.log(tableRef, treeRef);
@@ -55,7 +56,7 @@ export function useUser(tableRef: Ref, treeRef: Ref) {
   });
   /** 用户信息 */
   const userInfo = computed(() => {
-    return storageLocal().getItem("user-info").user;
+    return storageLocal().getItem<DataInfo<Date>>("user-info")?.user;
   });
   /** 获取邮箱验证码 */
   const getEmailCode = email => {
