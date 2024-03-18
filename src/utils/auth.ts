@@ -65,7 +65,8 @@ export function setToken(data: DataInfo<Date>) {
   function setUserKey(
     accessToken: string,
     username: string,
-    roles: Array<string>
+    roles: Array<string>,
+    user?: any
   ) {
     useUserStoreHook().SET_USERNAME(username);
     useUserStoreHook().SET_ROLES(roles);
@@ -73,13 +74,14 @@ export function setToken(data: DataInfo<Date>) {
       accessToken,
       expires,
       username,
-      roles
+      roles,
+      user
     });
   }
 
   if (data.username && data.roles) {
-    const { username, roles } = data;
-    setUserKey(accessToken, username, roles);
+    const { username, roles, user } = data;
+    setUserKey(accessToken, username, roles, user);
   } else {
     const username =
       storageLocal().getItem<DataInfo<number>>(userKey)?.username ?? "";

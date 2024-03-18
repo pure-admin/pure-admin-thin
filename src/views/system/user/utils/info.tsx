@@ -4,7 +4,7 @@ import { baseUrlAvatar } from "@/api/utils";
 import { zxcvbn } from "@zxcvbn-ts/core";
 import { isAllEmpty, isNull, isEmail } from "@pureadmin/utils";
 import { addDialog } from "@/components/ReDialog";
-import Cookies from "js-cookie";
+import { storageLocal } from "@pureadmin/utils";
 import * as User from "@/api/system/user";
 import {
   ElForm,
@@ -55,7 +55,7 @@ export function useUser(tableRef: Ref, treeRef: Ref) {
   });
   /** 用户信息 */
   const userInfo = computed(() => {
-    return JSON.parse(Cookies.get("userInfo"));
+    return storageLocal().getItem("user-info").user;
   });
   /** 获取邮箱验证码 */
   const getEmailCode = email => {

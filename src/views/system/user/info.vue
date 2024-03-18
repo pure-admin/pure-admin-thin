@@ -30,7 +30,7 @@ const {
   submitEditUser
 } = useUser(tableRef, treeRef);
 
-const user = reactive(userInfo.value.user);
+const user = reactive(userInfo.value);
 defineOptions({
   name: "UserInfo"
 });
@@ -51,9 +51,9 @@ defineOptions({
               <el-avatar
                 :size="80"
                 src="https://empty"
-                @click="handleUpload(userInfo.user)"
+                @click="handleUpload(userInfo)"
               >
-                <img :src="'/avatar/' + userInfo.user.avatarName" />
+                <img :src="'/avatar/' + userInfo.avatarName" />
               </el-avatar>
             </div>
 
@@ -62,28 +62,28 @@ defineOptions({
                 <div style="height: 100%">
                   <IconifyIconOffline class="check-zh" :icon="SignIn" />
                   登录账号
-                  <div class="user-right">{{ userInfo.user.username }}</div>
+                  <div class="user-right">{{ userInfo.username }}</div>
                 </div>
               </li>
               <li>
                 <IconifyIconOffline class="check-zh" :icon="Check" />
                 用户昵称
-                <div class="user-right">{{ userInfo.user.nickName }}</div>
+                <div class="user-right">{{ userInfo.nickName }}</div>
               </li>
               <li>
                 <IconifyIconOffline class="check-zh" :icon="NodeTree" />
                 所属部门
-                <div class="user-right">{{ userInfo.user.dept.name }}</div>
+                <div class="user-right">{{ userInfo.dept.name }}</div>
               </li>
               <li>
                 <IconifyIconOffline class="check-zh" :icon="Phone" />
                 手机号码
-                <div class="user-right">{{ userInfo.user.phone }}</div>
+                <div class="user-right">{{ userInfo.phone }}</div>
               </li>
               <li>
                 <IconifyIconOffline class="check-zh" :icon="Mail" />
                 用户邮箱
-                <div class="user-right">{{ userInfo.user.email }}</div>
+                <div class="user-right">{{ userInfo.email }}</div>
               </li>
               <li>
                 <IconifyIconOffline class="check-zh" :icon="Secure" />
@@ -135,7 +135,7 @@ defineOptions({
                     clearable
                     style="width: 35%"
                   />
-                  <span style=" margin-left: 10px;color: #e6a23c"
+                  <span style="margin-left: 10px; color: #e6a23c"
                     >⚠️用户昵称不作为登录使用</span
                   >
                 </el-form-item>
@@ -164,7 +164,7 @@ defineOptions({
                   ]"
                 >
                   <el-input v-model="user.phone" clearable style="width: 35%" />
-                  <span style=" margin-left: 10px;color: #e6a23c"
+                  <span style="margin-left: 10px; color: #e6a23c"
                     >⚠️手机号码不能重复</span
                   >
                 </el-form-item>

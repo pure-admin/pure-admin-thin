@@ -7,9 +7,11 @@ import Breadcrumb from "./sidebar/breadCrumb.vue";
 import topCollapse from "./sidebar/topCollapse.vue";
 import { useTranslationLang } from "../hooks/useTranslationLang";
 import globalization from "@/assets/svg/globalization.svg?component";
+import { useDetail } from "@/router/utils";
 import LogoutCircleRLine from "@iconify-icons/ri/logout-circle-r-line";
 import Setting from "@iconify-icons/ri/settings-3-line";
 import Check from "@iconify-icons/ep/check";
+import Avatar from "@iconify-icons/ep/avatar";
 
 const {
   layout,
@@ -24,6 +26,7 @@ const {
   getDropdownItemStyle,
   getDropdownItemClass
 } = useNav();
+const { router } = useDetail();
 
 const { t, locale, translationCh, translationEn } = useTranslationLang();
 </script>
@@ -89,6 +92,16 @@ const { t, locale, translationCh, translationEn } = useTranslationLang();
         </span>
         <template #dropdown>
           <el-dropdown-menu class="logout">
+            <el-dropdown-item
+              @click="
+                router.push({
+                  name: 'UserInfo'
+                })
+              "
+            >
+              <IconifyIconOffline :icon="Avatar" style="margin: 5px" />
+              个人中心
+            </el-dropdown-item>
             <el-dropdown-item @click="logout">
               <IconifyIconOffline
                 :icon="LogoutCircleRLine"
