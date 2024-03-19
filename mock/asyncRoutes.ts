@@ -134,6 +134,25 @@ const permissionRouter = {
   },
   children: [
     {
+      path: "/editor/index",
+      name: "EditorPage",
+      meta: {
+        title: "Editor",
+        roles: ["admin", "common"]
+      }
+    },
+    // query 传参模式
+    {
+      path: "/monitor/generator/query-detail",
+      name: "TabQueryDetail",
+      meta: {
+        // 不在menu菜单中显示
+        showLink: false,
+        activePath: "/monitor/generator/index",
+        roles: ["admin", "common"]
+      }
+    },
+    {
       path: "/permission/page/index",
       name: "PermissionPage",
       meta: {

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import { useRole } from "./hook";
+import { useRole, useDetail } from "./hook";
 import { PureTableBar } from "@/components/RePureTableBar";
 import { useRenderIcon } from "@/components/ReIcon/src/hooks";
 
@@ -11,6 +11,7 @@ defineOptions({
   name: "OnlineUser"
 });
 
+const { toDetail } = useDetail();
 const formRef = ref();
 const {
   form,
@@ -85,22 +86,16 @@ const {
           @page-current-change="handleCurrentChange"
         >
           <template #operation="{ row }">
-            <el-popconfirm
-              :title="`是否强制下线${row.username}`"
-              @confirm="handleOffline(row)"
+            <el-button
+              class="reset-margin"
+              link
+              type="primary"
+              :size="size"
+              :icon="useRenderIcon(Plane)"
+              @click="toDetail({ id: row.tableName }, 'query')"
             >
-              <template #reference>
-                <el-button
-                  class="reset-margin"
-                  link
-                  type="primary"
-                  :size="size"
-                  :icon="useRenderIcon(Plane)"
-                >
-                  强退
-                </el-button>
-              </template>
-            </el-popconfirm>
+              预览
+            </el-button>
           </template>
         </pure-table>
       </template>
