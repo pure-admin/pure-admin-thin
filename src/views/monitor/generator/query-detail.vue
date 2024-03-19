@@ -25,6 +25,6 @@ onMounted(() => {
       {{ item.name }} &nbsp;
     </span>
 
-    <Base v-model:content="datas[0].content" />
+    <Base v-model:content="datas[0]" />
   </div>
 </template>

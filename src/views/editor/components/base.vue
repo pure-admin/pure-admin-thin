@@ -2,23 +2,30 @@
 import "@wangeditor/editor/dist/css/style.css";
 import { IEditorConfig } from "@wangeditor/editor";
 import { Editor } from "@wangeditor/editor-for-vue";
-import { onBeforeUnmount, shallowRef } from "vue";
+import { onMounted, onBeforeUnmount, shallowRef, ref } from "vue";
+import { type Generator } from "@/api/generator/generator";
 defineOptions({
   name: "BaseEditor"
 });
 
-const content = defineModel<string>("content");
-console.log("content", content);
+const content = defineModel<Generator>("content");
 
 const mode = "default";
 // 编辑器实例，必须用 shallowRef
 const editorRef = shallowRef();
 
 // 内容 HTML
-const valueHtml =
-  '<pre><code class="language-java">' + content.value + "</code></pre>";
+const valueHtml = ref("");
 const editorConfig: Partial<IEditorConfig> = { MENU_CONF: {} };
 
+onMounted(() => {
+  console.log("content", content.value.content);
+  valueHtml.value =
+    '<pre><code class="language-java">' +
+    content.value.content +
+    "</code></pre>";
+  const editorConfig: Partial<IEditorConfig> = { MENU_CONF: {} };
+});
 const handleCreated = editor => {
   // 记录 editor 实例，重要！
   editorRef.value = editor;
