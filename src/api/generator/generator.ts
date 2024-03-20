@@ -1,8 +1,8 @@
 import { http } from "@/utils/http";
-import { type ApiAbstract, VersionEntity } from "@/utils/http/ApiAbstract";
+import type { ApiAbstract } from "@/utils/http/ApiAbstract";
 import { baseUrlApi } from "../utils";
 
-export class Generator extends VersionEntity {
+export class Generator {
   name: string;
   content: string;
 }
