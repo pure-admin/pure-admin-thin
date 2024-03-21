@@ -12,7 +12,7 @@
 </template>
 
 <script setup lang="ts">
-import { shallowRef, defineProps, defineEmits, ref, watch } from "vue";
+import { shallowRef, ref, watch } from "vue";
 import { Codemirror } from "vue-codemirror";
 import { javascript } from "@codemirror/lang-javascript";
 import { java } from "@codemirror/lang-java";
