@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import { Base } from "./components";
+import { Code } from "./components";
 
 defineOptions({
   name: "Editor"
@@ -27,7 +27,7 @@ const activeNames = ref("1");
     </template>
     <el-collapse v-model="activeNames" accordion>
       <el-collapse-item title="基础用法" name="1">
-        <Base v-if="activeNames === '1'" />
+        <Code v-if="activeNames === '1'" />
       </el-collapse-item>
     </el-collapse>
   </el-card>

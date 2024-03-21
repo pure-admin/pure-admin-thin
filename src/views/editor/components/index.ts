@@ -1,5 +1,5 @@
-import base from "./base.vue";
+import code from "./index.vue";
 
-const Base = base;
+const Code = code;
 
-export { Base };
+export { Code };

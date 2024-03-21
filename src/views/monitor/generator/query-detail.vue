@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { useDetail } from "./hook";
-import { onMounted, ref, reactive } from "vue";
+import { onMounted, ref } from "vue";
 import { get, type Generator } from "@/api/generator/generator";
-import { Base } from "@/views/editor/components";
+import { Code } from "@/views/editor/components";
 
 defineOptions({
   name: "TabQueryDetail"
@@ -12,31 +12,33 @@ const { initToDetail, getParameter } = useDetail();
 initToDetail("query");
 const datas = ref([]);
 const content = ref("");
+const type = ref("java");
 onMounted(() => {
   get(getParameter.id, 1).then(data => {
     console.log("data", data);
     datas.value = data.data;
-    content.value =
-      '<pre><code class="language-java">' +
-      data.data[0].content +
-      "</code></pre>";
+    content.value = data.data[0].content;
   });
 });
-const clickFn = (item: String) => {
-  content.value = '<pre><code class="language-java">' + item + "</code></pre>";
+const clickFn = (item: Generator) => {
+  if (item.name.indexOf("Xml") > -1) {
+    type.value = "xml";
+  } else if (item.name.indexOf("api") > -1) {
+    type.value = "javascript";
+  } else if (item.name.indexOf("index") > -1) {
+    type.value = "html";
+  } else {
+    type.value = "java";
+  }
+  content.value = item.content;
 };
 </script>
 
 <template>
   <div>
-    <span
-      v-for="(item, index) in datas"
-      :key="index"
-      @click="clickFn(item.content)"
-    >
+    <span v-for="(item, index) in datas" :key="index" @click="clickFn(item)">
       {{ item.name }} &nbsp;
     </span>
-
-    <Base v-model:content="content" />
+    <Code v-model:code="content" v-model:type="type" />
   </div>
 </template>
