@@ -25,7 +25,7 @@ The simplified version is based on the shelf extracted from [vue-pure-admin](htt
 
 ## Preview
 
-- [Click me to view the preview station](https://pure-admin-thin.netlify.app/#/login)
+[Click me to view the preview station](https://pure-admin-thin.netlify.app/#/login)
 
 ## Maintainer
 
@@ -33,7 +33,7 @@ The simplified version is based on the shelf extracted from [vue-pure-admin](htt
 
 ## ⚠️ Attention
 
-- The Lite version does not accept any issues and prs. If you have any questions, please go to the full version [issues](https://github.com/pure-admin/vue-pure-admin/issues/new/choose) to mention, thank you!
+The Lite version does not accept any issues and prs. If you have any questions, please go to the full version [issues](https://github.com/pure-admin/vue-pure-admin/issues/new/choose) to mention, thank you!
 
 ## License
 
