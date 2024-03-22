@@ -9,7 +9,7 @@ defineOptions({
 });
 
 const { initToDetail, getParameter } = useDetail();
-initToDetail("query");
+initToDetail();
 const datas = ref([]);
 const content = ref("");
 const type = ref("java");

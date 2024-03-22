@@ -10,7 +10,8 @@ import {
   useRouter,
   useRoute,
   type LocationQueryRaw,
-  type RouteParamsRaw
+  type RouteParamsRaw,
+  type RouteRecordName
 } from "vue-router";
 
 export function useRole() {
@@ -145,6 +146,143 @@ export function useRole() {
     onSearch();
   });
 
+  const dataList1 = ref([]);
+
+  const columns1: TableColumnList = [
+    {
+      type: "index",
+      label: "index",
+      hide: true,
+      prop: "index"
+    },
+    {
+      label: "字段名称",
+      prop: "columnName"
+    },
+    {
+      label: "字段类型",
+      prop: "columnType"
+    },
+    {
+      label: "字段描述",
+      prop: "remark",
+      cellRenderer: ({ row }) => <el-input v-model={row.remark} />
+    },
+    {
+      label: "必填",
+      prop: "notNull",
+      cellRenderer: ({ row }) => <el-checkbox v-model={row.notNull} />
+    },
+    {
+      label: "列表",
+      prop: "listShow",
+      cellRenderer: ({ row }) => <el-checkbox v-model={row.listShow} />
+    },
+    {
+      label: "表单",
+      prop: "formShow",
+      cellRenderer: ({ row }) => <el-checkbox v-model={row.formShow} />
+    },
+    {
+      label: "表单类型",
+      prop: "formType",
+      cellRenderer: ({ row }) => (
+        <el-select
+          v-model={row.formType}
+          filterable
+          clearable
+          size="small"
+          placeholder="请选择"
+        >
+          <el-option label="文本框" value="Input" />
+          <el-option label="文本域" value="Textarea" />
+          <el-option label="单选框" value="Radio" />
+          <el-option label="下拉框" value="Select" />
+          <el-option label="日期框" value="Date" />
+        </el-select>
+      )
+    },
+    {
+      label: "查询方式",
+      prop: "queryType",
+      cellRenderer: ({ row }) => (
+        <el-select
+          v-model={row.queryType}
+          filterable
+          clearable
+          size="small"
+          placeholder="请选择"
+        >
+          <el-option label="=" value="=" />
+          <el-option label="!=" value="!=" />
+          <el-option label=">=" value=">=" />
+          <el-option label="<=" value="<=" />
+          <el-option label="Like" value="Like" />
+          <el-option label="NotNull" value="NotNull" />
+          <el-option label="BetWeen" value="BetWeen" />
+        </el-select>
+      )
+    },
+    {
+      label: "日期注解",
+      prop: "dateAnnotation",
+      cellRenderer: ({ row }) => (
+        <el-select
+          v-model={row.dateAnnotation}
+          filterable
+          clearable
+          size="small"
+          placeholder="请选择"
+        >
+          <el-option label="自动创建时间" value="CreationTimestamp" />
+          <el-option label="自动更新时间" value="UpdateTimestamp" />
+        </el-select>
+      ),
+      minWidth: 110
+    },
+    {
+      label: "关联字典",
+      prop: "dictName",
+      cellRenderer: ({ row }) => (
+        <el-date-picker
+          v-model={row.date}
+          type="date"
+          format="YYYY/MM/DD"
+          value-format="YYYY-MM-DD"
+          placeholder="请选择日期"
+        />
+      ),
+      minWidth: 110
+    },
+    {
+      label: "操作",
+      fixed: "right",
+      width: 90,
+      slot: "operation"
+    }
+  ];
+
+  function onAdd() {
+    dataList1.value.push({
+      id: dataList1.value.length + 1,
+      columnName: "字段名称",
+      columnType: "字段类型",
+      remark: "字段描述",
+      notNull: true,
+      listShow: false,
+      formShow: true,
+      formType: "Textarea",
+      sex: 0,
+      hobby: "",
+      date: ""
+    });
+  }
+
+  function onDel(row) {
+    const index = dataList1.value.indexOf(row);
+    if (index !== -1) dataList1.value.splice(index, 1);
+  }
+
   return {
     form,
     loading,
@@ -152,6 +290,10 @@ export function useRole() {
     dataList,
     pagination,
     changeList,
+    columns1,
+    dataList1,
+    onAdd,
+    onDel,
     onSearch,
     resetForm,
     handleOffline,
@@ -169,8 +311,7 @@ export function useDetail() {
   const getParameter = isEmpty(route.params) ? route.query : route.params;
 
   function toDetail(
-    parameter: LocationQueryRaw | RouteParamsRaw,
-    model: "query" | "params"
+    parameter: RouteRecordName | LocationQueryRaw | RouteParamsRaw | any
   ) {
     // ⚠️ 这里要特别注意下，因为vue-router在解析路由参数的时候会自动转化成字符串类型，比如在使用useRoute().route.query或useRoute().route.params时，得到的参数都是字符串类型
     // 所以在传参的时候，如果参数是数字类型，就需要在此处 toString() 一下，保证传参跟路由参数类型一致都是字符串，这是必不可少的环节！！！
@@ -179,46 +320,29 @@ export function useDetail() {
         parameter[param] = parameter[param].toString();
       }
     });
-    if (model === "query") {
-      // 保存信息到标签页
-      useMultiTagsStoreHook().handleTags("push", {
-        path: `/monitor/generator/query-detail`,
-        name: "TabQueryDetail",
-        query: parameter,
-        meta: {
-          title: {
-            zh: `${parameter.id} - 预览`,
-            en: `No.${parameter.id} - DetailInfo`
-          },
-          // 如果使用的是非国际化精简版title可以像下面这么写
-          // title: `No.${index} - 详情信息`,
-          // 最大打开标签数
-          dynamicLevel: 3
-        }
-      });
-      // 路由跳转
-      router.push({ name: "TabQueryDetail", query: parameter });
-    } else if (model === "params") {
-      useMultiTagsStoreHook().handleTags("push", {
-        path: `/monitor/generator/params-detail/:id`,
-        name: "TabParamsDetail",
-        params: parameter,
-        meta: {
-          title: {
-            zh: `No.${parameter.id} - 详情信息`,
-            en: `No.${parameter.id} - DetailInfo`
-          }
-          // 如果使用的是非国际化精简版title可以像下面这么写
-          // title: `No.${index} - 详情信息`,
-        }
-      });
-      router.push({ name: "TabParamsDetail", params: parameter });
-    }
+    // 保存信息到标签页
+    useMultiTagsStoreHook().handleTags("push", {
+      path: `/monitor/generator/${parameter.path}`,
+      name: parameter.name,
+      query: parameter,
+      meta: {
+        title: {
+          zh: `${parameter.id} - ${parameter.title}`,
+          en: `No.${parameter.id} - DetailInfo`
+        },
+        // 如果使用的是非国际化精简版title可以像下面这么写
+        // title: `No.${index} - 详情信息`,
+        // 最大打开标签数
+        dynamicLevel: 3
+      }
+    });
+    // 路由跳转
+    router.push({ name: parameter.name, query: parameter });
   }
 
   // 用于页面刷新，重新获取浏览器地址栏参数并保存到标签页
-  const initToDetail = (model: "query" | "params") => {
-    if (getParameter) toDetail(getParameter, model);
+  const initToDetail = () => {
+    if (getParameter) toDetail(getParameter);
   };
 
   return { toDetail, initToDetail, getParameter, router };

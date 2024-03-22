@@ -101,7 +101,14 @@ const {
                 link
                 type="primary"
                 :size="size"
-                @click="toDetail({ id: row.tableName }, 'query')"
+                @click="
+                  toDetail({
+                    id: row.tableName,
+                    name: 'TabQueryDetail',
+                    path: 'query-detail',
+                    title: '预览'
+                  })
+                "
               >
                 预览
               </el-button>
@@ -114,7 +121,20 @@ const {
               >
                 下载
               </el-button>
-              <el-button class="reset-margin" link type="primary" :size="size">
+              <el-button
+                class="reset-margin"
+                link
+                type="primary"
+                :size="size"
+                @click="
+                  toDetail({
+                    id: row.tableName,
+                    name: 'TabQueryPreview',
+                    path: 'preview',
+                    title: '配置'
+                  })
+                "
+              >
                 配置
               </el-button>
               <el-button class="reset-margin" link type="primary" :size="size">

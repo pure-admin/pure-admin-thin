@@ -152,6 +152,17 @@ const permissionRouter = {
         roles: ["admin", "common"]
       }
     },
+    // query 传参模式
+    {
+      path: "/monitor/generator/preview",
+      name: "TabQueryPreview",
+      meta: {
+        // 不在menu菜单中显示
+        showLink: false,
+        activePath: "/monitor/generator/index",
+        roles: ["admin", "common"]
+      }
+    },
     {
       path: "/permission/page/index",
       name: "PermissionPage",
