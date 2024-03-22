@@ -35,7 +35,8 @@
     }
   }
 
-  .set-icon {
+  .set-icon,
+  .fullscreen-icon {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -91,7 +92,7 @@
     z-index: 1001;
     width: $sideBarWidth !important;
     height: 100%;
-    overflow: hidden;
+    overflow: visible;
     font-size: 0;
     background: $menuBg;
     border-right: 1px solid var(--pure-border-color);
@@ -460,7 +461,9 @@
 
       /* 搜索 */
       .search-container,
-      /* 告警 */
+      /* 全屏 */
+      .fullscreen-icon,
+      /* 消息通知 */
       .dropdown-badge,
       /* 用户名 */
       .el-dropdown-link,
@@ -631,7 +634,9 @@ body[layout="vertical"] {
 
   /* 搜索 */
   .search-container,
-  /* 告警 */
+  /* 全屏 */
+  .fullscreen-icon,
+  /* 消息通知 */
   .dropdown-badge,
   /* 用户名 */
   .el-dropdown-link,
