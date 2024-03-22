@@ -4,7 +4,6 @@ import { useRole, useDetail } from "./hook";
 import { PureTableBar } from "@/components/RePureTableBar";
 import { useRenderIcon } from "@/components/ReIcon/src/hooks";
 
-import Plane from "@iconify-icons/ri/plane-line";
 import Refresh from "@iconify-icons/ep/refresh";
 
 defineOptions({
@@ -19,12 +18,15 @@ const {
   columns,
   dataList,
   pagination,
+  changeList,
   onSearch,
   resetForm,
   handleOffline,
   handleSizeChange,
   handleCurrentChange,
-  handleSelectionChange
+  handleSelectionChange,
+  downloadCode,
+  syncCode
 } = useRole();
 </script>
 
@@ -59,24 +61,31 @@ const {
       </el-form-item>
     </el-form>
 
-    <PureTableBar
-      title="在线用户（仅演示，操作后不生效）"
-      :columns="columns"
-      @refresh="onSearch"
-    >
+    <PureTableBar title="代码生成" :columns="columns" @refresh="onSearch">
+      <template #buttons>
+        <el-button
+          type="success"
+          :icon="useRenderIcon(Refresh)"
+          :disabled="changeList.length <= 0"
+          @click="syncCode"
+        >
+          同步
+        </el-button>
+      </template>
       <template v-slot="{ size, dynamicColumns }">
         <pure-table
+          adaptive
+          :adaptiveConfig="{ offsetBottom: 45 }"
           align-whole="center"
           showOverflowTooltip
           table-layout="auto"
+          default-expand-all
+          stripe
           :loading="loading"
           :size="size"
-          adaptive
-          :adaptiveConfig="{ offsetBottom: 108 }"
           :data="dataList"
           :columns="dynamicColumns"
           :pagination="pagination"
-          :paginationSmall="size === 'small' ? true : false"
           :header-cell-style="{
             background: 'var(--el-fill-color-light)',
             color: 'var(--el-text-color-primary)'
@@ -86,16 +95,32 @@ const {
           @page-current-change="handleCurrentChange"
         >
           <template #operation="{ row }">
-            <el-button
-              class="reset-margin"
-              link
-              type="primary"
-              :size="size"
-              :icon="useRenderIcon(Plane)"
-              @click="toDetail({ id: row.tableName }, 'query')"
-            >
-              预览
-            </el-button>
+            <div :style="{ width: '100%', 'margin-left': '-15px' }">
+              <el-button
+                class="reset-margin"
+                link
+                type="primary"
+                :size="size"
+                @click="toDetail({ id: row.tableName }, 'query')"
+              >
+                预览
+              </el-button>
+              <el-button
+                class="reset-margin"
+                link
+                type="primary"
+                :size="size"
+                @click="downloadCode(row.tableName)"
+              >
+                下载
+              </el-button>
+              <el-button class="reset-margin" link type="primary" :size="size">
+                配置
+              </el-button>
+              <el-button class="reset-margin" link type="primary" :size="size">
+                生成
+              </el-button>
+            </div>
           </template>
         </pure-table>
       </template>

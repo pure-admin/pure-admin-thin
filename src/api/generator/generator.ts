@@ -12,3 +12,18 @@ export const get = (tableName, type) => {
     baseUrlApi("generator/") + tableName + "/" + type
   );
 };
+
+export const download = (name: String) => {
+  return http.request<Blob>(
+    "post",
+    baseUrlApi("generator/" + name + "/2"),
+    {},
+    { responseType: "blob" }
+  );
+};
+
+export function sync(tables) {
+  return http.request<Blob>("post", baseUrlApi("generator/sync"), {
+    data: tables
+  });
+}

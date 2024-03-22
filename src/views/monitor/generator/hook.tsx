@@ -1,6 +1,7 @@
 import dayjs from "dayjs";
 import { message } from "@/utils/message";
 import { CRUD } from "@/api/utils";
+import { download, sync } from "@/api/generator/generator";
 import { reactive, ref, onMounted, toRaw } from "vue";
 import type { PaginationProps } from "@pureadmin/table";
 import { isString, isEmpty } from "@pureadmin/utils";
@@ -16,17 +17,24 @@ export function useRole() {
   const form = reactive({
     username: "",
     tableName: "",
-    size: 999
+    size: 10,
+    page: 0
   });
   const dataList = ref([]);
+  const changeList = ref([]);
   const loading = ref(true);
   const pagination = reactive<PaginationProps>({
     total: 0,
     pageSize: 10,
+    pageSizes: [10, 20, 50],
     currentPage: 1,
     background: true
   });
   const columns: TableColumnList = [
+    {
+      type: "selection",
+      align: "left"
+    },
     {
       label: "表名",
       prop: "tableName",
@@ -62,15 +70,18 @@ export function useRole() {
   ];
 
   function handleSizeChange(val: number) {
-    console.log(`${val} items per page`);
+    pagination.pageSize = val;
+    onSearch();
   }
 
   function handleCurrentChange(val: number) {
-    console.log(`current page: ${val}`);
+    pagination.currentPage = val;
+    onSearch();
   }
 
   function handleSelectionChange(val) {
-    console.log("handleSelectionChange", val);
+    console.log("handleSelectionChange", val.length);
+    changeList.value = val.map(person => person.tableName);
   }
 
   function handleOffline(row) {
@@ -80,8 +91,11 @@ export function useRole() {
 
   async function onSearch() {
     loading.value = true;
+    const forms = toRaw(form);
+    forms.page = pagination.currentPage - 1;
+    forms.size = pagination.pageSize;
     const { data } = await CRUD.get("generator/tables", {
-      params: toRaw(form)
+      params: forms
     });
     dataList.value = data.content;
     pagination.total = data.totalElements;
@@ -97,6 +111,36 @@ export function useRole() {
     onSearch();
   };
 
+  const downloadCode = name => {
+    download(name).then(data => {
+      const a = document.createElement("a");
+      const url = window.URL.createObjectURL(data); // 创建媒体流 url ，详细了解可自己查 URL.createObjectURL（推荐 MDN ）
+
+      // 创建一个 a 标签，并设置其 href 属性和显示样式
+      a.href = url;
+      a.style.display = "none";
+      a.download = name + ".zip";
+      document.body.appendChild(a);
+      a.click();
+      // 点击 a 标签后，移除 a 标签
+      a.parentNode.removeChild(a);
+      // 释放对象 URL，避免内存泄漏
+      window.URL.revokeObjectURL(url); // 删除创建的媒体流 url 对象
+      message("导出成功", {
+        type: "success"
+      });
+    });
+  };
+
+  const syncCode = () => {
+    sync(changeList.value).then(() => {
+      message("同步成功", {
+        type: "success"
+      });
+      onSearch();
+    });
+  };
+
   onMounted(() => {
     onSearch();
   });
@@ -107,12 +151,15 @@ export function useRole() {
     columns,
     dataList,
     pagination,
+    changeList,
     onSearch,
     resetForm,
     handleOffline,
     handleSizeChange,
     handleCurrentChange,
-    handleSelectionChange
+    handleSelectionChange,
+    downloadCode,
+    syncCode
   };
 }
 
