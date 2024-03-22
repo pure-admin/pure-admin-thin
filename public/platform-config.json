@@ -1,5 +1,5 @@
 {
-  "Version": "5.1.0",
+  "Version": "5.2.0",
   "Title": "PureAdmin",
   "FixedHeader": true,
   "HiddenSideBar": false,
@@ -13,6 +13,7 @@
   "Weak": false,
   "HideTabs": false,
   "HideFooter": false,
+  "Stretch": false,
   "SidebarStatus": true,
   "EpThemeColor": "#409EFF",
   "ShowLogo": true,

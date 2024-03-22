@@ -105,15 +105,8 @@ export function useTags() {
     },
     {
       icon: Fullscreen,
-      text: "整体页面全屏",
-      divided: true,
-      disabled: false,
-      show: true
-    },
-    {
-      icon: Fullscreen,
       text: "内容区全屏",
-      divided: false,
+      divided: true,
       disabled: false,
       show: true
     }

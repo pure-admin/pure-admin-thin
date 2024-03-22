@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import Footer from "./footer/index.vue";
-import { useGlobal } from "@pureadmin/utils";
+import { useGlobal, isNumber } from "@pureadmin/utils";
 import KeepAliveFrame from "./keepAliveFrame/index.vue";
 import backTop from "@/assets/svg/back_top.svg?component";
 import { h, computed, Transition, defineComponent } from "vue";
@@ -30,16 +30,28 @@ const hideFooter = computed(() => {
   return $storage?.configure.hideFooter;
 });
 
+const stretch = computed(() => {
+  return $storage?.configure.stretch;
+});
+
 const layout = computed(() => {
   return $storage?.layout.layout === "vertical";
+});
+
+const getMainWidth = computed(() => {
+  return isNumber(stretch.value)
+    ? stretch.value + "px"
+    : stretch.value
+      ? "1440px"
+      : "100%";
 });
 
 const getSectionStyle = computed(() => {
   return [
     hideTabs.value && layout ? "padding-top: 48px;" : "",
-    !hideTabs.value && layout ? "padding-top: 85px;" : "",
+    !hideTabs.value && layout ? "padding-top: 81px;" : "",
     hideTabs.value && !layout.value ? "padding-top: 48px;" : "",
-    !hideTabs.value && !layout.value ? "padding-top: 85px;" : "",
+    !hideTabs.value && !layout.value ? "padding-top: 81px;" : "",
     props.fixedHeader
       ? ""
       : `padding-top: 0;${
@@ -96,12 +108,15 @@ const transitionMain = defineComponent({
               v-if="props.fixedHeader"
               :wrap-style="{
                 display: 'flex',
-                'flex-wrap': 'wrap'
+                'flex-wrap': 'wrap',
+                'max-width': getMainWidth,
+                margin: '0 auto',
+                transition: 'all 300ms cubic-bezier(0.4, 0, 0.2, 1)'
               }"
               :view-style="{
                 display: 'flex',
                 flex: 'auto',
-                overflow: 'auto',
+                overflow: 'hidden',
                 'flex-direction': 'column'
               }"
             >
