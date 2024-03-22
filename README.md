@@ -29,7 +29,7 @@
 
 ## 预览
 
-- [查看预览](https://pure-admin-thin.netlify.app/#/login)
+[查看预览](https://pure-admin-thin.netlify.app/#/login)
 
 ## 维护者
 
@@ -37,7 +37,7 @@
 
 ## ⚠️ 注意
 
-- 精简版不接受任何 `issues` 和 `pr`，如果有问题请到完整版 [issues](https://github.com/pure-admin/vue-pure-admin/issues/new/choose) 去提，谢谢！
+精简版不接受任何 `issues` 和 `pr`，如果有问题请到完整版 [issues](https://github.com/pure-admin/vue-pure-admin/issues/new/choose) 去提，谢谢！
 
 ## 许可证
 
