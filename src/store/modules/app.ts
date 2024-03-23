@@ -20,7 +20,12 @@ export const useAppStore = defineStore({
       storageLocal().getItem<StorageConfigs>(
         `${responsiveStorageNameSpace()}layout`
       )?.layout ?? getConfig().Layout,
-    device: deviceDetection() ? "mobile" : "desktop"
+    device: deviceDetection() ? "mobile" : "desktop",
+    // 浏览器窗口的可视区域大小
+    viewportSize: {
+      width: document.documentElement.clientWidth,
+      height: document.documentElement.clientHeight
+    }
   }),
   getters: {
     getSidebarStatus(state) {
@@ -28,6 +33,12 @@ export const useAppStore = defineStore({
     },
     getDevice(state) {
       return state.device;
+    },
+    getViewportWidth(state) {
+      return state.viewportSize.width;
+    },
+    getViewportHeight(state) {
+      return state.viewportSize.height;
     }
   },
   actions: {
@@ -59,6 +70,12 @@ export const useAppStore = defineStore({
     },
     setLayout(layout) {
       this.layout = layout;
+    },
+    setViewportSize(size) {
+      this.viewportSize = size;
+    },
+    setSortSwap(val) {
+      this.sortSwap = val;
     }
   }
 });
