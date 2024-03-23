@@ -7,10 +7,10 @@ settings:
 dependencies:
   '@pureadmin/descriptions':
     specifier: ^1.2.1
-    version: 1.2.1(echarts@5.5.0)(element-plus@2.6.1)(typescript@5.4.3)
+    version: 1.2.1(echarts@5.5.0)(element-plus@2.6.2)(typescript@5.4.3)
   '@pureadmin/table':
     specifier: ^3.1.2
-    version: 3.1.2(element-plus@2.6.1)(typescript@5.4.3)
+    version: 3.1.2(element-plus@2.6.2)(typescript@5.4.3)
   '@pureadmin/utils':
     specifier: ^2.4.7
     version: 2.4.7(echarts@5.5.0)(vue@3.4.21)
@@ -33,8 +33,8 @@ dependencies:
     specifier: ^5.5.0
     version: 5.5.0
   element-plus:
-    specifier: ^2.6.1
-    version: 2.6.1(vue@3.4.21)
+    specifier: ^2.6.2
+    version: 2.6.2(vue@3.4.21)
   js-cookie:
     specifier: ^3.0.5
     version: 3.0.5
@@ -132,10 +132,10 @@ devDependencies:
     version: 7.3.1(eslint@8.57.0)(typescript@5.4.3)
   '@vitejs/plugin-vue':
     specifier: ^5.0.4
-    version: 5.0.4(vite@5.2.2)(vue@3.4.21)
+    version: 5.0.4(vite@5.2.3)(vue@3.4.21)
   '@vitejs/plugin-vue-jsx':
     specifier: ^3.1.0
-    version: 3.1.0(vite@5.2.2)(vue@3.4.21)
+    version: 3.1.0(vite@5.2.3)(vue@3.4.21)
   autoprefixer:
     specifier: ^10.4.19
     version: 10.4.19(postcss@8.4.38)
@@ -221,14 +221,14 @@ devDependencies:
     specifier: ^5.4.3
     version: 5.4.3
   vite:
-    specifier: ^5.2.2
-    version: 5.2.2(@types/node@20.11.30)(sass@1.72.0)
+    specifier: ^5.2.3
+    version: 5.2.3(@types/node@20.11.30)(sass@1.72.0)
   vite-plugin-cdn-import:
     specifier: ^0.3.5
     version: 0.3.5(rollup@2.79.1)
   vite-plugin-compression:
     specifier: ^0.5.1
-    version: 0.5.1(vite@5.2.2)
+    version: 0.5.1(vite@5.2.3)
   vite-plugin-fake-server:
     specifier: ^2.1.1
     version: 2.1.1
@@ -1404,26 +1404,26 @@ packages:
     resolution: {integrity: sha512-P1st0aksCrn9sGZhp8GMYwBnQsbvAWsZAX44oXNNvLHGqAOcoVxmjZiohstwQ7SqKnbR47akdNi+uleWD8+g6A==}
     dev: false
 
-  /@pureadmin/descriptions@1.2.1(echarts@5.5.0)(element-plus@2.6.1)(typescript@5.4.3):
+  /@pureadmin/descriptions@1.2.1(echarts@5.5.0)(element-plus@2.6.2)(typescript@5.4.3):
     resolution: {integrity: sha512-7jDJuqz8xnhcmwXdWQnBzOYeX2WK27TRFaVgs9AdiRr+DnKb9W+krHByJwQtxo5lg4qyRh4/IWQGEMfhC2ljeQ==}
     peerDependencies:
       element-plus: ^2.0.0
     dependencies:
       '@element-plus/icons-vue': 2.3.1(vue@3.4.21)
       '@pureadmin/utils': 2.4.7(echarts@5.5.0)(vue@3.4.21)
-      element-plus: 2.6.1(vue@3.4.21)
+      element-plus: 2.6.2(vue@3.4.21)
       vue: 3.4.21(typescript@5.4.3)
     transitivePeerDependencies:
       - echarts
       - typescript
     dev: false
 
-  /@pureadmin/table@3.1.2(element-plus@2.6.1)(typescript@5.4.3):
+  /@pureadmin/table@3.1.2(element-plus@2.6.2)(typescript@5.4.3):
     resolution: {integrity: sha512-6GrZCjBDFn/kKjn/HGkx0BH9RiArg5QktPN2u5PNpzHBhZZXWMoFcKCkysWLfDdWfpCowQWgnOpr0KjTPEgT0A==}
     peerDependencies:
       element-plus: ^2.0.0
     dependencies:
-      element-plus: 2.6.1(vue@3.4.21)
+      element-plus: 2.6.2(vue@3.4.21)
       vue: 3.4.21(typescript@5.4.3)
     transitivePeerDependencies:
       - typescript
@@ -1805,7 +1805,7 @@ packages:
     resolution: {integrity: sha512-zuVdFrMJiuCDQUMCzQaD6KL28MjnqqN8XnAqiEq9PNm/hCPTSGfrXCOfwj1ow4LFb/tNymJPwsNbVePc1xFqrQ==}
     dev: true
 
-  /@vitejs/plugin-vue-jsx@3.1.0(vite@5.2.2)(vue@3.4.21):
+  /@vitejs/plugin-vue-jsx@3.1.0(vite@5.2.3)(vue@3.4.21):
     resolution: {integrity: sha512-w9M6F3LSEU5kszVb9An2/MmXNxocAnUb3WhRr8bHlimhDrXNt6n6D2nJQR3UXpGlZHh/EsgouOHCsM8V3Ln+WA==}
     engines: {node: ^14.18.0 || >=16.0.0}
     peerDependencies:
@@ -1815,20 +1815,20 @@ packages:
       '@babel/core': 7.24.3
       '@babel/plugin-transform-typescript': 7.24.1(@babel/core@7.24.3)
       '@vue/babel-plugin-jsx': 1.2.2(@babel/core@7.24.3)
-      vite: 5.2.2(@types/node@20.11.30)(sass@1.72.0)
+      vite: 5.2.3(@types/node@20.11.30)(sass@1.72.0)
       vue: 3.4.21(typescript@5.4.3)
     transitivePeerDependencies:
       - supports-color
     dev: true
 
-  /@vitejs/plugin-vue@5.0.4(vite@5.2.2)(vue@3.4.21):
+  /@vitejs/plugin-vue@5.0.4(vite@5.2.3)(vue@3.4.21):
     resolution: {integrity: sha512-WS3hevEszI6CEVEx28F8RjTX97k3KsrcY6kvTg7+Whm5y3oYvcqzVeGCU3hxSAn4uY2CLCkeokkGKpoctccilQ==}
     engines: {node: ^18.0.0 || >=20.0.0}
     peerDependencies:
       vite: ^5.0.0
       vue: ^3.2.25
     dependencies:
-      vite: 5.2.2(@types/node@20.11.30)(sass@1.72.0)
+      vite: 5.2.3(@types/node@20.11.30)(sass@1.72.0)
       vue: 3.4.21(typescript@5.4.3)
     dev: true
 
@@ -2976,8 +2976,8 @@ packages:
   /electron-to-chromium@1.4.715:
     resolution: {integrity: sha512-XzWNH4ZSa9BwVUQSDorPWAUQ5WGuYz7zJUNpNif40zFCiCl20t8zgylmreNmn26h5kiyw2lg7RfTmeMBsDklqg==}
 
-  /element-plus@2.6.1(vue@3.4.21):
-    resolution: {integrity: sha512-6VRpLjwtIVdtUuITJPPKtpOH1NM6nuAkRE3q5O4Lrx0N1bYMhTkiqb2Jy7zfQuDPbOIkkF2OABTzegpNnzgsnQ==}
+  /element-plus@2.6.2(vue@3.4.21):
+    resolution: {integrity: sha512-WFMv1v83l437Xu+GeeM+ytxd9VUQpR4418BowvTVIPYItsoj6yK0ITIuSv19iCesF405FbAOaCIHXhJch0ilFA==}
     peerDependencies:
       vue: ^3.2.0
     dependencies:
@@ -6346,7 +6346,7 @@ packages:
       - rollup
     dev: true
 
-  /vite-plugin-compression@0.5.1(vite@5.2.2):
+  /vite-plugin-compression@0.5.1(vite@5.2.3):
     resolution: {integrity: sha512-5QJKBDc+gNYVqL/skgFAP81Yuzo9R+EAf19d+EtsMF/i8kFUpNi3J/H01QD3Oo8zBQn+NzoCIFkpPLynoOzaJg==}
     peerDependencies:
       vite: '>=2.0.0'
@@ -6354,7 +6354,7 @@ packages:
       chalk: 4.1.2
       debug: 4.3.4
       fs-extra: 10.1.0
-      vite: 5.2.2(@types/node@20.11.30)(sass@1.72.0)
+      vite: 5.2.3(@types/node@20.11.30)(sass@1.72.0)
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -6386,8 +6386,8 @@ packages:
       vue: 3.4.21(typescript@5.4.3)
     dev: true
 
-  /vite@5.2.2(@types/node@20.11.30)(sass@1.72.0):
-    resolution: {integrity: sha512-FWZbz0oSdLq5snUI0b6sULbz58iXFXdvkZfZWR/F0ZJuKTSPO7v72QPXt6KqYeMFb0yytNp6kZosxJ96Nr/wDQ==}
+  /vite@5.2.3(@types/node@20.11.30)(sass@1.72.0):
+    resolution: {integrity: sha512-+i1oagbvkVIhEy9TnEV+fgXsng13nZM90JQbrcPrf6DvW2mXARlz+DK7DLiDP+qeKoD1FCVx/1SpFL1CLq9Mhw==}
     engines: {node: ^18.0.0 || >=20.0.0}
     hasBin: true
     peerDependencies:
