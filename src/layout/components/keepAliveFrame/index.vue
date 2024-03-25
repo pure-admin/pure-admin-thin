@@ -63,7 +63,6 @@ watch(
   }
 );
 </script>
-
 <template>
   <template v-for="[fullPath, Comp] in compList" :key="fullPath">
     <div v-show="fullPath === props.currRoute.fullPath" class="w-full h-full">

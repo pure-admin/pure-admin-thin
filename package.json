@@ -1,6 +1,6 @@
 {
   "name": "pure-admin-thin",
-  "version": "5.1.0",
+  "version": "5.2.0",
   "private": true,
   "type": "module",
   "scripts": {
@@ -136,8 +136,8 @@
     "stylelint-prettier": "^5.0.0",
     "svgo": "^3.2.0",
     "tailwindcss": "^3.4.1",
-    "typescript": "^5.3.3",
-    "vite": "^5.2.2",
+    "typescript": "^5.4.3",
+    "vite": "^5.2.3",
     "vite-plugin-cdn-import": "^0.3.5",
     "vite-plugin-compression": "^0.5.1",
     "vite-plugin-fake-server": "^2.1.1",
