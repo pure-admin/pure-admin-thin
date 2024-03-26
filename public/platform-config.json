@@ -1,6 +1,6 @@
 {
-  "Version": "5.2.0",
-  "Title": "PureAdmin",
+  "Version": "1.0.1",
+  "Title": "电力配餐后台管理系统",
   "FixedHeader": true,
   "HiddenSideBar": false,
   "MultiTagsCache": false,
