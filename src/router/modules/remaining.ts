@@ -7,7 +7,7 @@ export default [
     name: "Login",
     component: () => import("@/views/login/index.vue"),
     meta: {
-      title: $t("menus.hslogin"),
+      title: $t("menus.pureLogin"),
       showLink: false,
       rank: 101
     }
@@ -16,7 +16,7 @@ export default [
     path: "/redirect",
     component: Layout,
     meta: {
-      title: $t("status.hsLoad"),
+      title: $t("status.pureLoad"),
       showLink: false,
       rank: 102
     },

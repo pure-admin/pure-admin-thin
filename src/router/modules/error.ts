@@ -6,7 +6,7 @@ export default {
   meta: {
     icon: "ri:information-line",
     // showLink: false,
-    title: $t("menus.hsabnormal"),
+    title: $t("menus.pureAbnormal"),
     rank: 9
   },
   children: [
@@ -15,7 +15,7 @@ export default {
       name: "403",
       component: () => import("@/views/error/403.vue"),
       meta: {
-        title: $t("menus.hsfourZeroOne")
+        title: $t("menus.pureFourZeroOne")
       }
     },
     {
@@ -23,7 +23,7 @@ export default {
       name: "404",
       component: () => import("@/views/error/404.vue"),
       meta: {
-        title: $t("menus.hsfourZeroFour")
+        title: $t("menus.pureFourZeroFour")
       }
     },
     {
@@ -31,7 +31,7 @@ export default {
       name: "500",
       component: () => import("@/views/error/500.vue"),
       meta: {
-        title: $t("menus.hsFive")
+        title: $t("menus.pureFive")
       }
     }
   ]

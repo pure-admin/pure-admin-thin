@@ -1,45 +1,31 @@
 buttons:
-  hsLoginOut: LoginOut
-  hsfullscreen: FullScreen
-  hsexitfullscreen: ExitFullscreen
-  hsrefreshRoute: RefreshRoute
-  hslogin: Login
-  hsadd: Add
-  hsmark: Mark/Cancel
-  hssave: Save
-  hssearch: Search
-  hsexpendAll: Expand All
-  hscollapseAll: Collapse All
-  hssystemSet: Open ProjectConfig
-  hsdelete: Delete
-  hsreload: Reload
-  hscloseCurrentTab: Close CurrentTab
-  hscloseLeftTabs: Close LeftTabs
-  hscloseRightTabs: Close RightTabs
-  hscloseOtherTabs: Close OtherTabs
-  hscloseAllTabs: Close AllTabs
-  hswholeFullScreen: FullScreen
-  hswholeExitFullScreen: ExitFull
-  hscontentFullScreen: Content FullScreen
-  hscontentExitFullScreen: Content ExitFullScreen
+  pureLoginOut: LoginOut
+  pureLogin: Login
+  pureSystemSet: Open ProjectConfig
+  pureReload: Reload
+  pureCloseCurrentTab: Close CurrentTab
+  pureCloseLeftTabs: Close LeftTabs
+  pureCloseRightTabs: Close RightTabs
+  pureCloseOtherTabs: Close OtherTabs
+  pureCloseAllTabs: Close AllTabs
+  pureContentFullScreen: Content FullScreen
+  pureContentExitFullScreen: Content ExitFullScreen
 menus:
-  hshome: Home
-  hslogin: Login
-  hsabnormal: Abnormal Page
-  hsfourZeroFour: "404"
-  hsfourZeroOne: "403"
-  hsFive: "500"
-  permission: Permission Manage
-  permissionPage: Page Permission
-  permissionButton: Button Permission
+  pureHome: Home
+  pureLogin: Login
+  pureAbnormal: Abnormal Page
+  pureFourZeroFour: "404"
+  pureFourZeroOne: "403"
+  pureFive: "500"
+  purePermission: Permission Manage
+  purePermissionPage: Page Permission
+  purePermissionButton: Button Permission
 status:
-  hsLoad: Loading...
+  pureLoad: Loading...
 login:
-  username: Username
-  password: Password
-  remember: days no need to login
-  rememberInfo: After checking and logging in, will automatically log in to the system without entering your username and password within the specified number of days.
-  login: Login
-  usernameReg: Please enter username
-  passwordReg: Please enter password
-  passwordRuleReg: The password format should be any combination of 8-18 digits
+  pureUsername: Username
+  purePassword: Password
+  pureLogin: Login
+  pureUsernameReg: Please enter username
+  purePassWordReg: Please enter password
+  purePassWordRuleReg: The password format should be any combination of 8-18 digits

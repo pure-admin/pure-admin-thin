@@ -150,7 +150,7 @@ onBeforeUnmount(() => {
                 :rules="[
                   {
                     required: true,
-                    message: transformI18n($t('login.usernameReg')),
+                    message: transformI18n($t('login.pureUsernameReg')),
                     trigger: 'blur'
                   }
                 ]"
@@ -159,7 +159,7 @@ onBeforeUnmount(() => {
                 <el-input
                   v-model="ruleForm.username"
                   clearable
-                  :placeholder="t('login.username')"
+                  :placeholder="t('login.pureUsername')"
                   :prefix-icon="useRenderIcon(User)"
                 />
               </el-form-item>
@@ -171,7 +171,7 @@ onBeforeUnmount(() => {
                   v-model="ruleForm.password"
                   clearable
                   show-password
-                  :placeholder="t('login.password')"
+                  :placeholder="t('login.purePassword')"
                   :prefix-icon="useRenderIcon(Lock)"
                 />
               </el-form-item>
@@ -185,7 +185,7 @@ onBeforeUnmount(() => {
                 :loading="loading"
                 @click="onLogin(ruleFormRef)"
               >
-                {{ t("login.login") }}
+                {{ t("login.pureLogin") }}
               </el-button>
             </Motion>
           </el-form>
