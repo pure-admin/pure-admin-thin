@@ -1,3 +1,4 @@
+import Sortable from "sortablejs";
 import { useEpThemeStoreHook } from "@/store/modules/epTheme";
 import { defineComponent, ref, computed, type PropType, nextTick } from "vue";
 import {
@@ -8,7 +9,6 @@ import {
   getKeyList
 } from "@pureadmin/utils";
 
-import Sortable from "sortablejs";
 import DragIcon from "./svg/drag.svg?component";
 import ExpandIcon from "./svg/expand.svg?component";
 import RefreshIcon from "./svg/refresh.svg?component";
@@ -118,6 +118,7 @@ export default defineComponent({
     }
 
     function handleCheckedColumnsChange(value: string[]) {
+      checkedColumns.value = value;
       const checkedCount = value.length;
       checkAll.value = checkedCount === checkColumnList.length;
       isIndeterminate.value =
@@ -293,7 +294,7 @@ export default defineComponent({
                 <div class="pt-[6px] pl-[11px]">
                   <el-scrollbar max-height="36vh">
                     <el-checkbox-group
-                      v-model={checkedColumns.value}
+                      modelValue={checkedColumns.value}
                       onChange={value => handleCheckedColumnsChange(value)}
                     >
                       <el-space
@@ -301,7 +302,7 @@ export default defineComponent({
                         alignment="flex-start"
                         size={0}
                       >
-                        {checkColumnList.map(item => {
+                        {checkColumnList.map((item, index) => {
                           return (
                             <div class="flex items-center">
                               <DragIcon
@@ -316,7 +317,8 @@ export default defineComponent({
                                 }) => rowDrop(event)}
                               />
                               <el-checkbox
-                                key={item}
+                                key={index}
+                                label={item}
                                 value={item}
                                 onChange={value =>
                                   handleCheckColumnListChange(value, item)
