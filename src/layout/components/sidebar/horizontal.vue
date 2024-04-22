@@ -84,7 +84,7 @@ nextTick(() => {
       </el-dropdown>
       <span
         class="set-icon navbar-bg-hover"
-        title="打开项目配置"
+        title="打开系统配置"
         @click="onPanel"
       >
         <IconifyIconOffline :icon="Setting" />
@@ -99,7 +99,7 @@ nextTick(() => {
 }
 
 .logout {
-  max-width: 120px;
+  width: 120px;
 
   ::v-deep(.el-dropdown-menu__item) {
     display: inline-flex;

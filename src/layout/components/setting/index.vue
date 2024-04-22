@@ -145,18 +145,20 @@ function setFalse(Doms): any {
 }
 
 /** 页宽 */
-const stretchTypeOptions: Array<OptionsType> = [
-  {
-    label: "固定",
-    tip: "紧凑页面，轻松找到所需信息",
-    value: "fixed"
-  },
-  {
-    label: "自定义",
-    tip: "最小1280、最大1600",
-    value: "custom"
-  }
-];
+const stretchTypeOptions = computed<Array<OptionsType>>(() => {
+  return [
+    {
+      label: "固定",
+      tip: "紧凑页面，轻松找到所需信息",
+      value: "fixed"
+    },
+    {
+      label: "自定义",
+      tip: "最小1280、最大1600",
+      value: "custom"
+    }
+  ];
+});
 
 const setStretch = value => {
   settings.stretch = value;
@@ -217,18 +219,20 @@ const themeOptions = computed<Array<OptionsType>>(() => {
   ];
 });
 
-const markOptions: Array<OptionsType> = [
-  {
-    label: "灵动",
-    tip: "灵动标签，添趣生辉",
-    value: "smart"
-  },
-  {
-    label: "卡片",
-    tip: "卡片标签，高效浏览",
-    value: "card"
-  }
-];
+const markOptions = computed<Array<OptionsType>>(() => {
+  return [
+    {
+      label: "灵动",
+      tip: "灵动标签，添趣生辉",
+      value: "smart"
+    },
+    {
+      label: "卡片",
+      tip: "卡片标签，高效浏览",
+      value: "card"
+    }
+  ];
+});
 
 /** 设置导航模式 */
 function setLayoutModel(layout: string) {
@@ -291,7 +295,7 @@ function watchSystemThemeChange() {
 }
 
 onBeforeMount(() => {
-  /* 初始化项目配置 */
+  /* 初始化系统配置 */
   nextTick(() => {
     watchSystemThemeChange();
     settings.greyVal &&
@@ -311,6 +315,7 @@ onUnmounted(() => removeMatchMedia);
     <div class="p-5">
       <p :class="pClass">整体风格</p>
       <Segmented
+        resize
         class="select-none"
         :modelValue="overallStyle === 'system' ? 2 : dataTheme ? 1 : 0"
         :options="themeOptions"
@@ -390,6 +395,7 @@ onUnmounted(() => removeMatchMedia);
       <span v-if="useAppStoreHook().getViewportWidth > 1280">
         <p :class="['mt-5', pClass]">页宽</p>
         <Segmented
+          resize
           class="mb-2 select-none"
           :modelValue="isNumber(settings.stretch) ? 1 : 0"
           :options="stretchTypeOptions"
@@ -432,6 +438,7 @@ onUnmounted(() => removeMatchMedia);
 
       <p :class="['mt-4', pClass]">页签风格</p>
       <Segmented
+        resize
         class="select-none"
         :modelValue="markValue === 'smart' ? 0 : 1"
         :options="markOptions"

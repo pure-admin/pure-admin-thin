@@ -6,7 +6,7 @@ import fontIcon from "./src/iconfont";
 const IconifyIconOffline = iconifyIconOffline;
 /** 在线图标组件 */
 const IconifyIconOnline = iconifyIconOnline;
-/** iconfont组件 */
+/** `iconfont`组件 */
 const FontIcon = fontIcon;
 
 export { IconifyIconOffline, IconifyIconOnline, FontIcon };
