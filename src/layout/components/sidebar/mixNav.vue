@@ -153,7 +153,7 @@ watch(
       </el-dropdown>
       <span
         class="set-icon navbar-bg-hover"
-        :title="t('buttons.pureSystemSet')"
+        :title="t('buttons.pureOpenSystemSet')"
         @click="onPanel"
       >
         <IconifyIconOffline :icon="Setting" />
@@ -184,7 +184,7 @@ watch(
 }
 
 .logout {
-  max-width: 120px;
+  width: 120px;
 
   ::v-deep(.el-dropdown-menu__item) {
     display: inline-flex;
