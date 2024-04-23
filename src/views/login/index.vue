@@ -38,23 +38,26 @@ const ruleForm = reactive({
 });
 
 const onLogin = async (formEl: FormInstance | undefined) => {
-  loading.value = true;
   if (!formEl) return;
   await formEl.validate((valid, fields) => {
     if (valid) {
+      loading.value = true;
       useUserStoreHook()
         .loginByUsername({ username: ruleForm.username, password: "admin123" })
         .then(res => {
           if (res.success) {
             // 获取后端路由
-            initRouter().then(() => {
-              router.push(getTopMenu(true).path);
-              message("登录成功", { type: "success" });
+            return initRouter().then(() => {
+              router.push(getTopMenu(true).path).then(() => {
+                message("登录成功", { type: "success" });
+              });
             });
+          } else {
+            message("登录失败", { type: "error" });
           }
-        });
+        })
+        .finally(() => (loading.value = false));
     } else {
-      loading.value = false;
       return fields;
     }
   });
