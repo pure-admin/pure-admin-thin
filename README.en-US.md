@@ -15,12 +15,12 @@ The simplified version is based on the shelf extracted from [vue-pure-admin](htt
 
 ## Nanny-level documents
 
-[Click me to view vue-pure-admin documentation](https://yiming_chang.gitee.io/pure-admin-doc)  
+[Click me to view vue-pure-admin documentation](https://pure-admin.github.io/pure-admin-doc)  
 [Click me to view @pureadmin/utils documentation](https://pure-admin-utils.netlify.app)
 
 ## Quality service, software outsourcing, sponsorship support
 
-[Click me to view details](https://yiming_chang.gitee.io/pure-admin-doc/pages/service/)
+[Click me to view details](https://pure-admin.github.io/pure-admin-doc/pages/service/)
 
 ## Preview
 
