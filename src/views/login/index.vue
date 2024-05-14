@@ -64,8 +64,6 @@ const onLogin = async (formEl: FormInstance | undefined) => {
           }
         })
         .finally(() => (loading.value = false));
-    } else {
-      return fields;
     }
   });
 };
