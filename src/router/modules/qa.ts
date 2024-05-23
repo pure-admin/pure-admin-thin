@@ -3,7 +3,7 @@ export default {
   redirect: "/qa/chat",
   component: () => import("@/views/qa/chat/index.vue"),
   meta: {
-    icon: "lollipop",
+    icon: "ri:table-line",
     title: "问答系统",
     // showLink: false,
     rank: 10
