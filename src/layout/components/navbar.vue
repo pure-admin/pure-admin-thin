@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import Search from "./search/index.vue";
-import Notice from "./notice/index.vue";
+// import Notice from "./notice/index.vue";
 import mixNav from "./sidebar/mixNav.vue";
 import { useNav } from "@/layout/hooks/useNav";
 import Breadcrumb from "./sidebar/breadCrumb.vue";
@@ -43,7 +43,7 @@ const {
       <!-- 菜单搜索 -->
       <Search />
       <!-- 通知 -->
-      <Notice id="header-notice" />
+      <!-- <Notice id="header-notice" /> -->
       <!-- 退出登录 -->
       <el-dropdown trigger="click">
         <span class="el-dropdown-link navbar-bg-hover select-none">
