@@ -44,6 +44,7 @@ export type Triple = {
   subject: string;
   relation: string;
   object: string;
+  is_empty: boolean;
 };
 
 export type GetTriplesResult = {

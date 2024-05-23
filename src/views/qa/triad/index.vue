@@ -55,18 +55,20 @@
       </el-table-column>
       <el-table-column label="操作">
         <template #default="scope">
-          <el-button
-            @click="openUpdateDialog(scope.row)"
-            type="primary"
-            size="small"
-            >修改</el-button
-          >
-          <el-button
-            @click="confirmDelete(scope.row)"
-            type="danger"
-            size="small"
-            >删除</el-button
-          >
+          <template v-if="!scope.row.is_empty">
+            <el-button
+              @click="openUpdateDialog(scope.row)"
+              type="primary"
+              size="small"
+              >修改</el-button
+            >
+            <el-button
+              @click="confirmDelete(scope.row)"
+              type="danger"
+              size="small"
+              >删除</el-button
+            >
+          </template>
         </template>
       </el-table-column>
     </el-table>
@@ -78,6 +80,16 @@
         layout="prev, pager, next"
         :total="total"
       />
+      <div class="jump-to-page">
+        <el-input
+          v-model="goToPage"
+          placeholder="跳转到页"
+          type="number"
+          style="width: 100px; margin-left: 10px"
+          @keyup.enter="goToPageNumber"
+        />
+        <el-button @click="goToPageNumber">跳转</el-button>
+      </div>
     </div>
     <!-- 删除确认对话框 -->
     <el-dialog
@@ -159,6 +171,7 @@ export default {
     const limit = ref(10);
     const keyword = ref("");
     const total = ref(0);
+    const goToPage = ref(null);
 
     const deleteDialogVisible = ref(false);
     const updateDialogVisible = ref(false);
@@ -186,6 +199,7 @@ export default {
         const response = await getTraids(page.value, limit.value);
         triples.value = response.data;
         total.value = response.total;
+        goToPage.value = null;
       } catch (error) {
         console.error("Failed to fetch triples:", error);
         ElMessage.error("获取三元组失败");
@@ -210,6 +224,20 @@ export default {
     const handlePageChange = newPage => {
       page.value = newPage;
       fetchTriples();
+    };
+
+    const goToPageNumber = () => {
+      const pageNumber = parseInt(goToPage.value, 10);
+      if (
+        pageNumber &&
+        pageNumber > 0 &&
+        pageNumber <= Math.ceil(total.value / limit.value)
+      ) {
+        page.value = pageNumber;
+        fetchTriples();
+      } else {
+        ElMessage.error("页码超出范围");
+      }
     };
 
     const confirmDelete = row => {
@@ -300,6 +328,7 @@ export default {
       limit,
       keyword,
       total,
+      goToPage,
       deleteDialogVisible,
       updateDialogVisible,
       addDialogVisible,
@@ -310,6 +339,7 @@ export default {
       fetchTriples,
       searchTriples,
       handlePageChange,
+      goToPageNumber,
       confirmDelete,
       deleteTraidConfirm,
       openUpdateDialog,
@@ -341,9 +371,6 @@ export default {
 }
 
 .search-container {
-  /* display: flex; */
-
-  /* align-items: center; */
   float: right;
   margin-bottom: 20px;
 }
@@ -354,8 +381,16 @@ export default {
 }
 
 .pagination {
-  float: right;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
   margin-top: 20px;
+}
+
+.jump-to-page {
+  display: flex;
+  align-items: center;
+  margin-left: 10px;
 }
 
 .ellipsis {
