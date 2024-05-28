@@ -29,9 +29,8 @@ const rules = ref({
   newPassword: [
     { required: true, message: "新密码不能为空", trigger: "blur" },
     {
-      min: 6,
-      max: 20,
-      message: "长度在 6 到 20 个字符",
+      pattern:  /^(?![0-9]+$)(?![a-z]+$)(?![A-Z]+$)(?!([^(0-9a-zA-Z)]|[()])+$)(?!^.*[\u4E00-\u9FA5].*$)([^(0-9a-zA-Z)]|[()]|[a-z]|[A-Z]|[0-9]){8,18}$/,
+      message: "新密码格式应为8-18位数字、字母、符号的任意两种组合",
       trigger: "blur"
     }
   ],
