@@ -144,7 +144,7 @@ function resolvePath(routePath) {
             item?.pathList?.length === 2)
         "
         truncated
-        class="!w-full !px-4 !text-inherit"
+        class="!w-full !pl-4 !text-inherit"
       >
         {{ onlyOneChild.meta.title }}
       </el-text>
@@ -198,7 +198,7 @@ function resolvePath(routePath) {
         :class="{
           '!w-full': true,
           '!text-inherit': true,
-          '!px-4':
+          '!pl-4':
             layout !== 'horizontal' &&
             isCollapse &&
             !toRaw(item.meta.icon) &&
