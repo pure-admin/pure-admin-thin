@@ -54,6 +54,7 @@
 Node.js 版本要求：16.0+
 pnpm 版本要求：6.0+
 
+优先选择 node=16, pnpm=7.30.5的环境.
 
 如果您还没安装 pnpm，请执行下面命令进行安装（mac 用户遇到安装报错请在命令前加上 sudo） 如果是 windows 用户，使用 power shell 管理员权限执行
 
