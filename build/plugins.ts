@@ -4,6 +4,7 @@ import { viteBuildInfo } from "./info";
 import svgLoader from "vite-svg-loader";
 import type { PluginOption } from "vite";
 import vueJsx from "@vitejs/plugin-vue-jsx";
+import Inspector from "vite-plugin-vue-inspector";
 import { configCompressPlugin } from "./compress";
 import removeNoMatch from "vite-plugin-router-warn";
 import { visualizer } from "rollup-plugin-visualizer";
@@ -21,6 +22,8 @@ export function getPluginsList(
     vue(),
     // jsx、tsx语法支持
     vueJsx(),
+    // 按下Command(⌘)+Shift(⇧)，然后点击页面元素会自动打开本地IDE并跳转到对应的代码位置
+    Inspector(),
     viteBuildInfo(),
     /**
      * 开发环境下移除非必要的vue-router动态路由警告No match found for location with path

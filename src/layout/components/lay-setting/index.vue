@@ -230,6 +230,11 @@ const markOptions = computed<Array<OptionsType>>(() => {
       label: "卡片",
       tip: "卡片标签，高效浏览",
       value: "card"
+    },
+    {
+      label: "谷歌",
+      tip: "谷歌风格，经典美观",
+      value: "chrome"
     }
   ];
 });
@@ -440,7 +445,7 @@ onUnmounted(() => removeMatchMedia);
       <Segmented
         resize
         class="select-none"
-        :modelValue="markValue === 'smart' ? 0 : 1"
+        :modelValue="markValue === 'smart' ? 0 : markValue === 'card' ? 1 : 2"
         :options="markOptions"
         @change="onChange"
       />

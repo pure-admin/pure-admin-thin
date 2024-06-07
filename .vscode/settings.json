@@ -27,5 +27,16 @@
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "explicit"
   },
-  "iconify.excludes": ["el"]
+  "iconify.excludes": [
+    "el"
+  ],
+  "vscodeCustomCodeColor.highlightValue": [
+    "v-loading",
+    "v-auth",
+    "v-copy",
+    "v-longpress",
+    "v-optimize",
+    "v-ripple"
+  ],
+  "vscodeCustomCodeColor.highlightValueColor": "#b392f0",
 }
