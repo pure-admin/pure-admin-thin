@@ -8,6 +8,14 @@
 
 The simplified version is based on the shelf extracted from [vue-pure-admin](https://github.com/pure-admin/vue-pure-admin), which contains main functions and is more suitable for actual project development. The packaged size is introduced globally [element-plus](https://element-plus.org) is still below `2.3MB`, and the full version of the code will be permanently synchronized. After enabling `brotli` compression and `cdn` to replace the local library mode, the package size is less than `350kb`
 
+## `js` version
+
+[Click me to view js version](https://pure-admin.github.io/pure-admin-doc/pages/js/)
+
+## `max` version
+
+[Click me to view the max version](https://github.com/pure-admin/vue-pure-admin-max)
+
 ## Supporting video
 
 [Click me to view UI design](https://www.bilibili.com/video/BV17g411T7rq)  

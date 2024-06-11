@@ -12,6 +12,14 @@
 
 当前是非国际化版本，如果您需要国际化版本 [请点击](https://github.com/pure-admin/pure-admin-thin/tree/i18n)
 
+## `js` 版本
+
+[点我查看 js 版本](https://pure-admin.github.io/pure-admin-doc/pages/js/)
+
+## `max` 版本
+
+[点我查看 max 版本](https://github.com/pure-admin/vue-pure-admin-max)
+
 ## 配套视频
 
 [点我查看 UI 设计](https://www.bilibili.com/video/BV17g411T7rq)  
