@@ -124,6 +124,12 @@ export function useTags() {
     }
   }
 
+  const isFixedTag = computed(() => {
+    return item => {
+      return isBoolean(item?.meta?.fixedTag) && item?.meta?.fixedTag === true;
+    };
+  });
+
   const iconIsActive = computed(() => {
     return (item, index) => {
       if (index === 0) return;
@@ -220,6 +226,7 @@ export function useTags() {
     buttonTop,
     buttonLeft,
     translateX,
+    isFixedTag,
     pureSetting,
     activeIndex,
     getTabStyle,

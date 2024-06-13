@@ -36,6 +36,7 @@ const {
   buttonLeft,
   showModel,
   translateX,
+  isFixedTag,
   pureSetting,
   activeIndex,
   getTabStyle,
@@ -576,7 +577,7 @@ onBeforeUnmount(() => {
             'scroll-item is-closable',
             linkIsActive(item),
             showModel === 'chrome' && 'chrome-item',
-            !isAllEmpty(item?.meta?.fixedTag) && 'fixed-tag'
+            isFixedTag(item) && 'fixed-tag'
           ]"
           @contextmenu.prevent="openMenu(item, $event)"
           @mouseenter.prevent="onMouseenter(index)"
@@ -591,10 +592,10 @@ onBeforeUnmount(() => {
             </span>
             <span
               v-if="
-                isAllEmpty(item?.meta?.fixedTag)
-                  ? iconIsActive(item, index) ||
+                isFixedTag(item)
+                  ? false
+                  : iconIsActive(item, index) ||
                     (index === activeIndex && index !== 0)
-                  : false
               "
               class="el-icon-close"
               @click.stop="deleteMenu(item)"
@@ -615,7 +616,7 @@ onBeforeUnmount(() => {
               {{ item.meta.title }}
             </span>
             <span
-              v-if="isAllEmpty(item?.meta?.fixedTag) ? index !== 0 : false"
+              v-if="isFixedTag(item) ? false : index !== 0"
               class="chrome-close-btn"
               @click.stop="deleteMenu(item)"
             >
