@@ -63,7 +63,7 @@ const onLogin = async (formEl: FormInstance | undefined) => {
 
 /** 使用公共函数，避免`removeEventListener`失效 */
 function onkeypress({ code }: KeyboardEvent) {
-  if (code === "Enter") {
+  if (["Enter", "NumpadEnter"].includes(code)) {
     onLogin(ruleFormRef.value);
   }
 }
