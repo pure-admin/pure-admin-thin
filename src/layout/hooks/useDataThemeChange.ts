@@ -18,21 +18,21 @@ import {
 export function useDataThemeChange() {
   const { layoutTheme, layout } = useLayout();
   const themeColors = ref<Array<themeColorsType>>([
-    /* 亮白色 */
+    /* Màu sáng trắng */
     { color: "#ffffff", themeColor: "light" },
-    /* 道奇蓝 */
+    /* Xanh Đậm */
     { color: "#1b2a47", themeColor: "default" },
-    /* 深紫罗兰色 */
+    /* Tím Đậm */
     { color: "#722ed1", themeColor: "saucePurple" },
-    /* 深粉色 */
+    /* Hồng Đậm */
     { color: "#eb2f96", themeColor: "pink" },
-    /* 猩红色 */
+    /* Đỏ Lửa */
     { color: "#f5222d", themeColor: "dusk" },
-    /* 橙红色 */
+    /* Cam Đỏ */
     { color: "#fa541c", themeColor: "volcano" },
-    /* 绿宝石 */
+    /* Ngọc Lục Bảo */
     { color: "#13c2c2", themeColor: "mingQing" },
-    /* 酸橙绿 */
+    /* Xanh Lục Giác */
     { color: "#52c41a", themeColor: "auroraGreen" }
   ]);
 
@@ -48,7 +48,7 @@ export function useDataThemeChange() {
     targetEl.className = flag ? `${className} ${clsName}` : className;
   }
 
-  /** 设置导航主题色 */
+  /** Set màu chủ đề điều hướng */
   function setLayoutThemeColor(
     theme = getConfig().Theme ?? "light",
     isClick = true
@@ -57,7 +57,7 @@ export function useDataThemeChange() {
     toggleTheme({
       scopeName: `layout-theme-${theme}`
     });
-    // 如果非isClick，保留之前的themeColor
+    // Nếu không phải là isClick, giữ lại themeColor trước đó
     const storageThemeColor = $storage.layout.themeColor;
     $storage.layout = {
       layout: layout.value,
@@ -84,7 +84,7 @@ export function useDataThemeChange() {
     );
   }
 
-  /** 设置 `element-plus` 主题色 */
+  /** Set màu chủ đề `element-plus` */
   const setEpThemeColor = (color: string) => {
     useEpThemeStoreHook().setEpThemeColor(color);
     document.documentElement.style.setProperty("--el-color-primary", color);
@@ -96,7 +96,7 @@ export function useDataThemeChange() {
     }
   };
 
-  /** 浅色、深色整体风格切换 */
+  /** Chuyển đổi kiểu chủ đề sáng, tối */
   function dataThemeChange(overall?: string) {
     overallStyle.value = overall;
     if (useEpThemeStoreHook().epTheme === "light" && dataTheme.value) {
@@ -115,7 +115,7 @@ export function useDataThemeChange() {
     }
   }
 
-  /** 清空缓存并返回登录页 */
+  /** Xóa bộ nhớ cache và quay lại trang đăng nhập */
   function onReset() {
     removeToken();
     storageLocal().clear();

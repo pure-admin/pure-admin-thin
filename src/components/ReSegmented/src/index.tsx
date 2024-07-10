@@ -23,27 +23,27 @@ const props = {
     type: Array<OptionsType>,
     default: () => []
   },
-  /** 默认选中，按照第一个索引为 `0` 的模式，可选（`modelValue`只有传`number`类型时才为响应式） */
+  /** Mặc định được chọn, theo mô hình chỉ số đầu tiên là `0`, có thể chọn (Khi `modelValue` chỉ có kiểu `number` thì mới có sự phản hồi) */
   modelValue: {
     type: undefined,
     require: false,
     default: "0"
   },
-  /** 将宽度调整为父元素宽度	 */
+  /** Thay đổi chiều rộng để phù hợp với chiều rộng của phần tử cha */
   block: {
     type: Boolean,
     default: false
   },
-  /** 控件尺寸 */
+  /** Kích thước của điều khiển */
   size: {
     type: String as PropType<"small" | "default" | "large">
   },
-  /** 是否全局禁用，默认 `false` */
+  /** Vô hiệu hóa toàn cầu, mặc định `false` */
   disabled: {
     type: Boolean,
     default: false
   },
-  /** 当内容发生变化时，设置 `resize` 可使其自适应容器位置 */
+  /** Khi nội dung thay đổi, thiết lập `resize` để tự điều chỉnh vị trí của nó trong bộ chứa */
   resize: {
     type: Boolean,
     default: false

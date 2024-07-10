@@ -2,60 +2,62 @@ import Cookies from "js-cookie";
 import { storageLocal } from "@pureadmin/utils";
 import { useUserStoreHook } from "@/store/modules/user";
 
+// Định nghĩa interface cho thông tin dữ liệu người dùng
 export interface DataInfo<T> {
-  /** token */
+  /** Token truy cập */
   accessToken: string;
-  /** `accessToken`的过期时间（时间戳） */
+  /** Thời gian hết hạn của accessToken (dưới dạng timestamp) */
   expires: T;
-  /** 用于调用刷新accessToken的接口时所需的token */
+  /** Token dùng để làm mới accessToken */
   refreshToken: string;
-  /** 头像 */
+  /** Ảnh đại diện */
   avatar?: string;
-  /** 用户名 */
+  /** Tên đăng nhập */
   username?: string;
-  /** 昵称 */
+  /** Biệt danh */
   nickname?: string;
-  /** 当前登录用户的角色 */
+  /** Các vai trò của người dùng hiện tại */
   roles?: Array<string>;
 }
 
-export const userKey = "user-info";
-export const TokenKey = "authorized-token";
-/**
- * 通过`multiple-tabs`是否在`cookie`中，判断用户是否已经登录系统，
- * 从而支持多标签页打开已经登录的系统后无需再登录。
- * 浏览器完全关闭后`multiple-tabs`将自动从`cookie`中销毁，
- * 再次打开浏览器需要重新登录系统
- * */
-export const multipleTabsKey = "multiple-tabs";
+// Khai báo các hằng số
+export const userKey = "user-info"; // Key cho localStorage lưu thông tin người dùng
+export const TokenKey = "authorized-token"; // Key cho cookie lưu token truy cập
+export const multipleTabsKey = "multiple-tabs"; // Key cho cookie kiểm tra nhiều tab mở
 
-/** 获取`token` */
+/**
+ * Hàm lấy thông tin token từ cookie hoặc localStorage
+ * Nếu không tìm thấy token trong cookie, thử lấy từ localStorage
+ */
 export function getToken(): DataInfo<number> {
-  // 此处与`TokenKey`相同，此写法解决初始化时`Cookies`中不存在`TokenKey`报错
   return Cookies.get(TokenKey)
     ? JSON.parse(Cookies.get(TokenKey))
     : storageLocal().getItem(userKey);
 }
 
 /**
- * @description 设置`token`以及一些必要信息并采用无感刷新`token`方案
- * 无感刷新：后端返回`accessToken`（访问接口使用的`token`）、`refreshToken`（用于调用刷新`accessToken`的接口时所需的`token`，`refreshToken`的过期时间（比如30天）应大于`accessToken`的过期时间（比如2小时））、`expires`（`accessToken`的过期时间）
- * 将`accessToken`、`expires`、`refreshToken`这三条信息放在key值为authorized-token的cookie里（过期自动销毁）
- * 将`avatar`、`username`、`nickname`、`roles`、`refreshToken`、`expires`这六条信息放在key值为`user-info`的localStorage里（利用`multipleTabsKey`当浏览器完全关闭后自动销毁）
+ * Hàm thiết lập thông tin token và thông tin người dùng
+ * Sử dụng phương thức làm mới token mà không cần đăng nhập lại
+ * Lưu accessToken, expires và refreshToken vào cookie với key là TokenKey
+ * Lưu avatar, username, nickname, roles, refreshToken và expires vào localStorage với key là userKey
  */
 export function setToken(data: DataInfo<Date>) {
   let expires = 0;
   const { accessToken, refreshToken } = data;
   const { isRemembered, loginDay } = useUserStoreHook();
-  expires = new Date(data.expires).getTime(); // 如果后端直接设置时间戳，将此处代码改为expires = data.expires，然后把上面的DataInfo<Date>改成DataInfo<number>即可
+
+  // Xử lý giá trị của expires
+  expires = new Date(data.expires).getTime();
   const cookieString = JSON.stringify({ accessToken, expires, refreshToken });
 
+  // Thiết lập cookie TokenKey với các thông tin vừa xử lý
   expires > 0
     ? Cookies.set(TokenKey, cookieString, {
         expires: (expires - Date.now()) / 86400000
       })
     : Cookies.set(TokenKey, cookieString);
 
+  // Thiết lập cookie multipleTabsKey để kiểm tra nhiều tab
   Cookies.set(
     multipleTabsKey,
     "true",
@@ -66,6 +68,7 @@ export function setToken(data: DataInfo<Date>) {
       : {}
   );
 
+  // Hàm để thiết lập thông tin người dùng vào localStorage và store Vuex
   function setUserKey({ avatar, username, nickname, roles }) {
     useUserStoreHook().SET_AVATAR(avatar);
     useUserStoreHook().SET_USERNAME(username);
@@ -81,6 +84,7 @@ export function setToken(data: DataInfo<Date>) {
     });
   }
 
+  // Kiểm tra và thiết lập thông tin người dùng
   if (data.username && data.roles) {
     const { username, roles } = data;
     setUserKey({
@@ -107,14 +111,18 @@ export function setToken(data: DataInfo<Date>) {
   }
 }
 
-/** 删除`token`以及key值为`user-info`的localStorage信息 */
+/**
+ * Hàm xóa thông tin token và thông tin người dùng từ cookie và localStorage
+ */
 export function removeToken() {
-  Cookies.remove(TokenKey);
-  Cookies.remove(multipleTabsKey);
-  storageLocal().removeItem(userKey);
+  Cookies.remove(TokenKey); // Xóa cookie TokenKey
+  Cookies.remove(multipleTabsKey); // Xóa cookie multipleTabsKey
+  storageLocal().removeItem(userKey); // Xóa localStorage userKey
 }
 
-/** 格式化token（jwt格式） */
+/**
+ * Hàm định dạng token JWT
+ */
 export const formatToken = (token: string): string => {
   return "Bearer " + token;
 };

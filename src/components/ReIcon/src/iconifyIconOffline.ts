@@ -1,7 +1,7 @@
 import { h, defineComponent } from "vue";
 import { Icon as IconifyIcon, addIcon } from "@iconify/vue/dist/offline";
 
-// Iconify Icon在Vue里本地使用（用于内网环境）
+// Biểu tượng Iconify được sử dụng cục bộ trong Vue (dành cho môi trường mạng nội bộ)
 export default defineComponent({
   name: "IconifyIconOffline",
   components: { IconifyIcon },

@@ -3,16 +3,16 @@ import { h, defineComponent, type Component } from "vue";
 import { IconifyIconOnline, IconifyIconOffline, FontIcon } from "../index";
 
 /**
- * 支持 `iconfont`、自定义 `svg` 以及 `iconify` 中所有的图标
- * @see 点击查看文档图标篇 {@link https://pure-admin.github.io/pure-admin-doc/pages/icon/}
- * @param icon 必传 图标
- * @param attrs 可选 iconType 属性
+ * Hỗ trợ `iconfont`, `svg` tùy chỉnh và tất cả các biểu tượng trong `iconify`
+ * @see Nhấp để xem hướng dẫn biểu tượng trong tài liệu {@link https://pure-admin.github.io/pure-admin-doc/pages/icon/}
+ * @param icon Bắt buộc Biểu tượng
+ * @param attrs Tùy chọn Các thuộc tính loại iconType
  * @returns Component
  */
 export function useRenderIcon(icon: any, attrs?: iconType): Component {
   // iconfont
   const ifReg = /^IF-/;
-  // typeof icon === "function" 属于SVG
+  // typeof icon === "function" belongs to SVG
   if (ifReg.test(icon)) {
     // iconfont
     const name = icon.split(ifReg)[1];
@@ -45,7 +45,7 @@ export function useRenderIcon(icon: any, attrs?: iconType): Component {
       }
     });
   } else {
-    // 通过是否存在 : 符号来判断是在线还是本地图标，存在即是在线图标，反之
+    // Kiểm tra dấu : để xác định biểu tượng trực tuyến hoặc cục bộ, có tồn tại thì là biểu tượng trực tuyến, ngược lại là cục bộ
     return defineComponent({
       name: "Icon",
       render() {

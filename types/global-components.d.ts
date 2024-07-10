@@ -1,6 +1,6 @@
 declare module "vue" {
   /**
-   * 自定义全局组件获得 Volar 提示（自定义的全局组件需要在这里声明下才能获得 Volar 类型提示哦）
+   * Đăng ký các thành phần toàn cầu tùy chỉnh để nhận được gợi ý từ Volar
    */
   export interface GlobalComponents {
     IconifyIconOffline: (typeof import("../src/components/ReIcon"))["IconifyIconOffline"];
@@ -12,7 +12,7 @@ declare module "vue" {
 
 /**
  * TODO https://github.com/element-plus/element-plus/blob/dev/global.d.ts#L2
- * No need to install @vue/runtime-core
+ * Không cần cài đặt @vue/runtime-core
  */
 declare module "vue" {
   export interface GlobalComponents {

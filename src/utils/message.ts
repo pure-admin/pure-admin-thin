@@ -6,34 +6,34 @@ type messageStyle = "el" | "antd";
 type messageTypes = "info" | "success" | "warning" | "error";
 
 interface MessageParams {
-  /** 消息类型，可选 `info` 、`success` 、`warning` 、`error` ，默认 `info` */
+  /** Loại thông báo, có thể là `info`, `success`, `warning`, `error`. Mặc định là `info` */
   type?: messageTypes;
-  /** 自定义图标，该属性会覆盖 `type` 的图标 */
+  /** Biểu tượng tùy chỉnh, thuộc tính này sẽ ghi đè biểu tượng của `type` */
   icon?: any;
-  /** 是否将 `message` 属性作为 `HTML` 片段处理，默认 `false` */
+  /** Có sử dụng `message` như là một đoạn mã HTML hay không, mặc định là `false` */
   dangerouslyUseHTMLString?: boolean;
-  /** 消息风格，可选 `el` 、`antd` ，默认 `antd` */
+  /** Kiểu giao diện của thông báo, có thể là `el` hoặc `antd`, mặc định là `antd` */
   customClass?: messageStyle;
-  /** 显示时间，单位为毫秒。设为 `0` 则不会自动关闭，`element-plus` 默认是 `3000` ，平台改成默认 `2000` */
+  /** Thời gian hiển thị, tính bằng mili giây. Đặt là `0` thì không tự động đóng, `element-plus` mặc định là `3000`, nền tảng đã đổi thành mặc định `2000` */
   duration?: number;
-  /** 是否显示关闭按钮，默认值 `false` */
+  /** Hiển thị nút đóng, mặc định là `false` */
   showClose?: boolean;
-  /** 文字是否居中，默认值 `false` */
+  /** Văn bản có căn giữa hay không, mặc định là `false` */
   center?: boolean;
-  /** `Message` 距离窗口顶部的偏移量，默认 `20` */
+  /** Độ lệch của `Message` so với đỉnh cửa sổ, mặc định là `20` */
   offset?: number;
-  /** 设置组件的根元素，默认 `document.body` */
+  /** Thiết lập phần tử gốc của thành phần, mặc định là `document.body` */
   appendTo?: string | HTMLElement;
-  /** 合并内容相同的消息，不支持 `VNode` 类型的消息，默认值 `false` */
+  /** Gộp các thông báo cùng nội dung giống nhau, không hỗ trợ loại `VNode`, mặc định là `false` */
   grouping?: boolean;
-  /** 关闭时的回调函数, 参数为被关闭的 `message` 实例 */
+  /** Callback khi đóng thông báo, tham số là instance `message` đã đóng */
   onClose?: Function | null;
 }
 
-/** 用法非常简单，参考 src/views/components/message/index.vue 文件 */
+/** Sử dụng rất đơn giản, xem tệp src/views/components/message/index.vue để biết thêm chi tiết */
 
 /**
- * `Message` 消息提示函数
+ * Hàm thông báo `Message`
  */
 const message = (
   message: string | VNode | (() => VNode),
@@ -70,7 +70,7 @@ const message = (
       offset,
       appendTo,
       grouping,
-      // 全局搜 pure-message 即可知道该类的样式位置
+      // Tìm kiếm toàn cầu pure-message để biết vị trí lớp này
       customClass: customClass === "antd" ? "pure-message" : "",
       onClose: () => (isFunction(onClose) ? onClose() : null)
     });
@@ -78,7 +78,7 @@ const message = (
 };
 
 /**
- * 关闭所有 `Message` 消息提示函数
+ * Đóng tất cả các thông báo `Message`
  */
 const closeAllMessage = (): void => ElMessage.closeAll();
 

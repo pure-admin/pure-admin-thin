@@ -13,7 +13,7 @@ export interface iconType {
   align?: string;
   onLoad?: Function;
   includes?: Function;
-  // svg 需要什么SVG属性自行添加
+  // svg Những thuộc tính SVG nào là cần thiết để bạn thêm vào?
   fill?: string;
   // all icon
   style?: object;

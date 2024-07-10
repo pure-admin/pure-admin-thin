@@ -1,7 +1,7 @@
 /**
- * @description 提取菜单树中的每一项uniqueId
- * @param tree 树
- * @returns 每一项uniqueId组成的数组
+ * @description Trích xuất mỗi mục uniqueId từ cây menu
+ * @param tree Cây menu
+ * @returns Mảng chứa mỗi mục uniqueId
  */
 export const extractPathList = (tree: any[]): any => {
   if (!Array.isArray(tree)) {
@@ -21,10 +21,10 @@ export const extractPathList = (tree: any[]): any => {
 };
 
 /**
- * @description 如果父级下children的length为1，删除children并自动组建唯一uniqueId
- * @param tree 树
- * @param pathList 每一项的id组成的数组
- * @returns 组件唯一uniqueId后的树
+ * @description Nếu số lượng children của parent là 1, xóa children và tự động xây dựng uniqueId duy nhất
+ * @param tree Cây menu
+ * @param pathList Mảng chứa mỗi mục id
+ * @returns Cây với uniqueId duy nhất đã được xây dựng
  */
 export const deleteChildren = (tree: any[], pathList = []): any => {
   if (!Array.isArray(tree)) {
@@ -48,10 +48,10 @@ export const deleteChildren = (tree: any[], pathList = []): any => {
 };
 
 /**
- * @description 创建层级关系
- * @param tree 树
- * @param pathList 每一项的id组成的数组
- * @returns 创建层级关系后的树
+ * @description Xây dựng cấu trúc cây
+ * @param tree Cây menu
+ * @param pathList Mảng chứa mỗi mục id
+ * @returns Cây sau khi đã xây dựng cấu trúc cây
  */
 export const buildHierarchyTree = (tree: any[], pathList = []): any => {
   if (!Array.isArray(tree)) {
@@ -72,10 +72,10 @@ export const buildHierarchyTree = (tree: any[], pathList = []): any => {
 };
 
 /**
- * @description 广度优先遍历，根据唯一uniqueId找当前节点信息
- * @param tree 树
- * @param uniqueId 唯一uniqueId
- * @returns 当前节点信息
+ * @description Duyệt cây theo chiều rộng, tìm thông tin của node hiện tại dựa trên uniqueId
+ * @param tree Cây menu
+ * @param uniqueId uniqueId
+ * @returns Thông tin của node hiện tại
  */
 export const getNodeByUniqueId = (
   tree: any[],
@@ -96,11 +96,11 @@ export const getNodeByUniqueId = (
 };
 
 /**
- * @description 向当前唯一uniqueId节点中追加字段
- * @param tree 树
- * @param uniqueId 唯一uniqueId
- * @param fields 需要追加的字段
- * @returns 追加字段后的树
+ * @description Thêm trường vào node hiện tại dựa trên uniqueId
+ * @param tree Cây menu
+ * @param uniqueId uniqueId
+ * @param fields Các trường cần thêm
+ * @returns Cây sau khi đã thêm trường
  */
 export const appendFieldByUniqueId = (
   tree: any[],
@@ -127,12 +127,12 @@ export const appendFieldByUniqueId = (
 };
 
 /**
- * @description 构造树型结构数据
- * @param data 数据源
- * @param id id字段 默认id
- * @param parentId 父节点字段，默认parentId
- * @param children 子节点字段，默认children
- * @returns 追加字段后的树
+ * @description Xây dựng cấu trúc dữ liệu cây
+ * @param data Dữ liệu nguồn
+ * @param id Trường id, mặc định là "id"
+ * @param parentId Trường parentId, mặc định là "parentId"
+ * @param children Trường children, mặc định là "children"
+ * @returns Cây sau khi đã xây dựng cấu trúc dữ liệu
  */
 export const handleTree = (
   data: any[],

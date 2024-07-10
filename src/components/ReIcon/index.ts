@@ -2,11 +2,11 @@ import iconifyIconOffline from "./src/iconifyIconOffline";
 import iconifyIconOnline from "./src/iconifyIconOnline";
 import fontIcon from "./src/iconfont";
 
-/** 本地图标组件 */
+/** icon offline*/
 const IconifyIconOffline = iconifyIconOffline;
-/** 在线图标组件 */
+/** icon online */
 const IconifyIconOnline = iconifyIconOnline;
-/** `iconfont`组件 */
+/** `iconfont` */
 const FontIcon = fontIcon;
 
 export { IconifyIconOffline, IconifyIconOnline, FontIcon };

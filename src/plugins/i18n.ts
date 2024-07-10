@@ -1,15 +1,15 @@
-// 多组件库的国际化和本地项目国际化兼容
+// Internationalization compatibility for multiple component libraries and local projects
 import { type I18n, createI18n } from "vue-i18n";
 import type { App, WritableComputedRef } from "vue";
 import { responsiveStorageNameSpace } from "@/config";
 import { storageLocal, isObject } from "@pureadmin/utils";
 
-// element-plus国际化
+// Element Plus internationalization
 import enLocale from "element-plus/es/locale/lang/en";
-import zhLocale from "element-plus/es/locale/lang/zh-cn";
+import zhLocale from "element-plus/es/locale/lang/vi";
 
 const siphonI18n = (function () {
-  // 仅初始化一次国际化配置
+  // Initialize internationalization configuration only once
   let cache = Object.fromEntries(
     Object.entries(
       import.meta.glob("../../locales/*.y(a)?ml", { eager: true })
@@ -18,14 +18,14 @@ const siphonI18n = (function () {
       return [matched, value.default];
     })
   );
-  return (prefix = "zh-CN") => {
+  return (prefix = "vi") => {
     return cache[prefix];
   };
 })();
 
 export const localesConfigs = {
-  zh: {
-    ...siphonI18n("zh-CN"),
+  vi: {
+    ...siphonI18n("vi"),
     ...zhLocale
   },
   en: {
@@ -34,7 +34,7 @@ export const localesConfigs = {
   }
 };
 
-/** 获取对象中所有嵌套对象的key键，并将它们用点号分割组成字符串 */
+/** Get keys of all nested objects in an object and concatenate them with dots */
 function getObjectKeys(obj) {
   const stack = [];
   const keys: Set<string> = new Set();
@@ -58,9 +58,9 @@ function getObjectKeys(obj) {
   return keys;
 }
 
-/** 将展开的key缓存 */
+/** Cache expanded keys */
 const keysCache: Map<string, Set<string>> = new Map();
-const flatI18n = (prefix = "zh-CN") => {
+const flatI18n = (prefix = "vi") => {
   let cache = keysCache.get(prefix);
   if (!cache) {
     cache = getObjectKeys(siphonI18n(prefix));
@@ -70,16 +70,16 @@ const flatI18n = (prefix = "zh-CN") => {
 };
 
 /**
- * 国际化转换工具函数（自动读取根目录locales文件夹下文件进行国际化匹配）
- * @param message message
- * @returns 转化后的message
+ * Internationalization transformation utility function
+ * @param message message to transform
+ * @returns transformed message
  */
 export function transformI18n(message: any = "") {
   if (!message) {
     return "";
   }
 
-  // 处理存储动态路由的title,格式 {zh:"",en:""}
+  // Handle dynamic route titles stored in format {zh:"",en:""}
   if (typeof message === "object") {
     const locale: string | WritableComputedRef<string> | any =
       i18n.global.locale;
@@ -88,17 +88,17 @@ export function transformI18n(message: any = "") {
 
   const key = message.match(/(\S*)\./)?.input;
 
-  if (key && flatI18n("zh-CN").has(key)) {
+  if (key && flatI18n("vi").has(key)) {
     return i18n.global.t.call(i18n.global.locale, message);
-  } else if (!key && Object.hasOwn(siphonI18n("zh-CN"), message)) {
-    // 兼容非嵌套形式的国际化写法
+  } else if (!key && Object.hasOwn(siphonI18n("vi"), message)) {
+    // Compatible with non-nested internationalization format
     return i18n.global.t.call(i18n.global.locale, message);
   } else {
     return message;
   }
 }
 
-/** 此函数只是配合i18n Ally插件来进行国际化智能提示，并无实际意义（只对提示起作用），如果不需要国际化可删除 */
+/** This function is only for internationalization intelligent prompts with i18n Ally plugin (only affects prompts), can be removed if internationalization is not needed */
 export const $t = (key: string) => key;
 
 export const i18n: I18n = createI18n({
@@ -106,7 +106,7 @@ export const i18n: I18n = createI18n({
   locale:
     storageLocal().getItem<StorageConfigs>(
       `${responsiveStorageNameSpace()}locale`
-    )?.locale ?? "zh",
+    )?.locale ?? "vi",
   fallbackLocale: "en",
   messages: localesConfigs
 });

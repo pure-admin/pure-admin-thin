@@ -1,7 +1,7 @@
 import reSegmented from "./src/index";
 import { withInstall } from "@pureadmin/utils";
 
-/** 分段控制器组件 */
+/** Thành phần điều khiển phân đoạn */
 export const ReSegmented = withInstall(reSegmented);
 
 export default ReSegmented;

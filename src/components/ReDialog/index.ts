@@ -12,7 +12,7 @@ import type {
 
 const dialogStore = ref<Array<DialogOptions>>([]);
 
-/** 打开弹框 */
+/** Mở hộp thoại */
 const addDialog = (options: DialogOptions) => {
   const open = () =>
     dialogStore.value.push(Object.assign(options, { visible: true }));
@@ -25,7 +25,7 @@ const addDialog = (options: DialogOptions) => {
   }
 };
 
-/** 关闭弹框 */
+/** Đóng hộp thoại */
 const closeDialog = (options: DialogOptions, index: number, args?: any) => {
   dialogStore.value[index].visible = false;
   options.closeCallBack && options.closeCallBack({ options, index, args });
@@ -37,21 +37,21 @@ const closeDialog = (options: DialogOptions, index: number, args?: any) => {
 };
 
 /**
- * @description 更改弹框自身属性值
- * @param value 属性值
- * @param key 属性，默认`title`
- * @param index 弹框索引（默认`0`，代表只有一个弹框，对于嵌套弹框要改哪个弹框的属性值就把该弹框索引赋给`index`）
+ * @description Thay đổi giá trị thuộc tính của hộp thoại
+ * @param value Giá trị thuộc tính
+ * @param key Thuộc tính (mặc định là `title`)
+ * @param index Chỉ số của hộp thoại (mặc định là `0`, đại diện cho hộp thoại duy nhất; để thay đổi thuộc tính của hộp thoại lồng nhau, gán chỉ số của hộp thoại đó cho `index`)
  */
 const updateDialog = (value: any, key = "title", index = 0) => {
   dialogStore.value[index][key] = value;
 };
 
-/** 关闭所有弹框 */
+/** Đóng tất cả hộp thoại */
 const closeAllDialog = () => {
   dialogStore.value = [];
 };
 
-/** 千万别忘了在下面这三处引入并注册下，放心注册，不使用`addDialog`调用就不会被挂载
+/** Chắc chắn phải nhập và đăng ký ở ba dưới đây, yên tâm đăng ký, không sử dụng `addDialog` thì sẽ không bị gắn kết
  * https://github.com/pure-admin/vue-pure-admin/blob/main/src/App.vue#L4
  * https://github.com/pure-admin/vue-pure-admin/blob/main/src/App.vue#L12
  * https://github.com/pure-admin/vue-pure-admin/blob/main/src/App.vue#L22

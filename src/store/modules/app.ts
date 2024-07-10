@@ -19,13 +19,13 @@ export const useAppStore = defineStore({
       withoutAnimation: false,
       isClickCollapse: false
     },
-    // 这里的layout用于监听容器拖拉后恢复对应的导航模式
+    // Layout này được sử dụng để lắng nghe khi container kéo thả và phục hồi chế độ điều hướng tương ứng
     layout:
       storageLocal().getItem<StorageConfigs>(
         `${responsiveStorageNameSpace()}layout`
       )?.layout ?? getConfig().Layout,
     device: deviceDetection() ? "mobile" : "desktop",
-    // 浏览器窗口的可视区域大小
+    // Kích thước vùng hiển thị của cửa sổ trình duyệt
     viewportSize: {
       width: document.documentElement.clientWidth,
       height: document.documentElement.clientHeight

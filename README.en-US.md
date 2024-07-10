@@ -2,7 +2,7 @@
 
 [![license](https://img.shields.io/github/license/pure-admin/vue-pure-admin.svg)](LICENSE)
 
-**English** | [中文](./README.md)
+**English** | [TIẾNG VIỆT](./README.md)
 
 ## Introduce
 

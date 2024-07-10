@@ -26,7 +26,9 @@ const IFrame = () => import("@/layout/frame.vue");
 // https://cn.vitejs.dev/guide/features.html#glob-import
 const modulesRoutes = import.meta.glob("/src/views/**/*.{vue,tsx}");
 
-// 动态路由
+// Định nghĩa các hàm xử lý định tuyến động
+
+// Lấy danh sách định tuyến từ backend
 import { getAsyncRoutes } from "@/api/routes";
 
 function handRank(routeInfo: any) {
@@ -39,10 +41,10 @@ function handRank(routeInfo: any) {
     : false;
 }
 
-/** 按照路由中meta下的rank等级升序来排序路由 */
+/** Sắp xếp định tuyến theo thứ tự tăng dần dựa trên meta.rank trong route */
 function ascending(arr: any[]) {
   arr.forEach((v, index) => {
-    // 当rank不存在时，根据顺序自动创建，首页路由永远在第一位
+    // Khi không có rank, tự động tạo theo thứ tự, đảm bảo trang chủ luôn là trang đầu tiên
     if (handRank(v)) v.meta.rank = index + 2;
   });
   return arr.sort(
@@ -52,7 +54,7 @@ function ascending(arr: any[]) {
   );
 }
 
-/** 过滤meta中showLink为false的菜单 */
+/** Lọc các menu có meta.showLink === false */
 function filterTree(data: RouteComponent[]) {
   const newTree = cloneDeep(data).filter(
     (v: { meta: { showLink: boolean } }) => v.meta?.showLink !== false
@@ -63,7 +65,7 @@ function filterTree(data: RouteComponent[]) {
   return newTree;
 }
 
-/** 过滤children长度为0的的目录，当目录下没有菜单时，会过滤此目录，目录没有赋予roles权限，当目录下只要有一个菜单有显示权限，那么此目录就会显示 */
+/** Lọc các menu con có độ dài === 0, các mục không có menu sẽ bị loại bỏ */
 function filterChildrenTree(data: RouteComponent[]) {
   const newTree = cloneDeep(data).filter((v: any) => v?.children?.length !== 0);
   newTree.forEach(
@@ -72,7 +74,7 @@ function filterChildrenTree(data: RouteComponent[]) {
   return newTree;
 }
 
-/** 判断两个数组彼此是否存在相同值 */
+/** Kiểm tra xem hai mảng có phần tử chung hay không */
 function isOneOfArray(a: Array<string>, b: Array<string>) {
   return Array.isArray(a) && Array.isArray(b)
     ? intersection(a, b).length > 0
@@ -81,7 +83,7 @@ function isOneOfArray(a: Array<string>, b: Array<string>) {
     : true;
 }
 
-/** 从localStorage里取出当前登录用户的角色roles，过滤无权限的菜单 */
+/** Lấy danh sách các vai trò roles của người dùng từ localStorage và lọc các menu không có quyền */
 function filterNoPermissionTree(data: RouteComponent[]) {
   const currentRoles =
     storageLocal().getItem<DataInfo<number>>(userKey)?.roles ?? [];
@@ -94,31 +96,31 @@ function filterNoPermissionTree(data: RouteComponent[]) {
   return filterChildrenTree(newTree);
 }
 
-/** 通过指定 `key` 获取父级路径集合，默认 `key` 为 `path` */
+/** Lấy danh sách đường dẫn cha dựa trên `key` đã chỉ định, mặc định `key` là `path` */
 function getParentPaths(value: string, routes: RouteRecordRaw[], key = "path") {
-  // 深度遍历查找
+  // Duyệt sâu tìm kiếm
   function dfs(routes: RouteRecordRaw[], value: string, parents: string[]) {
     for (let i = 0; i < routes.length; i++) {
       const item = routes[i];
-      // 返回父级path
+      // Trả về danh sách path cha
       if (item[key] === value) return parents;
-      // children不存在或为空则不递归
+      // Nếu không có children hoặc children rỗng thì không đệ quy
       if (!item.children || !item.children.length) continue;
-      // 往下查找时将当前path入栈
+      // Khi tìm thấy path thì đưa path hiện tại vào stack
       parents.push(item.path);
 
       if (dfs(item.children, value, parents).length) return parents;
-      // 深度遍历查找未找到时当前path 出栈
+      // Khi tìm kiếm sâu không tìm thấy, bỏ path hiện tại ra khỏi stack
       parents.pop();
     }
-    // 未找到时返回空数组
+    // Khi không tìm thấy thì trả về mảng rỗng
     return [];
   }
 
   return dfs(routes, value, []);
 }
 
-/** 查找对应 `path` 的路由信息 */
+/** Tìm thông tin định tuyến theo `path` đã chỉ định */
 function findRouteByPath(path: string, routes: RouteRecordRaw[]) {
   let res = routes.find((item: { path: string }) => item.path == path);
   if (res) {
@@ -149,14 +151,14 @@ function addPathMatch() {
   }
 }
 
-/** 处理动态路由（后端返回的路由） */
+/** Xử lý định tuyến động (các route từ backend) */
 function handleAsyncRoutes(routeList) {
   if (routeList.length === 0) {
     usePermissionStoreHook().handleWholeMenus(routeList);
   } else {
     formatFlatteningRoutes(addAsyncRoutes(routeList)).map(
       (v: RouteRecordRaw) => {
-        // 防止重复添加路由
+        // Tránh thêm định tuyến trùng lặp
         if (
           router.options.routes[0].children.findIndex(
             value => value.path === v.path
@@ -164,9 +166,9 @@ function handleAsyncRoutes(routeList) {
         ) {
           return;
         } else {
-          // 切记将路由push到routes后还需要使用addRoute，这样路由才能正常跳转
+          // Lưu ý sau khi thêm định tuyến vào routes cần sử dụng addRoute để định tuyến mới có thể hoạt động bình thường
           router.options.routes[0].children.push(v);
-          // 最终路由进行升序
+          // Sắp xếp các định tuyến cuối cùng
           ascending(router.options.routes[0].children);
           if (!router.hasRoute(v?.name)) router.addRoute(v);
           const flattenRouters: any = router
@@ -189,10 +191,10 @@ function handleAsyncRoutes(routeList) {
   addPathMatch();
 }
 
-/** 初始化路由（`new Promise` 写法防止在异步请求中造成无限循环）*/
+/** Khởi tạo định tuyến (`new Promise` để tránh vòng lặp vô hạn trong yêu cầu không đồng bộ) */
 function initRouter() {
   if (getConfig()?.CachingAsyncRoutes) {
-    // 开启动态路由缓存本地localStorage
+    // Bật cache định tuyến động vào localStorage
     const key = "async-routes";
     const asyncRouteList = storageLocal().getItem(key) as any;
     if (asyncRouteList && asyncRouteList?.length > 0) {
@@ -220,9 +222,9 @@ function initRouter() {
 }
 
 /**
- * 将多级嵌套路由处理成一维数组
- * @param routesList 传入路由
- * @returns 返回处理后的一维路由
+ * Chuyển đổi mảng định tuyến nhiều cấp thành mảng một cấp
+ * @param routesList Mảng định tuyến đầu vào
+ * @returns Trả về mảng định tuyến đã được xử lý
  */
 function formatFlatteningRoutes(routesList: RouteRecordRaw[]) {
   if (routesList.length === 0) return routesList;
@@ -238,10 +240,10 @@ function formatFlatteningRoutes(routesList: RouteRecordRaw[]) {
 }
 
 /**
- * 一维数组处理成多级嵌套数组（三级及以上的路由全部拍成二级，keep-alive 只支持到二级缓存）
+ * Xử lý mảng định tuyến một cấp thành mảng nhiều cấp (Tất cả định tuyến từ cấp 3 trở lên đều được chuyển thành cấp 2, keep-alive chỉ hỗ trợ đến cấp 2)
  * https://github.com/pure-admin/vue-pure-admin/issues/67
- * @param routesList 处理后的一维路由菜单数组
- * @returns 返回将一维数组重新处理成规定路由的格式
+ * @param routesList Mảng định tuyến menu đã được xử lý
+ * @returns Trả về mảng định tuyến được chuyển đổi lại thành định dạng quy định
  */
 function formatTwoStageRoutes(routesList: RouteRecordRaw[]) {
   if (routesList.length === 0) return routesList;
@@ -263,7 +265,7 @@ function formatTwoStageRoutes(routesList: RouteRecordRaw[]) {
   return newRoutesList;
 }
 
-/** 处理缓存路由（添加、删除、刷新） */
+/** Xử lý định tuyến cache (Thêm, xóa, làm mới) */
 function handleAliveRoute({ name }: ToRouteType, mode?: string) {
   switch (mode) {
     case "add":
@@ -298,23 +300,23 @@ function handleAliveRoute({ name }: ToRouteType, mode?: string) {
   }
 }
 
-/** 过滤后端传来的动态路由 重新生成规范路由 */
+/** Lọc các định tuyến động trả về từ backend, tạo lại định dạng chuẩn của định tuyến */
 function addAsyncRoutes(arrRoutes: Array<RouteRecordRaw>) {
   if (!arrRoutes || !arrRoutes.length) return;
   const modulesRoutesKeys = Object.keys(modulesRoutes);
   arrRoutes.forEach((v: RouteRecordRaw) => {
-    // 将backstage属性加入meta，标识此路由为后端返回路由
+    // Thêm thuộc tính meta, đánh dấu đây là định tuyến trả về từ backend
     v.meta.backstage = true;
-    // 父级的redirect属性取值：如果子级存在且父级的redirect属性不存在，默认取第一个子级的path；如果子级存在且父级的redirect属性存在，取存在的redirect属性，会覆盖默认值
+    // Nếu có children và parent không có redirect, mặc định lấy path của children đầu tiên; Nếu có children và parent có redirect, lấy redirect của parent, sẽ ghi đè giá trị mặc định
     if (v?.children && v.children.length && !v.redirect)
       v.redirect = v.children[0].path;
-    // 父级的name属性取值：如果子级存在且父级的name属性不存在，默认取第一个子级的name；如果子级存在且父级的name属性存在，取存在的name属性，会覆盖默认值（注意：测试中发现父级的name不能和子级name重复，如果重复会造成重定向无效（跳转404），所以这里给父级的name起名的时候后面会自动加上`Parent`，避免重复）
+    // Nếu có children và parent không có name, mặc định lấy name của children đầu tiên; Nếu có children và parent có name, lấy name của parent, sẽ ghi đè giá trị mặc định (Chú ý: Trong thử nghiệm, name của parent không được trùng với name của children, nếu trùng sẽ dẫn đến không có redirect (chuyển hướng 404), vì vậy ở đây sẽ tự động thêm `Parent` vào cuối name của parent để tránh trùng)
     if (v?.children && v.children.length && !v.name)
       v.name = (v.children[0].name as string) + "Parent";
     if (v.meta?.frameSrc) {
       v.component = IFrame;
     } else {
-      // 对后端传component组件路径和不传做兼容（如果后端传component组件路径，那么path可以随便写，如果不传，component组件路径会跟path保持一致）
+      // Thích nghi với component và đường dẫn component không trả về từ backend (nếu backend trả về đường dẫn component, thì path có thể viết bất kỳ, nếu không trả về, đường dẫn component sẽ giống path)
       const index = v?.component
         ? modulesRoutesKeys.findIndex(ev => ev.includes(v.component as any))
         : modulesRoutesKeys.findIndex(ev => ev.includes(v.path));
@@ -327,20 +329,20 @@ function addAsyncRoutes(arrRoutes: Array<RouteRecordRaw>) {
   return arrRoutes;
 }
 
-/** 获取路由历史模式 https://next.router.vuejs.org/zh/guide/essentials/history-mode.html */
+/** Lấy chế độ lịch sử định tuyến https://next.router.vuejs.org/zh/guide/essentials/history-mode.html */
 function getHistoryMode(routerHistory): RouterHistory {
-  // len为1 代表只有历史模式 为2 代表历史模式中存在base参数 https://next.router.vuejs.org/zh/api/#%E5%8F%82%E6%95%B0-1
+  // Nếu len = 1 chỉ có lịch sử, len = 2 có tham số base trong lịch sử https://next.router.vuejs.org/zh/api/#%E5%8F%82%E6%95%B0-1
   const historyMode = routerHistory.split(",");
   const leftMode = historyMode[0];
   const rightMode = historyMode[1];
-  // no param
+  // Không có tham số
   if (historyMode.length === 1) {
     if (leftMode === "hash") {
       return createWebHashHistory("");
     } else if (leftMode === "h5") {
       return createWebHistory("");
     }
-  } //has param
+  } // Có tham số
   else if (historyMode.length === 2) {
     if (leftMode === "hash") {
       return createWebHashHistory(rightMode);
@@ -350,15 +352,15 @@ function getHistoryMode(routerHistory): RouterHistory {
   }
 }
 
-/** 获取当前页面按钮级别的权限 */
+/** Lấy quyền của nút ở trang hiện tại */
 function getAuths(): Array<string> {
   return router.currentRoute.value.meta.auths as Array<string>;
 }
 
-/** 是否有按钮级别的权限 */
+/** Kiểm tra quyền của nút */
 function hasAuth(value: string | Array<string>): boolean {
   if (!value) return false;
-  /** 从当前路由的`meta`字段里获取按钮级别的所有自定义`code`值 */
+  /** Lấy tất cả các giá trị `code` tuỳ chỉnh từ trường `meta` của route hiện tại */
   const metaAuths = getAuths();
   if (!metaAuths) return false;
   const isAuths = isString(value)
@@ -379,7 +381,7 @@ function handleTopMenu(route) {
   }
 }
 
-/** 获取所有菜单中的第一个菜单（顶级菜单）*/
+/** Lấy menu đầu tiên (menu cấp đỉnh) từ tất cả các menu */
 function getTopMenu(tag = false): menuType {
   const topMenu = handleTopMenu(
     usePermissionStoreHook().wholeMenus[0]?.children[0]

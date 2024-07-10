@@ -1,25 +1,25 @@
 import { useEventListener } from "@vueuse/core";
 
-/** 是否为`img`标签 */
+/** Kiểm tra xem có phải là thẻ `img` */
 function isImgElement(element) {
   return typeof HTMLImageElement !== "undefined"
     ? element instanceof HTMLImageElement
     : element.tagName.toLowerCase() === "img";
 }
 
-// 在 src/main.ts 引入并调用即可 import { addPreventDefault } from "@/utils/preventDefault"; addPreventDefault();
+// Import và gọi từ src/main.ts import { addPreventDefault } from "@/utils/preventDefault"; addPreventDefault();
 export const addPreventDefault = () => {
-  // 阻止通过键盘F12快捷键打开浏览器开发者工具面板
+  // Ngăn chặn mở bảng công cụ phát triển của trình duyệt bằng phím tắt F12
   useEventListener(
     window.document,
     "keydown",
     ev => ev.key === "F12" && ev.preventDefault()
   );
-  // 阻止浏览器默认的右键菜单弹出（不会影响自定义右键事件）
+  // Ngăn chặn menu chuột phải mặc định của trình duyệt (không ảnh hưởng đến sự kiện chuột phải tùy chỉnh)
   useEventListener(window.document, "contextmenu", ev => ev.preventDefault());
-  // 阻止页面元素选中
+  // Ngăn chặn các phần tử trang được chọn
   useEventListener(window.document, "selectstart", ev => ev.preventDefault());
-  // 浏览器中图片通常默认是可拖动的，并且可以在新标签页或窗口中打开，或者将其拖动到其他应用程序中，此处将其禁用，使其默认不可拖动
+  // Trình duyệt thường cho phép kéo và thả hình ảnh mặc định và có thể mở trong tab hoặc cửa sổ mới, hoặc kéo nó vào ứng dụng khác. Ở đây, chúng tôi vô hiệu hóa nó để mặc định hình ảnh không thể kéo và thả
   useEventListener(
     window.document,
     "dragstart",

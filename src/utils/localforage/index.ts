@@ -6,17 +6,17 @@ class StorageProxy implements ProxyStorage {
   constructor(storageModel) {
     this.storage = storageModel;
     this.storage.config({
-      // 首选IndexedDB作为第一驱动，不支持IndexedDB会自动降级到localStorage（WebSQL被弃用，详情看https://developer.chrome.com/blog/deprecating-web-sql）
+      // Ưu tiên sử dụng IndexedDB làm driver chính, nếu không hỗ trợ IndexedDB sẽ tự động hạ cấp xuống localStorage (WebSQL đã bị loại bỏ, xem chi tiết tại https://developer.chrome.com/blog/deprecating-web-sql)
       driver: [this.storage.INDEXEDDB, this.storage.LOCALSTORAGE],
       name: "pure-admin"
     });
   }
 
   /**
-   * @description 将对应键名的数据保存到离线仓库
-   * @param k 键名
-   * @param v 键值
-   * @param m 缓存时间（单位`分`，默认`0`分钟，永久缓存）
+   * @description Lưu dữ liệu với tên khóa tương ứng vào kho lưu trữ ngoại tuyến
+   * @param k Tên khóa
+   * @param v Giá trị
+   * @param m Thời gian lưu trữ (đơn vị phút, mặc định là 0 phút, lưu trữ vĩnh viễn)
    */
   public async setItem<T>(k: string, v: T, m = 0): Promise<T> {
     return new Promise((resolve, reject) => {
@@ -35,8 +35,8 @@ class StorageProxy implements ProxyStorage {
   }
 
   /**
-   * @description 从离线仓库中获取对应键名的值
-   * @param k 键名
+   * @description Lấy giá trị tương ứng với tên khóa từ kho lưu trữ ngoại tuyến
+   * @param k Tên khóa
    */
   public async getItem<T>(k: string): Promise<T> {
     return new Promise((resolve, reject) => {
@@ -54,8 +54,8 @@ class StorageProxy implements ProxyStorage {
   }
 
   /**
-   * @description 从离线仓库中删除对应键名的值
-   * @param k 键名
+   * @description Xóa giá trị tương ứng với tên khóa từ kho lưu trữ ngoại tuyến
+   * @param k Tên khóa
    */
   public async removeItem(k: string) {
     return new Promise<void>((resolve, reject) => {
@@ -71,7 +71,7 @@ class StorageProxy implements ProxyStorage {
   }
 
   /**
-   * @description 从离线仓库中删除所有的键名，重置数据库
+   * @description Xóa tất cả các tên khóa từ kho lưu trữ ngoại tuyến, đặt lại cơ sở dữ liệu
    */
   public async clear() {
     return new Promise<void>((resolve, reject) => {
@@ -87,7 +87,7 @@ class StorageProxy implements ProxyStorage {
   }
 
   /**
-   * @description 获取数据仓库中所有的key
+   * @description Lấy tất cả các khóa từ kho dữ liệu
    */
   public async keys() {
     return new Promise<string[]>((resolve, reject) => {
@@ -104,6 +104,6 @@ class StorageProxy implements ProxyStorage {
 }
 
 /**
- * 二次封装 [localforage](https://localforage.docschina.org/) 支持设置过期时间，提供完整的类型提示
+ * Bao bọc lại [localforage](https://localforage.docschina.org/) hỗ trợ thiết lập thời gian hết hạn, cung cấp gợi ý kiểu dữ liệu đầy đủ
  */
 export const localForage = () => new StorageProxy(forage);

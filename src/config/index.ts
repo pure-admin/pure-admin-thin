@@ -26,7 +26,7 @@ const getConfig = (key?: string): PlatformConfigs => {
   return config;
 };
 
-/** 获取项目动态全局配置 */
+/** Lấy cấu hình toàn cầu động của dự án */
 export const getPlatformConfig = async (app: App): Promise<undefined> => {
   app.config.globalProperties.$config = getConfig();
   return axios({
@@ -35,21 +35,21 @@ export const getPlatformConfig = async (app: App): Promise<undefined> => {
   })
     .then(({ data: config }) => {
       let $config = app.config.globalProperties.$config;
-      // 自动注入系统配置
+      // Tự động chèn cấu hình hệ thống
       if (app && $config && typeof config === "object") {
         $config = Object.assign($config, config);
         app.config.globalProperties.$config = $config;
-        // 设置全局配置
+        // Đặt cấu hình toàn cầu
         setConfig($config);
       }
       return $config;
     })
     .catch(() => {
-      throw "请在public文件夹下添加platform-config.json配置文件";
+      throw "Vui lòng thêm tệp cấu hình platform-config.json trong thư mục public";
     });
 };
 
-/** 本地响应式存储的命名空间 */
+/** Không gian lưu trữ đáp ứng cục bộ */
 const responsiveStorageNameSpace = () => getConfig().ResponsiveStorageNameSpace;
 
 export { getConfig, setConfig, responsiveStorageNameSpace };

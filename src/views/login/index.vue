@@ -53,7 +53,7 @@ const onLogin = async (formEl: FormInstance | undefined) => {
         .loginByUsername({ username: ruleForm.username, password: "admin123" })
         .then(res => {
           if (res.success) {
-            // 获取后端路由
+            // Fetch backend routes
             return initRouter().then(() => {
               router.push(getTopMenu(true).path).then(() => {
                 message(t("login.pureLoginSuccess"), { type: "success" });
@@ -68,7 +68,7 @@ const onLogin = async (formEl: FormInstance | undefined) => {
   });
 };
 
-/** 使用公共函数，避免`removeEventListener`失效 */
+/** Use common function to prevent `removeEventListener` failure */
 function onkeypress({ code }: KeyboardEvent) {
   if (["Enter", "NumpadEnter"].includes(code)) {
     onLogin(ruleFormRef.value);
@@ -88,7 +88,7 @@ onBeforeUnmount(() => {
   <div class="select-none">
     <img :src="bg" class="wave" />
     <div class="flex-c absolute right-5 top-3">
-      <!-- 主题 -->
+      <!-- Theme -->
       <el-switch
         v-model="dataTheme"
         inline-prompt
@@ -96,7 +96,7 @@ onBeforeUnmount(() => {
         :inactive-icon="darkIcon"
         @change="dataThemeChange"
       />
-      <!-- 国际化 -->
+      <!-- Globalization -->
       <el-dropdown trigger="click">
         <globalization
           class="hover:text-primary hover:!bg-[transparent] w-[20px] h-[20px] ml-1.5 cursor-pointer outline-none duration-300"
@@ -104,16 +104,16 @@ onBeforeUnmount(() => {
         <template #dropdown>
           <el-dropdown-menu class="translation">
             <el-dropdown-item
-              :style="getDropdownItemStyle(locale, 'zh')"
-              :class="['dark:!text-white', getDropdownItemClass(locale, 'zh')]"
+              :style="getDropdownItemStyle(locale, 'vi')"
+              :class="['dark:!text-white', getDropdownItemClass(locale, 'vi')]"
               @click="translationCh"
             >
               <IconifyIconOffline
-                v-show="locale === 'zh'"
-                class="check-zh"
+                v-show="locale === 'vi'"
+                class="check-vi"
                 :icon="Check"
               />
-              简体中文
+              Tiếng Việt
             </el-dropdown-item>
             <el-dropdown-item
               :style="getDropdownItemStyle(locale, 'en')"
@@ -210,7 +210,7 @@ onBeforeUnmount(() => {
     padding: 5px 40px;
   }
 
-  .check-zh {
+  .check-vi {
     position: absolute;
     left: 20px;
   }

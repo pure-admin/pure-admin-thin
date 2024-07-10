@@ -7,23 +7,23 @@ export interface CopyEl extends HTMLElement {
   copyValue: string;
 }
 
-/** 文本复制指令（默认双击复制） */
+/** Chỉ thị sao chép văn bản (mặc định là sao chép khi double click) */
 export const copy: Directive = {
   mounted(el: CopyEl, binding: DirectiveBinding<string>) {
     const { value } = binding;
     if (value) {
       el.copyValue = value;
       const arg = binding.arg ?? "dblclick";
-      // Register using addEventListener on mounted, and removeEventListener automatically on unmounted
+      // Đăng ký sử dụng addEventListener khi mounted và tự động gỡ bỏ addEventListener khi unmounted
       useEventListener(el, arg, () => {
         const success = copyTextToClipboard(el.copyValue);
         success
-          ? message("复制成功", { type: "success" })
-          : message("复制失败", { type: "error" });
+          ? message("Sao chép thành công", { type: "success" })
+          : message("Sao chép thất bại", { type: "error" });
       });
     } else {
       throw new Error(
-        '[Directive: copy]: need value! Like v-copy="modelValue"'
+        '[Directive: copy]: cần giá trị! Ví dụ: v-copy="modelValue"'
       );
     }
   },

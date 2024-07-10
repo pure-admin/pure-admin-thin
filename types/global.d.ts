@@ -2,11 +2,12 @@ import type { ECharts } from "echarts";
 import type { TableColumns } from "@pureadmin/table";
 
 /**
- * 全局类型声明，无需引入直接在 `.vue` 、`.ts` 、`.tsx` 文件使用即可获得类型提示
+ * Khai báo toàn cầu, không cần nhập trực tiếp để sử dụng gợi ý kiểu trong các tệp `.vue`, `.ts`, `.tsx`
  */
 declare global {
   /**
-   * 平台的名称、版本、运行所需的`node`和`pnpm`版本、依赖、最后构建时间的类型提示
+   * Thông tin ứng dụng như tên, phiên bản, yêu cầu phiên bản `node` và `pnpm`, các phụ thuộc,
+   * các phụ thuộc phát triển và thời gian xây dựng cuối cùng của nó.
    */
   const __APP_INFO__: {
     pkg: {
@@ -23,10 +24,10 @@ declare global {
   };
 
   /**
-   * Window 的类型提示
+   * Kiểu gợi ý cho đối tượng Window
    */
   interface Window {
-    // Global vue app instance
+    // Thể hiện ứng dụng Vue toàn cục
     __APP__: App<Element>;
     webkitCancelAnimationFrame: (handle: number) => void;
     mozCancelAnimationFrame: (handle: number) => void;
@@ -39,7 +40,7 @@ declare global {
   }
 
   /**
-   * Document 的类型提示
+   * Kiểu gợi ý cho đối tượng Document
    */
   interface Document {
     webkitFullscreenElement?: Element;
@@ -48,7 +49,7 @@ declare global {
   }
 
   /**
-   * 打包压缩格式的类型声明
+   * Kiểu gợi ý cho các lựa chọn nén và đóng gói
    */
   type ViteCompression =
     | "none"
@@ -60,8 +61,7 @@ declare global {
     | "both-clear";
 
   /**
-   * 全局自定义环境变量的类型声明
-   * @see {@link https://pure-admin.github.io/pure-admin-doc/pages/config/#%E5%85%B7%E4%BD%93%E9%85%8D%E7%BD%AE}
+   * Kiểu gợi ý cho các biến môi trường tùy chỉnh toàn cầu
    */
   interface ViteEnv {
     VITE_PORT: number;
@@ -73,13 +73,12 @@ declare global {
   }
 
   /**
-   *  继承 `@pureadmin/table` 的 `TableColumns` ，方便全局直接调用
+   * Mảng kiểu gợi ý cho các cột trong bảng, mở rộng từ `@pureadmin/table`
    */
   interface TableColumnList extends Array<TableColumns> {}
 
   /**
-   * 对应 `public/platform-config.json` 文件的类型声明
-   * @see {@link https://pure-admin.github.io/pure-admin-doc/pages/config/#platform-config-json}
+   * Kiểu dữ liệu tương ứng với tệp `public/platform-config.json`
    */
   interface PlatformConfigs {
     Version?: string;
@@ -111,8 +110,7 @@ declare global {
   }
 
   /**
-   * 与 `PlatformConfigs` 类型不同，这里是缓存到浏览器本地存储的类型声明
-   * @see {@link https://pure-admin.github.io/pure-admin-doc/pages/config/#platform-config-json}
+   * Kiểu dữ liệu lưu trữ trong bộ nhớ cục bộ, khác biệt so với `PlatformConfigs`
    */
   interface StorageConfigs {
     version?: string;
@@ -140,7 +138,7 @@ declare global {
   }
 
   /**
-   * `responsive-storage` 本地响应式 `storage` 的类型声明
+   * Đối tượng lưu trữ phản ứng cục bộ dựa trên `responsive-storage`
    */
   interface ResponsiveStorage {
     locale: {
@@ -169,7 +167,7 @@ declare global {
   }
 
   /**
-   * 平台里所有组件实例都能访问到的全局属性对象的类型声明
+   * Thuộc tính toàn cầu cho tất cả các thể hiện thành phần trong ứng dụng
    */
   interface GlobalPropertiesApi {
     $echarts: ECharts;
@@ -178,10 +176,9 @@ declare global {
   }
 
   /**
-   * 扩展 `Element`
+   * Mở rộng đối tượng Element để hỗ trợ v-ripple từ `src/directives/ripple/index.ts`
    */
   interface Element {
-    // v-ripple 作用于 src/directives/ripple/index.ts 文件
     _ripple?: {
       enabled?: boolean;
       centered?: boolean;

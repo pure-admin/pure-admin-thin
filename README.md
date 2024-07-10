@@ -1,51 +1,51 @@
-<h1>vue-pure-admin精简版（国际化版本）</h1>
+<h1>vue-pure-admin phiên bản tinh gọn (phiên bản quốc tế hóa)</h1>
 
 [![license](https://img.shields.io/github/license/pure-admin/vue-pure-admin.svg)](LICENSE)
 
 **中文** | [English](./README.en-US.md)
 
-## 介绍
+## Giới thiệu
 
-精简版是基于 [vue-pure-admin](https://github.com/pure-admin/vue-pure-admin) 提炼出的架子，包含主体功能，更适合实际项目开发，打包后的大小在全局引入 [element-plus](https://element-plus.org) 的情况下仍然低于 `2.3MB`，并且会永久同步完整版的代码。开启 `brotli` 压缩和 `cdn` 替换本地库模式后，打包大小低于 `350kb`
+Phiên bản tinh gọn được trích xuất từ [vue-pure-admin](https://github.com/pure-admin/vue-pure-admin), chứa các chức năng chính, phù hợp hơn cho việc phát triển dự án thực tế. Kích thước gói sau khi đóng gói, khi nhập toàn cục [element-plus](https://element-plus.org) vẫn dưới `2.3MB` và sẽ luôn đồng bộ mã với phiên bản đầy đủ. Khi bật nén `brotli` và thay thế thư viện địa phương bằng `cdn`, kích thước gói đóng gói sẽ dưới `350kb`.
 
-## 版本选择
+## Lựa chọn phiên bản
 
-当前是国际化版本，如果您需要非国际化版本 [请点击](https://github.com/pure-admin/pure-admin-thin)
+Hiện tại là phiên bản quốc tế hóa, nếu bạn cần phiên bản không quốc tế hóa [hãy nhấp vào đây](https://github.com/pure-admin/pure-admin-thin).
 
-## `js` 版本
+## Phiên bản `js`
 
-[点我查看 js 版本](https://pure-admin.github.io/pure-admin-doc/pages/js/)
+[Nhấp vào đây để xem phiên bản js](https://pure-admin.github.io/pure-admin-doc/pages/js/)
 
-## `max` 版本
+## Phiên bản `max`
 
-[点我查看 max 版本](https://github.com/pure-admin/vue-pure-admin-max)
+[Nhấp vào đây để xem phiên bản max](https://github.com/pure-admin/vue-pure-admin-max)
 
-## 配套视频
+## Video hướng dẫn kèm theo
 
-[点我查看 UI 设计](https://www.bilibili.com/video/BV17g411T7rq)  
-[点我查看快速开发教程](https://www.bilibili.com/video/BV1kg411v7QT)
+[Nhấp vào đây để xem thiết kế UI](https://www.bilibili.com/video/BV17g411T7rq)  
+[Nhấp vào đây để xem hướng dẫn phát triển nhanh](https://www.bilibili.com/video/BV1kg411v7QT)
 
-## 配套保姆级文档
+## Tài liệu hướng dẫn kèm theo
 
-[点我查看 vue-pure-admin 文档](https://pure-admin.github.io/pure-admin-doc)  
-[点我查看 @pureadmin/utils 文档](https://pure-admin-utils.netlify.app)
+[Nhấp vào đây để xem tài liệu vue-pure-admin](https://pure-admin.github.io/pure-admin-doc)  
+[Nhấp vào đây để xem tài liệu @pureadmin/utils](https://pure-admin-utils.netlify.app)
 
-## 优质服务、软件外包、赞助支持
+## Dịch vụ chất lượng, gia công phần mềm, hỗ trợ tài trợ
 
-[点我查看详情](https://pure-admin.github.io/pure-admin-doc/pages/service/)
+[Nhấp vào đây để xem chi tiết](https://pure-admin.github.io/pure-admin-doc/pages/service/)
 
-## 预览
+## Xem trước
 
-[查看预览](https://pure-admin-thin.netlify.app/#/login)
+[Xem trước](https://pure-admin-thin.netlify.app/#/login)
 
-## 维护者
+## Người bảo trì
 
 [xiaoxian521](https://github.com/xiaoxian521)
 
-## ⚠️ 注意
+## ⚠️ Chú ý
 
-精简版不接受任何 `issues` 和 `pr`，如果有问题请到完整版 [issues](https://github.com/pure-admin/vue-pure-admin/issues/new/choose) 去提，谢谢！
+Phiên bản tinh gọn không chấp nhận bất kỳ `issues` và `pr`, nếu có vấn đề xin vui lòng đến phiên bản đầy đủ [issues](https://github.com/pure-admin/vue-pure-admin/issues/new/choose) để đề xuất, cảm ơn!
 
-## 许可证
+## Giấy phép
 
 [MIT © 2020-present, pure-admin](./LICENSE)

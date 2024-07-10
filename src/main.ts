@@ -1,37 +1,35 @@
-import App from "./App.vue";
-import router from "./router";
-import { setupStore } from "@/store";
-import { useI18n } from "@/plugins/i18n";
-import { getPlatformConfig } from "./config";
-import { MotionPlugin } from "@vueuse/motion";
-// import { useEcharts } from "@/plugins/echarts";
-import { createApp, type Directive } from "vue";
-import { useElementPlus } from "@/plugins/elementPlus";
-import { injectResponsiveStorage } from "@/utils/responsive";
+import App from "./App.vue"; // Nhập component App.vue chính của ứng dụng
+import router from "./router"; // Nhập định tuyến của Vue Router
+import { setupStore } from "@/store"; // Sử dụng hàm setupStore từ module store
+import { useI18n } from "@/plugins/i18n"; // Sử dụng plugin i18n cho quản lý ngôn ngữ
+import { getPlatformConfig } from "./config"; // Lấy cấu hình nền tảng từ module config
+import { MotionPlugin } from "@vueuse/motion"; // Sử dụng plugin motion từ VueUse
+import { useEcharts } from "@/plugins/echarts"; // Sử dụng plugin Echarts
+import { createApp, type Directive } from "vue"; // Tạo ứng dụng Vue mới
+import { useVxeTable } from "@/plugins/vxeTable"; // Sử dụng plugin VxeTable
+import { useElementPlus } from "@/plugins/elementPlus"; // Sử dụng plugin Element Plus
+import { injectResponsiveStorage } from "@/utils/responsive"; // Sử dụng hàm injectResponsiveStorage từ util responsive
 
-import Table from "@pureadmin/table";
-// import PureDescriptions from "@pureadmin/descriptions";
+import Table from "@pureadmin/table"; // Nhập component Table từ thư viện @pureadmin/table
+import PureDescriptions from "@pureadmin/descriptions"; // Nhập component PureDescriptions từ thư viện @pureadmin/descriptions
 
-// 引入重置样式
+// Nhập các file style để reset, import index.scss và tailwind.css
 import "./style/reset.scss";
-// 导入公共样式
 import "./style/index.scss";
-// 一定要在main.ts中导入tailwind.css，防止vite每次hmr都会请求src/style/index.scss整体css文件导致热更新慢的问题
 import "./style/tailwind.css";
-import "element-plus/dist/index.css";
-// 导入字体图标
-import "./assets/iconfont/iconfont.js";
-import "./assets/iconfont/iconfont.css";
+import "element-plus/dist/index.css"; // Import CSS của Element Plus
+import "./assets/iconfont/iconfont.js"; // Nhập icon font
+import "./assets/iconfont/iconfont.css"; // Import CSS của icon font
 
-const app = createApp(App);
+const app = createApp(App); // Tạo một ứng dụng Vue mới với component App.vue
 
-// 自定义指令
+// Định nghĩa các custom directive
 import * as directives from "@/directives";
 Object.keys(directives).forEach(key => {
   app.directive(key, (directives as { [key: string]: Directive })[key]);
 });
 
-// 全局注册@iconify/vue图标库
+// Đăng ký toàn cục thư viện iconify/vue
 import {
   IconifyIconOffline,
   IconifyIconOnline,
@@ -41,23 +39,29 @@ app.component("IconifyIconOffline", IconifyIconOffline);
 app.component("IconifyIconOnline", IconifyIconOnline);
 app.component("FontIcon", FontIcon);
 
-// 全局注册按钮级别权限组件
+// Đăng ký toàn cục component cho quyền truy cập cấp nút
 import { Auth } from "@/components/ReAuth";
 app.component("Auth", Auth);
 
-// 全局注册vue-tippy
+// Đăng ký toàn cục Vue Tippy
 import "tippy.js/dist/tippy.css";
 import "tippy.js/themes/light.css";
 import VueTippy from "vue-tippy";
 app.use(VueTippy);
 
+// Lấy cấu hình nền tảng và khởi tạo ứng dụng
 getPlatformConfig(app).then(async config => {
-  setupStore(app);
-  app.use(router);
-  await router.isReady();
-  injectResponsiveStorage(app, config);
-  app.use(MotionPlugin).use(useI18n).use(useElementPlus).use(Table);
-  // .use(PureDescriptions)
-  // .use(useEcharts);
-  app.mount("#app");
+  setupStore(app); // Thiết lập store Vuex
+  app.use(router); // Sử dụng router Vue
+  await router.isReady(); // Chờ router sẵn sàng
+  injectResponsiveStorage(app, config); // Inject cấu hình đáp ứng vào ứng dụng
+  app
+    .use(MotionPlugin) // Sử dụng MotionPlugin từ VueUse
+    .use(useI18n) // Sử dụng plugin i18n
+    .use(useElementPlus) // Sử dụng plugin Element Plus
+    .use(Table) // Sử dụng component Table
+    .use(useVxeTable) // Sử dụng plugin VxeTable
+    .use(PureDescriptions) // Sử dụng component PureDescriptions
+    .use(useEcharts); // Sử dụng plugin Echarts
+  app.mount("#app"); // Gắn ứng dụng vào phần tử có id là "app"
 });

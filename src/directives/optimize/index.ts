@@ -9,19 +9,19 @@ import { useEventListener } from "@vueuse/core";
 import type { Directive, DirectiveBinding } from "vue";
 
 export interface OptimizeOptions {
-  /** 事件名 */
+  /** Tên sự kiện */
   event: string;
-  /** 事件触发的方法 */
+  /** Phương thức gọi sự kiện */
   fn: (...params: any) => any;
-  /** 是否立即执行 */
+  /** Có thực thi ngay lập tức hay không */
   immediate?: boolean;
-  /** 防抖或节流的延迟时间（防抖默认：`200`毫秒、节流默认：`1000`毫秒） */
+  /** Thời gian chậm hành động hoặc giảm tốc (giảm tốc mặc định: `200` mili giây, giảm tốc mặc định: `1000` mili giây) */
   timeout?: number;
-  /** 传递的参数 */
+  /** Tham số truyền vào */
   params?: any;
 }
 
-/** 防抖（v-optimize或v-optimize:debounce）、节流（v-optimize:throttle）指令 */
+/** Chỉ thị giảm tốc (v-optimize hoặc v-optimize:giảm tốc), giảm tốc (v-optimize:giảm tốc) */
 export const optimize: Directive = {
   mounted(el: HTMLElement, binding: DirectiveBinding<OptimizeOptions>) {
     const { value } = binding;
@@ -35,11 +35,11 @@ export const optimize: Directive = {
             params = isObject(params) ? Array.of(params) : params;
           } else {
             throw new Error(
-              "[Directive: optimize]: `params` must be an array or object"
+              "[Chỉ thị: optimize]: `params` phải là một mảng hoặc đối tượng"
             );
           }
         }
-        // Register using addEventListener on mounted, and removeEventListener automatically on unmounted
+        // Đăng ký sử dụng addEventListener khi mounted và tự động gỡ bỏ addEventListener khi unmounted
         useEventListener(
           el,
           value.event,
@@ -56,12 +56,12 @@ export const optimize: Directive = {
         );
       } else {
         throw new Error(
-          "[Directive: optimize]: `event` and `fn` are required, and `fn` must be a function"
+          "[Chỉ thị: optimize]: `event` và `fn` là bắt buộc, và `fn` phải là một hàm"
         );
       }
     } else {
       throw new Error(
-        "[Directive: optimize]: only `debounce` and `throttle` are supported"
+        "[Chỉ thị: optimize]: chỉ hỗ trợ `debounce` và `throttle`"
       );
     }
   }

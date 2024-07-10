@@ -1,4 +1,4 @@
-// 此文件跟同级目录的 global.d.ts 文件一样也是全局类型声明，只不过这里存放一些零散的全局类型，无需引入直接在 .vue 、.ts 、.tsx 文件使用即可获得类型提示
+// Như tệp global.d.ts cùng cấp với nó, tệp này cũng là khai báo toàn cầu, nhưng lưu trữ một số loại toàn cầu phân tán. Không cần nhập, bạn có thể sử dụng trực tiếp trong các tệp .vue, .ts, .tsx để nhận được gợi ý kiểu
 
 type RefType<T> = T | null;
 

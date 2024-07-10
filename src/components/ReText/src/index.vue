@@ -7,7 +7,7 @@ defineOptions({
 });
 
 const props = defineProps({
-  // 行数
+  // Số dòng
   lineClamp: {
     type: [String, Number]
   },
@@ -24,10 +24,10 @@ const tippyFunc = ref();
 
 const isTextEllipsis = (el: HTMLElement) => {
   if (!props.lineClamp) {
-    // 单行省略判断
+    // Kiểm tra có dòng đơn bị cắt ngắn
     return el.scrollWidth > el.clientWidth;
   } else {
-    // 多行省略判断
+    // Kiểm tra có dòng nhiều bị cắt ngắn
     return el.scrollHeight > el.clientHeight;
   }
 };

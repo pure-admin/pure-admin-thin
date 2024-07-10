@@ -3,19 +3,19 @@ import { http } from "@/utils/http";
 export type UserResult = {
   success: boolean;
   data: {
-    /** 头像 */
+    /** Đường dẫn ảnh đại diện */
     avatar: string;
-    /** 用户名 */
+    /** Tên người dùng */
     username: string;
-    /** 昵称 */
+    /** Bút danh */
     nickname: string;
-    /** 当前登录用户的角色 */
+    /** Các vai trò của người dùng hiện tại */
     roles: Array<string>;
-    /** `token` */
+    /** Mã thông báo truy cập */
     accessToken: string;
-    /** 用于调用刷新`accessToken`的接口时所需的`token` */
+    /** Mã thông báo cần thiết để gọi API làm mới `accessToken` */
     refreshToken: string;
-    /** `accessToken`的过期时间（格式'xxxx/xx/xx xx:xx:xx'） */
+    /** Thời gian hết hạn của `accessToken` (định dạng 'xxxx/xx/xx xx:xx:xx') */
     expires: Date;
   };
 };
@@ -23,21 +23,21 @@ export type UserResult = {
 export type RefreshTokenResult = {
   success: boolean;
   data: {
-    /** `token` */
+    /** Mã thông báo truy cập */
     accessToken: string;
-    /** 用于调用刷新`accessToken`的接口时所需的`token` */
+    /** Mã thông báo cần thiết để gọi API làm mới `accessToken` */
     refreshToken: string;
-    /** `accessToken`的过期时间（格式'xxxx/xx/xx xx:xx:xx'） */
+    /** Thời gian hết hạn của `accessToken` (định dạng 'xxxx/xx/xx xx:xx:xx') */
     expires: Date;
   };
 };
 
-/** 登录 */
+/** Đăng nhập */
 export const getLogin = (data?: object) => {
   return http.request<UserResult>("post", "/login", { data });
 };
 
-/** 刷新`token` */
+/** Làm mới `token` */
 export const refreshTokenApi = (data?: object) => {
   return http.request<RefreshTokenResult>("post", "/refresh-token", { data });
 };

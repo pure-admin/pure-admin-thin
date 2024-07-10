@@ -2,15 +2,15 @@ import NProgress from "nprogress";
 import "nprogress/nprogress.css";
 
 NProgress.configure({
-  // 动画方式
+  // Animation mode
   easing: "ease",
-  // 递增进度条的速度
+  // Tăng tốc độ của thanh tiến trình
   speed: 500,
-  // 是否显示加载ico
+  // Có hiển thị ico đang tải hay không
   showSpinner: false,
-  // 自动递增间隔
+  // khoảng thời gian tự động tăng
   trickleSpeed: 200,
-  // 初始化时的最小百分比
+  // Tỷ lệ phần trăm tối thiểu khi khởi tạo
   minimum: 0.3
 });
 

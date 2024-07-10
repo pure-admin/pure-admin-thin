@@ -23,7 +23,7 @@ const footerButtons = computed(() => {
       ? options.footerButtons
       : ([
           {
-            label: "取消",
+            label: "Hủy",
             text: true,
             bg: true,
             btnClick: ({ dialog: { options, index } }) => {
@@ -37,7 +37,7 @@ const footerButtons = computed(() => {
             }
           },
           {
-            label: "确定",
+            label: "OK",
             type: "primary",
             text: true,
             bg: true,

@@ -25,24 +25,26 @@ import SettingIcon from "@/assets/table-bar/settings.svg?component";
 import CollapseIcon from "@/assets/table-bar/collapse.svg?component";
 
 const props = {
-  /** 头部最左边的标题 */
+  /** Tiêu đề ở phía trên bên trái của bảng */
   title: {
     type: String,
-    default: "列表"
+    default: "Danh sách"
   },
-  /** 对于树形表格，如果想启用展开和折叠功能，传入当前表格的ref即可 */
+  /** Nếu muốn bật chức năng mở rộng và thu gọn cho bảng cây, hãy truyền vào tham chiếu hiện tại của bảng */
   tableRef: {
     type: Object as PropType<any>
   },
-  /** 需要展示的列 */
+  /** Các cột cần hiển thị */
   columns: {
     type: Array as PropType<TableColumnList>,
     default: () => []
   },
+  /** Cho biết có mở rộng tất cả các hàng ban đầu hay không */
   isExpandAll: {
     type: Boolean,
     default: true
   },
+  /** Khóa duy nhất cho bảng */
   tableKey: {
     type: [String, Number] as PropType<string | number>,
     default: "0"
@@ -161,25 +163,25 @@ export default defineComponent({
             style={getDropdownItemStyle.value("large")}
             onClick={() => (size.value = "large")}
           >
-            宽松
+            Lỏng lẻo
           </el-dropdown-item>
           <el-dropdown-item
             style={getDropdownItemStyle.value("default")}
             onClick={() => (size.value = "default")}
           >
-            默认
+            Mặc định
           </el-dropdown-item>
           <el-dropdown-item
             style={getDropdownItemStyle.value("small")}
             onClick={() => (size.value = "small")}
           >
-            紧凑
+            Gọn nhẹ
           </el-dropdown-item>
         </el-dropdown-menu>
       )
     };
 
-    /** 列展示拖拽排序 */
+    /** Cột hiển thị kéo và thả sắp xếp */
     const rowDrop = (event: { preventDefault: () => void }) => {
       event.preventDefault();
       nextTick(() => {
@@ -195,7 +197,7 @@ export default defineComponent({
             const oldColumn = dynamicColumns.value[oldIndex];
             const newColumn = dynamicColumns.value[newIndex];
             if (oldColumn?.fixed || newColumn?.fixed) {
-              // 当前列存在fixed属性 则不可拖拽
+              // Nếu cột hiện tại có thuộc tính cố định thì không thể kéo được.
               const oldThElem = wrapperElem.children[oldIndex] as HTMLElement;
               if (newIndex > oldIndex) {
                 wrapperElem.insertBefore(targetThElem, oldThElem);
@@ -237,7 +239,7 @@ export default defineComponent({
       reference: () => (
         <SettingIcon
           class={["w-[16px]", iconClass.value]}
-          v-tippy={rendTippyProps("列设置")}
+          v-tippy={rendTippyProps("Cài đặt cột")}
         />
       )
     };
@@ -263,7 +265,7 @@ export default defineComponent({
                       transform: isExpandAll.value ? "none" : "rotate(-90deg)"
                     }}
                     v-tippy={rendTippyProps(
-                      isExpandAll.value ? "折叠" : "展开"
+                      isExpandAll.value ? "Thu nhỏ" : "Mở rộng"
                     )}
                     onClick={() => onExpand()}
                   />
@@ -276,14 +278,14 @@ export default defineComponent({
                   iconClass.value,
                   loading.value ? "animate-spin" : ""
                 ]}
-                v-tippy={rendTippyProps("刷新")}
+                v-tippy={rendTippyProps("Đặt lại")}
                 onClick={() => onReFresh()}
               />
               <el-divider direction="vertical" />
               <el-dropdown
                 v-slots={dropdown}
                 trigger="click"
-                v-tippy={rendTippyProps("密度")}
+                v-tippy={rendTippyProps("Tỉ trọng")}
               >
                 <CollapseIcon class={["w-[16px]", iconClass.value]} />
               </el-dropdown>
@@ -299,13 +301,13 @@ export default defineComponent({
                 <div class={[topClass.value]}>
                   <el-checkbox
                     class="!-mr-1"
-                    label="列展示"
+                    label="Hiển thị cột"
                     v-model={checkAll.value}
                     indeterminate={isIndeterminate.value}
                     onChange={value => handleCheckAllChange(value)}
                   />
                   <el-button type="primary" link onClick={() => onReset()}>
-                    重置
+                    Đặt lại
                   </el-button>
                 </div>
 

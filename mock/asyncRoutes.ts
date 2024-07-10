@@ -45,6 +45,8 @@ export default defineFakeRoute([
     response: () => {
       return {
         success: true,
+        msg: "success",
+        msgDev: null,
         data: [permissionRouter]
       };
     }

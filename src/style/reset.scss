@@ -23,14 +23,15 @@ html {
 
 body {
   width: 100%;
-  height: 100%;
-  margin: 0;
-  font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB",
-    "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
-  line-height: inherit;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-font-smoothing: antialiased;
-  text-rendering: optimizelegibility;
+  width: 100%;
+    height: 100%;
+    margin: 0;
+    font-family: "Segoe UI", Arial, sans-serif;
+    line-height: inherit;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizelegibility;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
 }
 
 hr {

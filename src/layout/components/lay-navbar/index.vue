@@ -48,9 +48,9 @@ const { t, locale, translationCh, translationEn } = useTranslationLang();
     <LayNavMix v-if="layout === 'mix'" />
 
     <div v-if="layout === 'vertical'" class="vertical-header-right">
-      <!-- 菜单搜索 -->
+      <!-- Menu Search -->
       <LaySearch id="header-search" />
-      <!-- 国际化 -->
+      <!-- Globalization -->
       <el-dropdown id="header-translation" trigger="click">
         <GlobalizationIcon
           class="navbar-bg-hover w-[40px] h-[48px] p-[11px] cursor-pointer outline-none"
@@ -58,16 +58,16 @@ const { t, locale, translationCh, translationEn } = useTranslationLang();
         <template #dropdown>
           <el-dropdown-menu class="translation">
             <el-dropdown-item
-              :style="getDropdownItemStyle(locale, 'zh')"
-              :class="['dark:!text-white', getDropdownItemClass(locale, 'zh')]"
+              :style="getDropdownItemStyle(locale, 'vi')"
+              :class="['dark:!text-white', getDropdownItemClass(locale, 'vi')]"
               @click="translationCh"
             >
               <IconifyIconOffline
-                v-show="locale === 'zh'"
-                class="check-zh"
+                v-show="locale === 'vi'"
+                class="check-vi"
                 :icon="Check"
               />
-              简体中文
+              Tiếng Việt
             </el-dropdown-item>
             <el-dropdown-item
               :style="getDropdownItemStyle(locale, 'en')"
@@ -82,11 +82,11 @@ const { t, locale, translationCh, translationEn } = useTranslationLang();
           </el-dropdown-menu>
         </template>
       </el-dropdown>
-      <!-- 全屏 -->
+      <!-- Full Screen -->
       <LaySidebarFullScreen id="full-screen" />
-      <!-- 消息通知 -->
+      <!-- Notification -->
       <LayNotice id="header-notice" />
-      <!-- 退出登录 -->
+      <!-- Logout -->
       <el-dropdown trigger="click">
         <span class="el-dropdown-link navbar-bg-hover select-none">
           <img :src="userAvatar" :style="avatarsStyle" />
@@ -168,7 +168,7 @@ const { t, locale, translationCh, translationEn } = useTranslationLang();
     padding: 5px 40px;
   }
 
-  .check-zh {
+  .check-vi {
     position: absolute;
     left: 20px;
   }

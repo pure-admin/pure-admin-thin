@@ -189,7 +189,7 @@ const transitionMain = defineComponent({
       </template>
     </router-view>
 
-    <!-- 页脚 -->
+    <!-- Chân trang -->
     <LayFooter v-if="!hideFooter && !fixedHeader" />
   </section>
 </template>

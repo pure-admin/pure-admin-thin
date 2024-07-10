@@ -2,7 +2,9 @@ import { http } from "@/utils/http";
 
 type Result = {
   success: boolean;
-  data: Array<any>;
+  msg: string;
+  msgDev: string;
+  data: object;
 };
 
 export const getAsyncRoutes = () => {

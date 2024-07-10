@@ -65,9 +65,9 @@ nextTick(() => {
       />
     </el-menu>
     <div class="horizontal-header-right">
-      <!-- 菜单搜索 -->
+      <!-- Menu Search -->
       <LaySearch id="header-search" />
-      <!-- 国际化 -->
+      <!-- Globalization -->
       <el-dropdown id="header-translation" trigger="click">
         <GlobalizationIcon
           class="navbar-bg-hover w-[40px] h-[48px] p-[11px] cursor-pointer outline-none"
@@ -75,14 +75,14 @@ nextTick(() => {
         <template #dropdown>
           <el-dropdown-menu class="translation">
             <el-dropdown-item
-              :style="getDropdownItemStyle(locale, 'zh')"
-              :class="['dark:!text-white', getDropdownItemClass(locale, 'zh')]"
+              :style="getDropdownItemStyle(locale, 'vi')"
+              :class="['dark:!text-white', getDropdownItemClass(locale, 'vi')]"
               @click="translationCh"
             >
-              <span v-show="locale === 'zh'" class="check-zh">
+              <span v-show="locale === 'vi'" class="check-vi">
                 <IconifyIconOffline :icon="Check" />
               </span>
-              简体中文
+              Tiếng Việt
             </el-dropdown-item>
             <el-dropdown-item
               :style="getDropdownItemStyle(locale, 'en')"
@@ -97,11 +97,11 @@ nextTick(() => {
           </el-dropdown-menu>
         </template>
       </el-dropdown>
-      <!-- 全屏 -->
+      <!-- Full Screen -->
       <LaySidebarFullScreen id="full-screen" />
-      <!-- 消息通知 -->
+      <!-- Notification -->
       <LayNotice id="header-notice" />
-      <!-- 退出登录 -->
+      <!-- Logout -->
       <el-dropdown trigger="click">
         <span class="el-dropdown-link navbar-bg-hover">
           <img :src="userAvatar" :style="avatarsStyle" />
@@ -140,7 +140,7 @@ nextTick(() => {
     padding: 5px 40px;
   }
 
-  .check-zh {
+  .check-vi {
     position: absolute;
     left: 20px;
   }
