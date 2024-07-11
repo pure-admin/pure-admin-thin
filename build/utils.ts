@@ -11,45 +11,45 @@ import {
   devDependencies
 } from "../package.json";
 
-/** 启动`node`进程时所在工作目录的绝对路径 */
+/** Đường dẫn tuyệt đối của thư mục làm việc hiện tại khi khởi động tiến trình `node` */
 const root: string = process.cwd();
 
 /**
- * @description 根据可选的路径片段生成一个新的绝对路径
- * @param dir 路径片段，默认`build`
- * @param metaUrl 模块的完整`url`，如果在`build`目录外调用必传`import.meta.url`
+ * @description Tạo một đường dẫn tuyệt đối mới dựa trên đoạn đường dẫn tùy chọn
+ * @param dir Đoạn đường dẫn, mặc định là `build`
+ * @param metaUrl URL đầy đủ của mô-đun, cần truyền `import.meta.url` nếu gọi ngoài thư mục `build`
  */
 const pathResolve = (dir = ".", metaUrl = import.meta.url) => {
-  // 当前文件目录的绝对路径
+  // Đường dẫn tuyệt đối của thư mục hiện tại
   const currentFileDir = dirname(fileURLToPath(metaUrl));
-  // build 目录的绝对路径
+  // Đường dẫn tuyệt đối của thư mục build
   const buildDir = resolve(currentFileDir, "build");
-  // 解析的绝对路径
+  // Đường dẫn tuyệt đối đã được giải quyết
   const resolvedPath = resolve(currentFileDir, dir);
-  // 检查解析的绝对路径是否在 build 目录内
+  // Kiểm tra xem đường dẫn tuyệt đối đã giải quyết có nằm trong thư mục build không
   if (resolvedPath.startsWith(buildDir)) {
-    // 在 build 目录内，返回当前文件路径
+    // Nếu trong thư mục build, trả về đường dẫn tệp hiện tại
     return fileURLToPath(metaUrl);
   }
-  // 不在 build 目录内，返回解析后的绝对路径
+  // Nếu không trong thư mục build, trả về đường dẫn tuyệt đối đã giải quyết
   return resolvedPath;
 };
 
-/** 设置别名 */
+/** Đặt biệt danh */
 const alias: Record<string, string> = {
   "@": pathResolve("../src"),
   "@build": pathResolve()
 };
 
-/** 平台的名称、版本、运行所需的`node`和`pnpm`版本、依赖、最后构建时间的类型提示 */
+/** Thông tin về tên nền tảng, phiên bản, phiên bản `node` và `pnpm` cần thiết để chạy, phụ thuộc, và thời gian xây dựng cuối cùng */
 const __APP_INFO__ = {
   pkg: { name, version, engines, dependencies, devDependencies },
   lastBuildTime: dayjs(new Date()).format("YYYY-MM-DD HH:mm:ss")
 };
 
-/** 处理环境变量 */
+/** Xử lý biến môi trường */
 const wrapperEnv = (envConf: Recordable): ViteEnv => {
-  // 默认值
+  // Giá trị mặc định
   const ret: ViteEnv = {
     VITE_PORT: 8848,
     VITE_PUBLIC_PATH: "",
@@ -79,7 +79,7 @@ const wrapperEnv = (envConf: Recordable): ViteEnv => {
 
 const fileListTotal: number[] = [];
 
-/** 获取指定文件夹中所有文件的总大小 */
+/** Lấy tổng kích thước của tất cả các tệp trong thư mục chỉ định */
 const getPackageSize = options => {
   const { folder = "dist", callback, format = true } = options;
   readdir(folder, (err, files: string[]) => {

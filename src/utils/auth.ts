@@ -24,7 +24,7 @@ export interface DataInfo<T> {
 export const userKey = "user-info"; // Key cho localStorage lưu thông tin người dùng
 export const TokenKey = "authorized-token"; // Key cho cookie lưu token truy cập
 export const multipleTabsKey = "multiple-tabs"; // Key cho cookie kiểm tra nhiều tab mở
-
+export const oidcKey = "admin-pure-oidcuser"; // Key cho localStorage lưu thông tin người dùng
 /**
  * Hàm lấy thông tin token từ cookie hoặc localStorage
  * Nếu không tìm thấy token trong cookie, thử lấy từ localStorage
@@ -85,7 +85,7 @@ export function setToken(data: DataInfo<Date>) {
   }
 
   // Kiểm tra và thiết lập thông tin người dùng
-  if (data.username && data.roles) {
+  if (data.username) {
     const { username, roles } = data;
     setUserKey({
       avatar: data?.avatar ?? "",

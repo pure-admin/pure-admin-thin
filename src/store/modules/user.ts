@@ -15,7 +15,8 @@ import {
 } from "@/api/user";
 import { useMultiTagsStoreHook } from "./multiTags";
 import { type DataInfo, setToken, removeToken, userKey } from "@/utils/auth";
-
+import { useAuth } from "vue3-oidc";
+const { signoutRedirect } = useAuth();
 export const useUserStore = defineStore({
   id: "pure-user",
   state: (): userType => ({
@@ -77,6 +78,7 @@ export const useUserStore = defineStore({
       removeToken();
       useMultiTagsStoreHook().handleTags("equal", [...routerArrays]);
       resetRouter();
+      signoutRedirect();
       router.push("/login");
     },
     /** 刷新`token` */

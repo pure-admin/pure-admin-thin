@@ -3,32 +3,34 @@ import { useI18n } from "vue-i18n";
 import Motion from "./utils/motion";
 import { useRouter } from "vue-router";
 import { message } from "@/utils/message";
-import { loginRules } from "./utils/rule";
 import { useNav } from "@/layout/hooks/useNav";
-import type { FormInstance } from "element-plus";
-import { $t, transformI18n } from "@/plugins/i18n";
 import { useLayout } from "@/layout/hooks/useLayout";
-import { useUserStoreHook } from "@/store/modules/user";
-import { initRouter, getTopMenu } from "@/router/utils";
 import { bg, avatar, illustration } from "./utils/static";
-import { useRenderIcon } from "@/components/ReIcon/src/hooks";
-import { ref, reactive, toRaw, onMounted, onBeforeUnmount } from "vue";
 import { useTranslationLang } from "@/layout/hooks/useTranslationLang";
 import { useDataThemeChange } from "@/layout/hooks/useDataThemeChange";
-
+import dayjs from "dayjs";
 import dayIcon from "@/assets/svg/day.svg?component";
 import darkIcon from "@/assets/svg/dark.svg?component";
 import globalization from "@/assets/svg/globalization.svg?component";
-import Lock from "@iconify-icons/ri/lock-fill";
 import Check from "@iconify-icons/ep/check";
-import User from "@iconify-icons/ri/user-3-fill";
+
+import {
+  computed,
+  onMounted,
+  ref,
+  reactive,
+  onBeforeUnmount,
+  toRaw
+} from "vue";
+import { useAuth, useOidcStore } from "vue3-oidc";
+import { type DataInfo, setToken, removeToken, userKey } from "@/utils/auth";
+const { signinRedirect, signoutRedirect, autoAuthenticate } = useAuth();
 
 defineOptions({
   name: "Login"
 });
 const router = useRouter();
 const loading = ref(false);
-const ruleFormRef = ref<FormInstance>();
 
 const { initStorage } = useLayout();
 initStorage();
@@ -39,48 +41,53 @@ dataThemeChange(overallStyle.value);
 const { title, getDropdownItemStyle, getDropdownItemClass } = useNav();
 const { locale, translationCh, translationEn } = useTranslationLang();
 
-const ruleForm = reactive({
-  username: "admin",
-  password: "admin123"
-});
-
-const onLogin = async (formEl: FormInstance | undefined) => {
-  if (!formEl) return;
-  await formEl.validate((valid, fields) => {
-    if (valid) {
-      loading.value = true;
-      useUserStoreHook()
-        .loginByUsername({ username: ruleForm.username, password: "admin123" })
-        .then(res => {
-          if (res.success) {
-            // Fetch backend routes
-            return initRouter().then(() => {
-              router.push(getTopMenu(true).path).then(() => {
-                message(t("login.pureLoginSuccess"), { type: "success" });
-              });
-            });
-          } else {
-            message(t("login.pureLoginFail"), { type: "error" });
-          }
-        })
-        .finally(() => (loading.value = false));
-    }
-  });
-};
-
 /** Use common function to prevent `removeEventListener` failure */
 function onkeypress({ code }: KeyboardEvent) {
   if (["Enter", "NumpadEnter"].includes(code)) {
-    onLogin(ruleFormRef.value);
+    signin();
   }
 }
 
-onMounted(() => {
-  window.document.addEventListener("keypress", onkeypress);
-});
-
 onBeforeUnmount(() => {
   window.document.removeEventListener("keypress", onkeypress);
+});
+
+const { state } = useOidcStore();
+
+const user = computed(() => state.value.user?.profile);
+
+const signin = () => {
+  signinRedirect();
+  setLogin();
+  //The following operations are completed in the callback route
+};
+
+const setLogin = () => {
+  if (state.value != null) {
+    router.push("/welcome").then(() => {
+      const avv = {
+        /** Token truy cập */
+        accessToken: state.value.token.toString(),
+        /** Thời gian hết hạn của accessToken (dưới dạng timestamp) */
+        expires: dayjs(state?.value.user.expires_in).toDate(),
+        /** Token dùng để làm mới accessToken */
+        refreshToken: user.value.emp_id.toString(),
+        /** Ảnh đại diện */
+        avatar: "https://api-hr.medlatec.vn/" + user.value.avatar,
+        /** Tên đăng nhập */
+        username: user.value.preferred_username.toString(),
+        /** Biệt danh */
+        nickname: user.value.full_name.toString()
+      };
+      setToken(avv);
+      message(t("login.pureLoginSuccess"), { type: "success" });
+      window.location.href = "/welcome";
+    });
+  }
+};
+
+onMounted(() => {
+  autoAuthenticate();
 });
 </script>
 
@@ -140,51 +147,14 @@ onBeforeUnmount(() => {
             <h2 class="outline-none">{{ title }}</h2>
           </Motion>
 
-          <el-form
-            ref="ruleFormRef"
-            :model="ruleForm"
-            :rules="loginRules"
-            size="large"
-          >
-            <Motion :delay="100">
-              <el-form-item
-                :rules="[
-                  {
-                    required: true,
-                    message: transformI18n($t('login.pureUsernameReg')),
-                    trigger: 'blur'
-                  }
-                ]"
-                prop="username"
-              >
-                <el-input
-                  v-model="ruleForm.username"
-                  clearable
-                  :placeholder="t('login.pureUsername')"
-                  :prefix-icon="useRenderIcon(User)"
-                />
-              </el-form-item>
-            </Motion>
-
-            <Motion :delay="150">
-              <el-form-item prop="password">
-                <el-input
-                  v-model="ruleForm.password"
-                  clearable
-                  show-password
-                  :placeholder="t('login.purePassword')"
-                  :prefix-icon="useRenderIcon(Lock)"
-                />
-              </el-form-item>
-            </Motion>
-
+          <el-form size="large">
             <Motion :delay="250">
               <el-button
                 class="w-full mt-4"
                 size="default"
                 type="primary"
                 :loading="loading"
-                @click="onLogin(ruleFormRef)"
+                @click="signin()"
               >
                 {{ t("login.pureLogin") }}
               </el-button>

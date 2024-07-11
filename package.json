@@ -75,15 +75,16 @@
     "vue": "^3.4.31",
     "vue-i18n": "^9.13.1",
     "vue-router": "^4.4.0",
-    "xlsx": "^0.18.5",
     "vue-tippy": "^6.4.4",
     "vue-types": "^5.1.2",
     "vue-virtual-scroller": "2.0.0-beta.8",
     "vue-waterfall-plugin-next": "^2.4.3",
     "vue3-danmaku": "^1.6.0",
+    "vue3-oidc": "^0.1.15",
     "vue3-puzzle-vcode": "^1.1.7",
     "vuedraggable": "^4.1.0",
-    "vxe-table": "4.6.17"
+    "vxe-table": "4.6.17",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.3.0",

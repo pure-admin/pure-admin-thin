@@ -20,6 +20,7 @@ import "./style/tailwind.css";
 import "element-plus/dist/index.css"; // Import CSS của Element Plus
 import "./assets/iconfont/iconfont.js"; // Nhập icon font
 import "./assets/iconfont/iconfont.css"; // Import CSS của icon font
+import "./oidc/oidc";
 
 const app = createApp(App); // Tạo một ứng dụng Vue mới với component App.vue
 
