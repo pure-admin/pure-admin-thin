@@ -15,7 +15,7 @@ export default {
       name: "DashbroadIndex",
       component: () => import("@/views/dashboard/index.vue"),
       meta: {
-        title: "仪表盘首页",
+        title: "仪表盘",
         showLink: true
       }
     }

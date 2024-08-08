@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
+import { useRouter } from "vue-router";
 
 const getStatLabel = (key: string): string => {
   const labels: { [key: string]: string } = {
@@ -33,8 +34,13 @@ const projects = ref([
     projectSource: "Github"
   }
 ]);
-</script>
 
+const router = useRouter();
+
+const navigateToDetails = () => {
+  router.push({ path: "/project/detail" });
+};
+</script>
 <template>
   <div class="project-management">
     <div class="stats-container">
@@ -47,8 +53,8 @@ const projects = ref([
       <button class="btn">+ 新建项目</button>
     </div>
     <div class="filter-container">
-      <el-input type="text" placeholder="选择搜索类型(ID或name或者tags)" />
-      <el-input type="text" placeholder="根据搜索类型搜索" />
+      <input type="text" placeholder="选择搜索类型(ID或name或者tags)" />
+      <input type="text" placeholder="根据搜索类型搜索" />
     </div>
     <table class="project-table">
       <thead>
@@ -68,11 +74,7 @@ const projects = ref([
       <tbody>
         <tr v-for="project in projects" :key="project.name">
           <td>
-            <a
-              :href="'https://' + project.projectLink"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
+            <a href="#" @click.prevent="navigateToDetails">
               {{ project.name }}
             </a>
           </td>
@@ -98,7 +100,6 @@ const projects = ref([
     </table>
   </div>
 </template>
-
 <style scoped lang="scss">
 .project-management {
   padding: 20px;
@@ -169,6 +170,7 @@ const projects = ref([
 .project-table td a {
   color: #3498db;
   text-decoration: none;
+  cursor: pointer;
 }
 
 .scan-btn {
