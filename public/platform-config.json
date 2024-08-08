@@ -1,6 +1,6 @@
 {
-  "Version": "5.7.0",
-  "Title": "PureAdmin",
+  "Version": "1.0.0",
+  "Title": "安全赋能平台",
   "FixedHeader": true,
   "HiddenSideBar": false,
   "MultiTagsCache": false,
@@ -11,7 +11,7 @@
   "OverallStyle": "light",
   "Grey": false,
   "Weak": false,
-  "HideTabs": false,
+  "HideTabs": true,
   "HideFooter": false,
   "Stretch": false,
   "SidebarStatus": true,
