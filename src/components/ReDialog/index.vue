@@ -15,6 +15,7 @@ defineOptions({
   name: "ReDialog"
 });
 
+const sureBtnMap = ref({});
 const fullscreen = ref(false);
 
 const footerButtons = computed(() => {
@@ -43,10 +44,26 @@ const footerButtons = computed(() => {
             bg: true,
             popconfirm: options?.popconfirm,
             btnClick: ({ dialog: { options, index } }) => {
-              const done = () =>
+              if (options?.sureBtnLoading) {
+                sureBtnMap.value[index] = Object.assign(
+                  {},
+                  sureBtnMap.value[index],
+                  {
+                    loading: true
+                  }
+                );
+              }
+              const closeLoading = () => {
+                if (options?.sureBtnLoading) {
+                  sureBtnMap.value[index].loading = false;
+                }
+              };
+              const done = () => {
+                closeLoading();
                 closeDialog(options, index, { command: "sure" });
+              };
               if (options?.beforeSure && isFunction(options?.beforeSure)) {
-                options.beforeSure(done, { options, index });
+                options.beforeSure(done, { options, index, closeLoading });
               } else {
                 done();
               }
@@ -172,6 +189,7 @@ function handleClose(
           <el-button
             v-else
             v-bind="btn"
+            :loading="key === 1 && sureBtnMap[index]?.loading"
             @click="
               btn.btnClick({
                 dialog: { options, index },
