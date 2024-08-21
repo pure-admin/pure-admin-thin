@@ -14,28 +14,6 @@
         </el-col>
       </el-row>
     </el-card>
-
-    <!--    <el-row :gutter="20" class="stats-row">-->
-    <!--      <el-col :span="8">-->
-    <!--        <div class="stats-card">-->
-    <!--          <h3>组件版本数</h3>-->
-    <!--          <div ref="componentVersionsChart" class="chart-container" />-->
-    <!--        </div>-->
-    <!--      </el-col>-->
-    <!--      <el-col :span="8">-->
-    <!--        <div class="stats-card">-->
-    <!--          <h3>安全漏洞</h3>-->
-    <!--          <div ref="securityIssuesChart" class="chart-container" />-->
-    <!--        </div>-->
-    <!--      </el-col>-->
-    <!--      <el-col :span="8">-->
-    <!--        <div class="stats-card">-->
-    <!--          <h3>有许可证的组件版本数</h3>-->
-    <!--          <div ref="licensedVersionsChart" class="chart-container" />-->
-    <!--        </div>-->
-    <!--      </el-col>-->
-    <!--    </el-row>-->
-
     <el-tabs v-model="activeTab">
       <el-tab-pane label="软件依赖成分分析" name="1">
         <el-row :gutter="20">
@@ -59,7 +37,7 @@
           <el-table-column prop="lowRisk" label="低危" />
         </el-table>
       </el-tab-pane>
-      <el-tab-pane label="源代码静态检测" name="2">
+      <el-tab-pane label="Fuzzing扫描" name="2">
         <!-- 这里可以添加源代码静态检测的内容 -->
       </el-tab-pane>
     </el-tabs>

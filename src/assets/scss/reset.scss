@@ -1,0 +1,14 @@
+.el-button--small:not(.el-button--text),
+.el-radio-button--small .el-radio-button__inner {
+  padding: 8px 16px;
+  font-size: 14px;
+}
+
+.el-button--text {
+  padding: 0;
+  font-size: 14px;
+}
+
+.el-button--default {
+  border-color: #d0d0d0;
+}

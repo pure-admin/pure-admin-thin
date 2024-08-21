@@ -9,7 +9,7 @@ import {
   Tooltip,
   Legend
 } from "chart.js";
-import Card from "@/components/Card/Card.vue";
+import VulnerabilityCard from "@/views/dashboard/components/VulnerabilityCard.vue";
 ChartJS.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend);
 
 const projectInfo = ref({
@@ -18,24 +18,23 @@ const projectInfo = ref({
   scanTimes: 10,
   scanFiles: 62655
 });
-
-const vulnerabilities = ref([
-  { id: "CVE-2024-9999", description: "发生堆缓冲区溢出攻击" },
-  { id: "CVE-123456", description: "发布在一天之前 2024-7-23 11:44" }
-]);
-
 const recentScansData = ref({
   labels: ["一月", "二月", "三月", "四月", "五月"],
   datasets: [
     {
       label: "软件成分分析",
-      backgroundColor: "#72a4d2",
-      data: [613, 448, 540, 652, 977]
+      backgroundColor: "#ff6384",
+      data: [20, 42, 37, 45, 54]
     },
     {
-      label: "静态代码扫描(SAST)",
-      backgroundColor: "#8cd17d",
-      data: [138, 936, 777, 590, 54]
+      label: "Fuzz测试",
+      backgroundColor: "#36a2eb",
+      data: [12, 23, 34, 45, 56]
+    },
+    {
+      label: "静态代码分析",
+      backgroundColor: "#33bb33",
+      data: [32, 45, 23, 54, 32]
     }
   ]
 });
@@ -71,101 +70,125 @@ const appRankingData = ref({
     }
   ]
 });
+const radio3 = ref("静态代码分析");
 </script>
-<!--<template>-->
-<!--  <div class="dashboard">-->
-<!--    <h1>软件安全赋能平台</h1>-->
-<!--    <div class="status-overview">-->
-<!--      <div class="project-info">-->
-<!--        <h2>项目信息</h2>-->
-<!--        <div class="info-box">-->
-<!--          <p>项目数量(个): {{ projectInfo.projects }}</p>-->
-<!--          <p>仓库数量(个): {{ projectInfo.repositories }}</p>-->
-<!--          <p>扫描次数: {{ projectInfo.scanTimes }}</p>-->
-<!--          <p>扫描文件数量: {{ projectInfo.scanFiles }}</p>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--      <div class="vulnerabilities">-->
-<!--        <h2>最新漏洞与补丁提示</h2>-->
-<!--        <ul>-->
-<!--          <li v-for="vulnerability in vulnerabilities" :key="vulnerability.id">-->
-<!--            {{ vulnerability.id }}: {{ vulnerability.description }}-->
-<!--          </li>-->
-<!--        </ul>-->
-<!--      </div>-->
-<!--      <div class="recent-scans">-->
-<!--        <h2>近期扫描趋势</h2>-->
-<!--        <Bar :data="recentScansData" />-->
-<!--      </div>-->
-<!--    </div>-->
-<!--    <div class="details">-->
-<!--      <div class="issues-ranking">-->
-<!--        <h2>违规问题排行</h2>-->
-<!--        <Bar :data="issuesRankingData" />-->
-<!--      </div>-->
-<!--      <div class="app-ranking">-->
-<!--        <h2>违规应用排行</h2>-->
-<!--        <Bar :data="appRankingData" />-->
-<!--      </div>-->
-<!--    </div>-->
-<!--  </div>-->
-<!--</template>-->
 <template>
   <div class="dashboard">
-    <div class="grid-container">
-      <Card title="项目信息">
-        <div class="info-box">
-          <p>项目数量(个): {{ projectInfo.projects }}</p>
-          <p>仓库数量(个): {{ projectInfo.repositories }}</p>
-          <p>扫描次数: {{ projectInfo.scanTimes }}</p>
-          <p>扫描文件数量: {{ projectInfo.scanFiles }}</p>
-        </div>
-      </Card>
-      <Card title="最新漏洞与补丁提示">
-        <ul>
-          <li v-for="vulnerability in vulnerabilities" :key="vulnerability.id">
-            {{ vulnerability.id }}: {{ vulnerability.description }}
-          </li>
-        </ul>
-      </Card>
-      <Card title="近期扫描趋势">
-        <Bar :data="recentScansData" />
-      </Card>
-      <Card title="违规问题排行">
-        <Bar :data="issuesRankingData" />
-      </Card>
-      <Card title="违规应用排行">
-        <Bar :data="appRankingData" />
-      </Card>
+    <el-row :gutter="10">
+      <el-col :span="8">
+        <el-card class="top-card">
+          <div class="card-title">应用信息</div>
+          <div class="app-info">
+            <div class="app-card">
+              <div class="right-info">
+                <div class="proj">项目数量(个)</div>
+                <div
+                  class="proj-num"
+                  style=" font-size: 14px; font-weight: bold;color: #47f"
+                >
+                  {{ projectInfo.projects }}
+                </div>
+              </div>
+            </div>
+            <div class="app-card">
+              <div class="right-info">
+                <div class="repo">仓库数量(个)</div>
+                <div
+                  class="repo-num"
+                  style=" font-size: 14px; font-weight: bold;color: #87f"
+                >
+                  {{ projectInfo.repositories }}
+                </div>
+              </div>
+            </div>
+            <div class="app-card">
+              <div class="right-info">
+                <div class="scan">扫描次数(次)</div>
+                <div
+                  class="scan-num"
+                  style=" font-size: 14px; font-weight: bold;color: #f83"
+                >
+                  {{ projectInfo.scanTimes }}
+                </div>
+              </div>
+            </div>
+            <div class="app-card">
+              <div class="right-info">
+                <div class="file">扫描文件数量(个)</div>
+                <div
+                  class="file-num"
+                  style=" font-size: 14px; font-weight: bold;color: #3b6"
+                >
+                  {{ projectInfo.scanFiles }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </el-card>
+      </el-col>
+      <el-col :span="8">
+        <el-card class="top-card">
+          <div class="card-title">最新漏洞与补丁提示</div>
+          <vulnerability-card />
+        </el-card>
+      </el-col>
+      <el-col :span="8">
+        <el-card class="top-card">
+          <div class="card-title">近期扫描趋势</div>
+          <Bar :data="recentScansData" />
+        </el-card>
+      </el-col>
+    </el-row>
+    <div style="margin: 6px 0 2px">
+      <el-radio-group v-model="radio3" size="small">
+        <el-radio-button label="静态代码分析" />
+        <el-radio-button label="架构一致性" />
+        <el-radio-button label="软件物料" />
+      </el-radio-group>
     </div>
   </div>
 </template>
 
 <style scoped lang="scss">
-.dashboard {
-  padding: 20px;
-  background-color: #f4f5f7;
+.dashboard >>> .el-card {
+  margin-bottom: 8px;
 }
 
-.grid-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 10px; /* Reduce the gap to make cards closer */
+.top-card {
+  width: 100%;
+  height: 30vh;
+  margin-bottom: 8px;
 }
 
-.info-box p {
-  margin: 10px 0;
+.card-title {
+  margin-bottom: 0 !important;
+  font-weight: 600;
 }
 
-ul {
-  padding: 0;
-  list-style: none;
+.app-info {
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  justify-content: space-between;
 }
 
-ul li {
-  padding: 10px;
-  margin-bottom: 5px; /* Reduce margin for a tighter look */
-  background: #f2f2f2;
-  border-radius: 4px;
+.app-card {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  width: calc(50% - 5px);
+  height: 10vh;
+  padding: 0.3vw;
+  margin-top: 6px;
+  margin-bottom: 4px;
+  background-color: #fff;
+  border: 1px solid #dde;
+  border-radius: 6px;
+}
+
+.app-card > .right-info {
+  width: 140px;
+  font-size: 14px;
 }
 </style>
