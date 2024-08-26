@@ -84,7 +84,7 @@ const radio3 = ref("静态代码分析");
                 <div class="proj">项目数量(个)</div>
                 <div
                   class="proj-num"
-                  style=" font-size: 14px; font-weight: bold;color: #47f"
+                  style="font-size: 14px; font-weight: bold; color: #47f"
                 >
                   {{ projectInfo.projects }}
                 </div>
@@ -95,7 +95,7 @@ const radio3 = ref("静态代码分析");
                 <div class="repo">仓库数量(个)</div>
                 <div
                   class="repo-num"
-                  style=" font-size: 14px; font-weight: bold;color: #87f"
+                  style="font-size: 14px; font-weight: bold; color: #87f"
                 >
                   {{ projectInfo.repositories }}
                 </div>
@@ -106,7 +106,7 @@ const radio3 = ref("静态代码分析");
                 <div class="scan">扫描次数(次)</div>
                 <div
                   class="scan-num"
-                  style=" font-size: 14px; font-weight: bold;color: #f83"
+                  style="font-size: 14px; font-weight: bold; color: #f83"
                 >
                   {{ projectInfo.scanTimes }}
                 </div>
@@ -117,7 +117,7 @@ const radio3 = ref("静态代码分析");
                 <div class="file">扫描文件数量(个)</div>
                 <div
                   class="file-num"
-                  style=" font-size: 14px; font-weight: bold;color: #3b6"
+                  style="font-size: 14px; font-weight: bold; color: #3b6"
                 >
                   {{ projectInfo.scanFiles }}
                 </div>

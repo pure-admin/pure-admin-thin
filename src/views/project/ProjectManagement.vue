@@ -1,11 +1,14 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
+import { http } from "@/utils/http";
 import { useRouter } from "vue-router";
+import { ArrowDown } from "@element-plus/icons-vue";
+
+const showDropdown = ref(false);
 
 const getStatLabel = (key: string): string => {
   const labels: { [key: string]: string } = {
     totalProjects: "项目总数",
-    scanTimes: "扫描次数",
     unscanned: "未扫描",
     outdatedScans: "未更新扫描",
     scanned: "已扫描"
@@ -13,15 +16,37 @@ const getStatLabel = (key: string): string => {
   return labels[key] || key;
 };
 
+const formatDate = (dateString: string) => {
+  const date = new Date(dateString);
+  const year = date.getFullYear();
+  const month = (date.getMonth() + 1).toString().padStart(2, "0");
+  const day = date.getDate().toString().padStart(2, "0");
+  const hour = date.getHours().toString().padStart(2, "0");
+  const minute = date.getMinutes().toString().padStart(2, "0");
+  const second = date.getSeconds().toString().padStart(2, "0");
+  return `${year}-${month}-${day} ${hour}:${minute}:${second}`;
+};
+
 const projectStats = ref({
-  totalProjects: 32,
-  scanTimes: 9,
-  unscanned: 2,
-  outdatedScans: 4,
-  scanned: 4
+  totalProjects: 0,
+  unscanned: 0,
+  outdatedScans: 0,
+  scanned: 0
 });
 
-const projects = ref([
+interface Project {
+  name: string;
+  status: string;
+  riskLevel: string;
+  lastUpdate: string;
+  lastScan: string;
+  riskDistribution: string;
+  scanType: string;
+  scanTime: string;
+  projectSource: string;
+}
+
+const _projects = ref([
   {
     name: "TestProject",
     status: "已更新",
@@ -35,6 +60,55 @@ const projects = ref([
   }
 ]);
 
+const projects = ref<Project[]>([]);
+
+const getProjectList = async params => {
+  var query = new URLSearchParams(params).toString();
+  var ret = [];
+  await http
+    .request<any[]>("get", "/project/api/project/v1/getprojlist?" + query)
+    .then(resSets => {
+      // projects.value = res;
+      for (let i = 0; i < resSets.length; i++) {
+        ret.push(resSets[i]);
+      }
+    });
+  return ret;
+};
+
+const fetchProjects = async () => {
+  projects.value = [];
+  var res = await getProjectList({ userUUID: "5" });
+  var unScanned = 0;
+  var outdatedScans = 0;
+  var scanned = 0;
+  console.log(res);
+  for (let i = 0; i < res.length; i++) {
+    if (res[i].lastScanStatus == null) unScanned++;
+    else if (res[i].lastScanStatus == "outdated") outdatedScans++;
+    else if (res[i].lastScanStatus == "scanned") scanned++;
+    projects.value.push({
+      name: res[i].projectName,
+      status: res[i].lastScanStatus,
+      riskLevel: null,
+      lastUpdate: res[i].lastUpdateTime,
+      lastScan: res[i].lastScanTime,
+      riskDistribution: null,
+      scanType: null,
+      scanTime: null,
+      // TODO: 项目地址和来源
+      projectSource: null
+    });
+  }
+  projectStats.value.totalProjects = res.length;
+  projectStats.value.unscanned = unScanned;
+  projectStats.value.outdatedScans = outdatedScans;
+  projectStats.value.scanned = scanned;
+};
+
+onMounted(async () => {
+  fetchProjects();
+});
 const router = useRouter();
 
 const navigateToDetails = () => {
@@ -50,7 +124,20 @@ const navigateToDetails = () => {
       </div>
     </div>
     <div class="actions">
-      <button class="btn">+ 新建项目</button>
+      <el-dropdown>
+        <el-button type="primary" size="large" class="new_btn">
+          + 新建项目<el-icon class="el-icon--right"><arrow-down /></el-icon>
+        </el-button>
+        <template #dropdown>
+          <el-dropdown-menu>
+            <el-dropdown-item>从文件上传</el-dropdown-item>
+            <el-dropdown-item>从远程仓库导入</el-dropdown-item>
+          </el-dropdown-menu>
+        </template>
+      </el-dropdown>
+      <el-button class="refresh_btn" size="large" @click="fetchProjects"
+        >刷新项目列表</el-button
+      >
     </div>
     <div class="filter-container">
       <input type="text" placeholder="选择搜索类型(ID或name或者tags)" />
@@ -60,13 +147,13 @@ const navigateToDetails = () => {
       <thead>
         <tr>
           <th>项目名称</th>
-          <th>更新状态</th>
+          <th>状态</th>
           <th>风险等级</th>
+          <th>最近一次更新时间</th>
           <th>最近一次扫描时间</th>
           <th>风险分布</th>
           <th>扫描类别</th>
           <th>扫描耗费时间</th>
-          <th>项目地址</th>
           <th>项目来源</th>
           <th>扫描</th>
         </tr>
@@ -80,19 +167,17 @@ const navigateToDetails = () => {
           </td>
           <td>{{ project.status }}</td>
           <td>{{ project.riskLevel }}</td>
-          <td>{{ project.lastScan }}</td>
+          <td>
+            {{
+              project.lastUpdate == null ? null : formatDate(project.lastUpdate)
+            }}
+          </td>
+          <td>
+            {{ project.lastScan == null ? null : formatDate(project.lastScan) }}
+          </td>
           <td>{{ project.riskDistribution }}</td>
           <td>{{ project.scanType }}</td>
           <td>{{ project.scanTime }}</td>
-          <td>
-            <a
-              :href="'https://' + project.projectLink"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              {{ project.projectLink }}
-            </a>
-          </td>
           <td>{{ project.projectSource }}</td>
           <td><button class="scan-btn">扫描</button></td>
         </tr>
@@ -128,13 +213,24 @@ const navigateToDetails = () => {
   margin-bottom: 20px;
 }
 
-.btn {
-  padding: 10px 20px;
+.new_btn {
   color: white;
-  cursor: pointer;
   background: #4caf50;
-  border: none;
-  border-radius: 4px;
+  border: #4caf50;
+}
+
+.new_btn:hover {
+  background: #3e8e41;
+}
+
+.refresh_btn {
+  margin-left: 20px;
+  color: white;
+  background: #409eff;
+}
+
+.refresh_btn:hover {
+  background: #2a80eb;
 }
 
 .filter-container {
