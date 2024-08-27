@@ -2,12 +2,18 @@
 import { ref, onMounted } from "vue";
 import { http } from "@/utils/http";
 import { useRouter } from "vue-router";
-import type { FormInstance } from "element-plus";
+import {
+  genFileId,
+  type FormInstance,
+  type UploadFile,
+  type UploadInstance,
+  type UploadProps,
+  type UploadRawFile
+} from "element-plus";
 import { ArrowDown } from "@element-plus/icons-vue";
 
 const uploadVisible = ref(false);
 const importVisible = ref(false);
-const showDropdown = ref(false);
 
 const getStatLabel = (key: string): string => {
   const labels: { [key: string]: string } = {
@@ -49,6 +55,12 @@ interface Project {
   projectSource: string;
 }
 
+interface UploadForm {
+  userUUID: string;
+  projectName: string;
+  projectDesc: string;
+}
+
 interface ImportForm {
   userUUID: string;
   repoUrl: string;
@@ -63,6 +75,10 @@ const importRules = {
   repoType: [{ required: true, message: "请选择仓库类型", trigger: "change" }]
 };
 
+const uploadRules = {
+  projectName: [{ required: true, message: "请输入项目名称", trigger: "blur" }]
+};
+
 const importForm = ref<ImportForm>({
   userUUID: null,
   repoUrl: null,
@@ -72,7 +88,27 @@ const importForm = ref<ImportForm>({
   repoToken: null
 });
 
+const uploadForm = ref<UploadForm>({
+  userUUID: null,
+  projectName: null,
+  projectDesc: null
+});
+
+const file = ref();
+const uploadFile = ref<UploadInstance>();
+const changeFile = (upload: UploadFile) => {
+  file.value = upload;
+};
+
+const handleExceed: UploadProps["onExceed"] = files => {
+  uploadFile.value!.clearFiles();
+  const _file = files[0] as UploadRawFile;
+  _file.uid = genFileId();
+  uploadFile.value!.handleStart(_file);
+};
+
 const importFormRef = ref<FormInstance>();
+const uploadFormRef = ref<FormInstance>();
 
 const repoVis = ref("public"); // public or private
 
@@ -117,6 +153,24 @@ const fetchProjects = async () => {
     if (res[i].lastScanStatus == null) unScanned++;
     else if (res[i].lastScanStatus == "outdated") outdatedScans++;
     else if (res[i].lastScanStatus == "scanned") scanned++;
+    var projectSrc = "";
+    switch (res[i].projectType) {
+      case "upload":
+        projectSrc = "本地上传";
+        break;
+      case "github":
+        projectSrc = "Github";
+        break;
+      case "gitlab":
+        projectSrc = "Gitlab";
+        break;
+      case "gitee":
+        projectSrc = "Gitee";
+        break;
+      case "bitbucket":
+        projectSrc = "BitBucket";
+        break;
+    }
     projects.value.push({
       name: res[i].projectName,
       status: res[i].lastScanStatus,
@@ -127,12 +181,7 @@ const fetchProjects = async () => {
       scanType: null,
       scanTime: null,
       // TODO: 项目地址和来源
-      projectSource:
-        res[i].projectType == "upload"
-          ? "本地上传"
-          : res[i].projectType == "github"
-            ? "Github"
-            : "Gitlab"
+      projectSource: projectSrc
     });
   }
   projectStats.value.totalProjects = res.length;
@@ -141,28 +190,80 @@ const fetchProjects = async () => {
   projectStats.value.scanned = scanned;
 };
 
-const handleSubmitImport = async (formRef: FormInstance | undefined) => {
+const handleSubmitUpload = async (formRef: FormInstance | undefined) => {
   if (!formRef) return;
   await formRef.validate((valid, fields) => {
     if (valid) {
-      console.log(importForm.value);
-      importVisible.value = false;
+      uploadForm.value.userUUID = "5";
+      console.log(uploadForm.value);
+      console.log(file.value);
+      const jsonStr = JSON.stringify(uploadForm.value);
+      const blob = new Blob([jsonStr], { type: "application/json" });
+      let formData = new FormData();
+      formData.append("file", file.value.raw);
+      formData.append("uploadProjectRequest", blob);
+      http
+        .request("post", "project/api/project/v1/new/upload", {
+          headers: {
+            "Content-Type": "multipart/form-data; charset=utf-8"
+          },
+          data: formData
+        })
+        .then(res => {
+          console.log(res);
+          handleClose("upload");
+          fetchProjects();
+        });
     } else {
       console.log("error submit", fields);
     }
   });
 };
 
-const handleClose = () => {
-  importFormRef.value.resetFields();
-  importForm.value = {
-    userUUID: null,
-    repoUrl: null,
-    repoType: null,
-    repoUsername: null,
-    repoPassword: null,
-    repoToken: null
-  };
+const handleSubmitImport = async (formRef: FormInstance | undefined) => {
+  if (!formRef) return;
+  await formRef.validate((valid, fields) => {
+    if (valid) {
+      console.log(importForm.value);
+      // TODO: 获取userUUID
+      importForm.value.userUUID = "5";
+      http
+        .request("post", "project/api/project/v1/new/import", {
+          data: importForm.value
+        })
+        .then(res => {
+          console.log(res);
+          handleClose("import");
+          fetchProjects();
+        });
+    } else {
+      console.log("error submit", fields);
+    }
+  });
+};
+
+const handleClose = form => {
+  if (form === "upload") {
+    uploadVisible.value = false;
+    uploadFormRef.value.resetFields();
+    uploadForm.value = {
+      userUUID: null,
+      projectName: null,
+      projectDesc: null
+    };
+    uploadFile.value.clearFiles();
+  } else {
+    importVisible.value = false;
+    importFormRef.value.resetFields();
+    importForm.value = {
+      userUUID: null,
+      repoUrl: null,
+      repoType: null,
+      repoUsername: null,
+      repoPassword: null,
+      repoToken: null
+    };
+  }
 };
 
 onMounted(async () => {
@@ -202,10 +303,11 @@ const navigateToDetails = () => {
         >刷新项目列表</el-button
       >
     </div>
-    <div class="filter-container">
+    <!-- TODO: 项目筛选功能 -->
+    <!-- <div class="filter-container">
       <input type="text" placeholder="选择搜索类型(ID或name或者tags)" />
       <input type="text" placeholder="根据搜索类型搜索" />
-    </div>
+    </div> -->
     <table class="project-table">
       <thead>
         <tr>
@@ -252,7 +354,7 @@ const navigateToDetails = () => {
         v-model="importVisible"
         width="50%"
         title="从远程仓库导入"
-        @close="handleClose"
+        @close="handleClose('import')"
       >
         <el-form
           ref="importFormRef"
@@ -272,6 +374,8 @@ const navigateToDetails = () => {
               <el-select v-model="importForm.repoType">
                 <el-option label="Github" value="github" />
                 <el-option label="Gitlab" value="gitlab" />
+                <el-option label="Gitee" value="gitee" />
+                <el-option label="BitBucket" value="bitbucket" />
               </el-select>
             </el-col>
           </el-form-item>
@@ -299,6 +403,57 @@ const navigateToDetails = () => {
             <el-button
               type="primary"
               @click="handleSubmitImport(importFormRef)"
+            >
+              确认
+            </el-button>
+          </div>
+        </template>
+      </el-dialog>
+
+      <el-dialog
+        v-model="uploadVisible"
+        width="50%"
+        title="从文件上传"
+        @close="handleClose('upload')"
+      >
+        <el-form
+          ref="uploadFormRef"
+          :model="uploadForm"
+          :rules="uploadRules"
+          label-position="right"
+          label-width="auto"
+        >
+          <el-form-item label="项目名称" prop="projectName">
+            <el-input
+              v-model="uploadForm.projectName"
+              placeholder="请输入项目名称"
+            />
+          </el-form-item>
+          <el-form-item label="项目介绍">
+            <el-input
+              v-model="uploadForm.projectDesc"
+              placeholder="请输入项目介绍"
+            />
+          </el-form-item>
+          <el-form-item label="上传文件">
+            <el-upload
+              ref="uploadFile"
+              action="none"
+              :auto-upload="false"
+              :limit="1"
+              :on-change="changeFile"
+              :on-exceed="handleExceed"
+            >
+              <el-button type="primary">点击上传</el-button>
+            </el-upload>
+          </el-form-item>
+        </el-form>
+        <template #footer>
+          <div class="dialog-footer">
+            <el-button @click="uploadVisible = false">取消</el-button>
+            <el-button
+              type="primary"
+              @click="handleSubmitUpload(uploadFormRef)"
             >
               确认
             </el-button>
