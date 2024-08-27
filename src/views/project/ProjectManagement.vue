@@ -2,8 +2,11 @@
 import { ref, onMounted } from "vue";
 import { http } from "@/utils/http";
 import { useRouter } from "vue-router";
+import type { FormInstance } from "element-plus";
 import { ArrowDown } from "@element-plus/icons-vue";
 
+const uploadVisible = ref(false);
+const importVisible = ref(false);
 const showDropdown = ref(false);
 
 const getStatLabel = (key: string): string => {
@@ -45,6 +48,33 @@ interface Project {
   scanTime: string;
   projectSource: string;
 }
+
+interface ImportForm {
+  userUUID: string;
+  repoUrl: string;
+  repoType: string;
+  repoUsername?: string;
+  repoPassword?: string;
+  repoToken?: string;
+}
+
+const importRules = {
+  repoUrl: [{ required: true, message: "请输入仓库地址", trigger: "blur" }],
+  repoType: [{ required: true, message: "请选择仓库类型", trigger: "change" }]
+};
+
+const importForm = ref<ImportForm>({
+  userUUID: null,
+  repoUrl: null,
+  repoType: null,
+  repoUsername: null,
+  repoPassword: null,
+  repoToken: null
+});
+
+const importFormRef = ref<FormInstance>();
+
+const repoVis = ref("public"); // public or private
 
 const _projects = ref([
   {
@@ -97,13 +127,42 @@ const fetchProjects = async () => {
       scanType: null,
       scanTime: null,
       // TODO: 项目地址和来源
-      projectSource: null
+      projectSource:
+        res[i].projectType == "upload"
+          ? "本地上传"
+          : res[i].projectType == "github"
+            ? "Github"
+            : "Gitlab"
     });
   }
   projectStats.value.totalProjects = res.length;
   projectStats.value.unscanned = unScanned;
   projectStats.value.outdatedScans = outdatedScans;
   projectStats.value.scanned = scanned;
+};
+
+const handleSubmitImport = async (formRef: FormInstance | undefined) => {
+  if (!formRef) return;
+  await formRef.validate((valid, fields) => {
+    if (valid) {
+      console.log(importForm.value);
+      importVisible.value = false;
+    } else {
+      console.log("error submit", fields);
+    }
+  });
+};
+
+const handleClose = () => {
+  importFormRef.value.resetFields();
+  importForm.value = {
+    userUUID: null,
+    repoUrl: null,
+    repoType: null,
+    repoUsername: null,
+    repoPassword: null,
+    repoToken: null
+  };
 };
 
 onMounted(async () => {
@@ -130,8 +189,12 @@ const navigateToDetails = () => {
         </el-button>
         <template #dropdown>
           <el-dropdown-menu>
-            <el-dropdown-item>从文件上传</el-dropdown-item>
-            <el-dropdown-item>从远程仓库导入</el-dropdown-item>
+            <el-dropdown-item @click="uploadVisible = true"
+              >从文件上传</el-dropdown-item
+            >
+            <el-dropdown-item @click="importVisible = true"
+              >从远程仓库导入</el-dropdown-item
+            >
           </el-dropdown-menu>
         </template>
       </el-dropdown>
@@ -183,6 +246,66 @@ const navigateToDetails = () => {
         </tr>
       </tbody>
     </table>
+
+    <div class="dialog-container">
+      <el-dialog
+        v-model="importVisible"
+        width="50%"
+        title="从远程仓库导入"
+        @close="handleClose"
+      >
+        <el-form
+          ref="importFormRef"
+          :model="importForm"
+          :rules="importRules"
+          label-position="right"
+          label-width="auto"
+        >
+          <el-form-item label="仓库地址" prop="repoUrl">
+            <el-input
+              v-model="importForm.repoUrl"
+              placeholder="请输入仓库地址"
+            />
+          </el-form-item>
+          <el-form-item label="仓库类型" prop="repoType">
+            <el-col :span="6">
+              <el-select v-model="importForm.repoType">
+                <el-option label="Github" value="github" />
+                <el-option label="Gitlab" value="gitlab" />
+              </el-select>
+            </el-col>
+          </el-form-item>
+          <el-form-item label="仓库可见性">
+            <el-radio-group v-model="repoVis">
+              <el-radio-button label="公开" value="public" checked />
+              <el-radio-button label="私有" value="private" />
+            </el-radio-group>
+          </el-form-item>
+          <div v-if="repoVis === 'private'">
+            <el-form-item label="仓库用户名">
+              <el-input v-model="importForm.repoUsername" />
+            </el-form-item>
+            <el-form-item label="仓库密码">
+              <el-input v-model="importForm.repoPassword" type="password" />
+            </el-form-item>
+            <el-form-item label="仓库令牌">
+              <el-input v-model="importForm.repoToken" />
+            </el-form-item>
+          </div>
+        </el-form>
+        <template #footer>
+          <div class="dialog-footer">
+            <el-button @click="importVisible = false">取消</el-button>
+            <el-button
+              type="primary"
+              @click="handleSubmitImport(importFormRef)"
+            >
+              确认
+            </el-button>
+          </div>
+        </template>
+      </el-dialog>
+    </div>
   </div>
 </template>
 <style scoped lang="scss">
