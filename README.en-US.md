@@ -10,11 +10,11 @@ The simplified version is based on the shelf extracted from [vue-pure-admin](htt
 
 ## `js` version
 
-[Click me to view js version](https://pure-admin.github.io/pure-admin-doc/pages/js/)
+[Click me to view js version](https://pure-admin.cn/pages/js/)
 
 ## `max` version
 
-[Click me to view the max version](https://github.com/pure-admin/vue-pure-admin-max)
+[Click me to view the max version](https://pure-admin.cn/pages/max/)
 
 ## Supporting video
 
@@ -23,12 +23,12 @@ The simplified version is based on the shelf extracted from [vue-pure-admin](htt
 
 ## Nanny-level documents
 
-[Click me to view vue-pure-admin documentation](https://pure-admin.github.io/pure-admin-doc)  
+[Click me to view vue-pure-admin documentation](https://pure-admin.cn/)  
 [Click me to view @pureadmin/utils documentation](https://pure-admin-utils.netlify.app)
 
 ## Quality service, software outsourcing, sponsorship support
 
-[Click me to view details](https://pure-admin.github.io/pure-admin-doc/pages/service/)
+[Click me to view details](https://pure-admin.cn/pages/service/)
 
 ## Preview
 
