@@ -3,10 +3,10 @@ import { computed } from "vue";
 import { useGlobal } from "@pureadmin/utils";
 import { useNav } from "@/layout/hooks/useNav";
 
-import MenuFold from "@iconify-icons/ri/menu-fold-fill";
+import MenuFold from "~icons/ri/menu-fold-fill";
 
 interface Props {
-  isActive: boolean;
+  isActive?: boolean;
 }
 
 withDefaults(defineProps<Props>(), {
@@ -21,7 +21,7 @@ const iconClass = computed(() => {
     "mb-1",
     "w-[16px]",
     "h-[16px]",
-    "inline-block",
+    "inline-block!",
     "align-middle",
     "cursor-pointer",
     "duration-[100ms]"

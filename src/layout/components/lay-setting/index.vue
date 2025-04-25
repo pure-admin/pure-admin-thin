@@ -18,9 +18,9 @@ import Segmented, { type OptionsType } from "@/components/ReSegmented";
 import { useDataThemeChange } from "@/layout/hooks/useDataThemeChange";
 import { useDark, useGlobal, debounce, isNumber } from "@pureadmin/utils";
 
-import Check from "@iconify-icons/ep/check";
-import LeftArrow from "@iconify-icons/ri/arrow-left-s-line";
-import RightArrow from "@iconify-icons/ri/arrow-right-s-line";
+import Check from "~icons/ep/check";
+import LeftArrow from "~icons/ri/arrow-left-s-line?width=20&height=20";
+import RightArrow from "~icons/ri/arrow-right-s-line?width=20&height=20";
 import DayIcon from "@/assets/svg/day.svg?component";
 import DarkIcon from "@/assets/svg/dark.svg?component";
 import SystemIcon from "@/assets/svg/system.svg?component";
@@ -187,7 +187,7 @@ const getThemeColor = computed(() => {
 });
 
 const pClass = computed(() => {
-  return ["mb-[12px]", "font-medium", "text-sm", "dark:text-white"];
+  return ["mb-[12px]!", "font-medium", "text-sm", "dark:text-white"];
 });
 
 const themeOptions = computed<Array<OptionsType>>(() => {
@@ -333,7 +333,7 @@ onUnmounted(() => removeMatchMedia);
         "
       />
 
-      <p :class="['mt-5', pClass]">主题色</p>
+      <p :class="['mt-5!', pClass]">主题色</p>
       <ul class="theme-color">
         <li
           v-for="(item, index) in themeColors"
@@ -352,7 +352,7 @@ onUnmounted(() => removeMatchMedia);
         </li>
       </ul>
 
-      <p :class="['mt-5', pClass]">导航模式</p>
+      <p :class="['mt-5!', pClass]">导航模式</p>
       <ul class="pure-theme">
         <li
           ref="verticalRef"
@@ -395,7 +395,7 @@ onUnmounted(() => removeMatchMedia);
       </ul>
 
       <span v-if="useAppStoreHook().getViewportWidth > 1280">
-        <p :class="['mt-5', pClass]">页宽</p>
+        <p :class="['mt-5!', pClass]">页宽</p>
         <Segmented
           resize
           class="mb-2 select-none"
@@ -424,21 +424,19 @@ onUnmounted(() => removeMatchMedia);
           >
             <IconifyIconOffline
               :icon="settings.stretch ? RightArrow : LeftArrow"
-              height="20"
             />
             <div
-              class="flex-grow border-b border-dashed"
+              class="grow border-0 border-b border-dashed"
               style="border-color: var(--el-color-primary)"
             />
             <IconifyIconOffline
               :icon="settings.stretch ? LeftArrow : RightArrow"
-              height="20"
             />
           </div>
         </button>
       </span>
 
-      <p :class="['mt-4', pClass]">页签风格</p>
+      <p :class="['mt-4!', pClass]">页签风格</p>
       <Segmented
         resize
         class="select-none"
@@ -447,7 +445,7 @@ onUnmounted(() => removeMatchMedia);
         @change="onChange"
       />
 
-      <p class="mt-5 font-medium text-sm dark:text-white">界面显示</p>
+      <p class="mt-5! font-medium text-sm dark:text-white">界面显示</p>
       <ul class="setting">
         <li>
           <span class="dark:text-white">灰色模式</span>

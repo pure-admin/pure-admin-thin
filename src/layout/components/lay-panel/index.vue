@@ -3,7 +3,7 @@ import { emitter } from "@/utils/mitt";
 import { onClickOutside } from "@vueuse/core";
 import { ref, computed, onMounted, onBeforeUnmount } from "vue";
 import { useDataThemeChange } from "@/layout/hooks/useDataThemeChange";
-import CloseIcon from "@iconify-icons/ep/close";
+import CloseIcon from "~icons/ep/close";
 
 const target = ref(null);
 const show = ref<Boolean>(false);
@@ -15,7 +15,7 @@ const iconClass = computed(() => {
     "flex",
     "justify-center",
     "items-center",
-    "outline-none",
+    "outline-hidden",
     "rounded-[4px]",
     "cursor-pointer",
     "transition-colors",
@@ -49,7 +49,7 @@ onBeforeUnmount(() => {
     <div class="right-panel-background" />
     <div ref="target" class="right-panel bg-bg_color">
       <div
-        class="project-configuration border-b-[1px] border-solid border-[var(--pure-border-color)]"
+        class="project-configuration border-0 border-b-[1px] border-solid border-[var(--pure-border-color)]"
       >
         <h4 class="dark:text-white">系统配置</h4>
         <span
@@ -74,7 +74,7 @@ onBeforeUnmount(() => {
       </el-scrollbar>
 
       <div
-        class="flex justify-end p-3 border-t-[1px] border-solid border-[var(--pure-border-color)]"
+        class="flex justify-end p-3 border-0 border-t-[1px] border-solid border-[var(--pure-border-color)]"
       >
         <el-button
           v-tippy="{
@@ -117,8 +117,8 @@ onBeforeUnmount(() => {
   width: 100%;
   max-width: 280px;
   box-shadow: 0 0 15px 0 rgb(0 0 0 / 5%);
-  transition: all 0.25s cubic-bezier(0.7, 0.3, 0.1, 1);
   transform: translate(100%);
+  transition: all 0.25s cubic-bezier(0.7, 0.3, 0.1, 1);
 }
 
 .show {

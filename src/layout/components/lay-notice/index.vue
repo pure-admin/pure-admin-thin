@@ -2,7 +2,7 @@
 import { ref, computed } from "vue";
 import { noticesData } from "./data";
 import NoticeList from "./components/NoticeList.vue";
-import BellIcon from "@iconify-icons/ep/bell";
+import BellIcon from "~icons/ep/bell";
 
 const noticesNum = ref(0);
 const notices = ref(noticesData);

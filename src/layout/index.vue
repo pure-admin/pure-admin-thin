@@ -208,8 +208,8 @@ const LayHeader = defineComponent({
   height: 100%;
 
   &::after {
-    display: table;
     clear: both;
+    display: table;
     content: "";
   }
 

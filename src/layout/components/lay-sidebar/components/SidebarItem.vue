@@ -16,10 +16,10 @@ import {
   useAttrs
 } from "vue";
 
-import ArrowUp from "@iconify-icons/ep/arrow-up-bold";
-import EpArrowDown from "@iconify-icons/ep/arrow-down-bold";
-import ArrowLeft from "@iconify-icons/ep/arrow-left-bold";
-import ArrowRight from "@iconify-icons/ep/arrow-right-bold";
+import ArrowUp from "~icons/ep/arrow-up-bold";
+import EpArrowDown from "~icons/ep/arrow-down-bold";
+import ArrowLeft from "~icons/ep/arrow-left-bold";
+import ArrowRight from "~icons/ep/arrow-right-bold";
 
 const attrs = useAttrs();
 const { layout, isCollapse, tooltipEffect, getDivStyle } = useNav();
@@ -58,6 +58,21 @@ const getSubMenuIconStyle = computed((): CSSProperties => {
           ? "0 auto"
           : "0 5px 0 0"
   };
+});
+
+const textClass = computed(() => {
+  const item = props.item;
+  const baseClass = "w-full! text-inherit!";
+  if (
+    layout.value !== "horizontal" &&
+    isCollapse.value &&
+    !toRaw(item.meta.icon) &&
+    ((layout.value === "vertical" && item.parentId === null) ||
+      (layout.value === "mix" && item.pathList.length === 2))
+  ) {
+    return `${baseClass} min-w-[54px]! text-center! px-3!`;
+  }
+  return baseClass;
 });
 
 const expandCloseIcon = computed(() => {
@@ -143,7 +158,7 @@ function resolvePath(routePath) {
             item?.pathList?.length === 2)
         "
         truncated
-        class="!w-full !pl-4 !text-inherit"
+        class="w-full! px-3! min-w-[54px]! text-center! text-inherit!"
       >
         {{ onlyOneChild.meta.title }}
       </el-text>
@@ -155,7 +170,7 @@ function resolvePath(routePath) {
               offset: [0, -10],
               theme: tooltipEffect
             }"
-            class="!w-full !text-inherit"
+            class="w-full! text-inherit!"
           >
             {{ onlyOneChild.meta.title }}
           </ReText>
@@ -194,15 +209,7 @@ function resolvePath(routePath) {
           offset: [0, -10],
           theme: tooltipEffect
         }"
-        :class="{
-          '!w-full': true,
-          '!text-inherit': true,
-          '!pl-4':
-            layout !== 'horizontal' &&
-            isCollapse &&
-            !toRaw(item.meta.icon) &&
-            item.parentId === null
-        }"
+        :class="textClass"
       >
         {{ item.meta.title }}
       </ReText>

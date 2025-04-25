@@ -3,10 +3,10 @@ import { computed } from "vue";
 import { useGlobal } from "@pureadmin/utils";
 import { useNav } from "@/layout/hooks/useNav";
 
-import ArrowLeft from "@iconify-icons/ri/arrow-left-double-fill";
+import ArrowLeft from "~icons/ri/arrow-left-double-fill";
 
 interface Props {
-  isActive: boolean;
+  isActive?: boolean;
 }
 
 withDefaults(defineProps<Props>(), {
