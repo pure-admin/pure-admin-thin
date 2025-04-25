@@ -4,7 +4,7 @@ export default {
   path: "/error",
   redirect: "/error/403",
   meta: {
-    icon: "ri:information-line",
+    icon: "ri/information-line",
     // showLink: false,
     title: $t("menus.pureAbnormal"),
     rank: 9

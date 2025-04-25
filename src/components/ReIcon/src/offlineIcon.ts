@@ -1,14 +1,23 @@
 // 这里存放本地图标，在 src/layout/index.vue 文件中加载，避免在首启动加载
+import { getSvgInfo } from "@pureadmin/utils";
 import { addIcon } from "@iconify/vue/dist/offline";
 
+// https://icon-sets.iconify.design/ep/?keyword=ep
+import EpHomeFilled from "~icons/ep/home-filled?raw";
+
+// https://icon-sets.iconify.design/ri/?keyword=ri
+import RiSearchLine from "~icons/ri/search-line?raw";
+import RiInformationLine from "~icons/ri/information-line?raw";
+
+const icons = [
+  // Element Plus Icon: https://github.com/element-plus/element-plus-icons
+  ["ep/home-filled", EpHomeFilled],
+  // Remix Icon: https://github.com/Remix-Design/RemixIcon
+  ["ri/search-line", RiSearchLine],
+  ["ri/information-line", RiInformationLine]
+];
+
 // 本地菜单图标，后端在路由的 icon 中返回对应的图标字符串并且前端在此处使用 addIcon 添加即可渲染菜单图标
-// @iconify-icons/ep
-import Lollipop from "@iconify-icons/ep/lollipop";
-import HomeFilled from "@iconify-icons/ep/home-filled";
-addIcon("ep:lollipop", Lollipop);
-addIcon("ep:home-filled", HomeFilled);
-// @iconify-icons/ri
-import Search from "@iconify-icons/ri/search-line";
-import InformationLine from "@iconify-icons/ri/information-line";
-addIcon("ri:search-line", Search);
-addIcon("ri:information-line", InformationLine);
+icons.forEach(([name, icon]) => {
+  addIcon(name as string, getSvgInfo(icon as string));
+});
