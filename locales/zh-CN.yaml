@@ -64,9 +64,9 @@ menus:
   pureHome: 首页
   pureLogin: 登录
   pureAbnormal: 异常页面
-  pureFourZeroFour: "404"
-  pureFourZeroOne: "403"
-  pureFive: "500"
+  purePageNotFound: "404"
+  pureAccessDenied: "403"
+  pureServerError: "500"
   purePermission: 权限管理
   purePermissionPage: 页面权限
   purePermissionButton: 按钮权限

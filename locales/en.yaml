@@ -64,9 +64,9 @@ menus:
   pureHome: Home
   pureLogin: Login
   pureAbnormal: Abnormal Page
-  pureFourZeroFour: "404"
-  pureFourZeroOne: "403"
-  pureFive: "500"
+  purePageNotFound: "404"
+  pureAccessDenied: "403"
+  pureServerError: "500"
   purePermission: Permission Manage
   purePermissionPage: Page Permission
   purePermissionButton: Button Permission
